@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6fafc">
+  <title>Money Management Simulator | STRIVE Money Rehab</title>
+  <meta name="description" content="Practice money management with STRIVE Money Rehab, including mock bill pay, simulated online banking, and simulated ride-share tasks for functional rehab and IADL training.">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="money management simulator, STRIVE Money Rehab, mock bill pay, simulated online banking, simulated ride-share app, occupational therapy money management, IADL training, cognitive rehab, executive function practice, stroke rehab, brain injury rehab">
+  <link rel="canonical" href="https://striveptlv.com/moneymanagement/">
+  <meta property="og:title" content="Money Management Simulator | STRIVE Money Rehab">
+  <meta property="og:description" content="STRIVE Money Rehab supports money-management practice with mock bill pay, simulated online banking, and ride-share tasks under STRIVE INDEPENDENCE.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://striveptlv.com/moneymanagement/">
+  <meta property="og:image" content="https://striveptlv.com/moneymanagement/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Money Management Simulator | STRIVE Money Rehab">
+  <meta name="twitter:description" content="Practice mock bill pay, online banking, and ride-share tasks with STRIVE Money Rehab.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "STRIVE Money Rehab",
+    "alternateName": "Money Management Simulator",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web",
+    "description": "Money-management practice for functional rehabilitation, including mock bill pay, simulated online banking, and simulated ride-share tasks.",
+    "isPartOf": {
+      "@type": "SoftwareApplication",
+      "name": "STRIVE INDEPENDENCE"
+    },
+    "audience": [
+      { "@type": "Audience", "audienceType": "Occupational therapists" },
+      { "@type": "Audience", "audienceType": "Speech therapists" },
+      { "@type": "Audience", "audienceType": "Neuro rehab clinics" },
+      { "@type": "Audience", "audienceType": "Stroke and brain injury rehabilitation programs" }
+    ],
+    "featureList": [
+      "Mock bill pay",
+      "Simulated online banking",
+      "Simulated ride-share app",
+      "Money-management IADL practice",
+      "Executive function practice"
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #132338;
+      --blue: #1b4fa8;
+      --orange: #f5820a;
+      --orange-glow: rgba(245, 130, 10, 0.22);
+      --ink: #1a2e44;
+      --muted: rgba(26, 46, 68, 0.68);
+      --muted-s: rgba(26, 46, 68, 0.74);
+      --line: rgba(19, 35, 56, 0.12);
+      --gb: rgba(27, 79, 168, 0.13);
+      --paper: #f6fafc;
+      --white: #ffffff;
+    }
+    html { min-height: 100%; }
+    body {
+      min-height: 100vh;
+      font-family: "Outfit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 70% 42% at 50% -12%, rgba(27, 79, 168, 0.16), transparent 62%),
+        radial-gradient(ellipse 44% 36% at 96% 18%, rgba(245, 130, 10, 0.14), transparent 58%),
+        linear-gradient(180deg, #ffffff 0%, var(--paper) 100%);
+      display: grid;
+      place-items: center;
+      padding: 100px 28px 28px;
+    }
+    body.locked { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 300;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(22px) saturate(1.6);
+      -webkit-backdrop-filter: blur(22px) saturate(1.6);
+      border-bottom: 1px solid rgba(19, 35, 56, 0.11);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 11px; }
+    .logo-img { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+    .logo-wrap { display: flex; flex-direction: column; line-height: 1; }
+    .logo-text { font-size: 21px; font-weight: 900; letter-spacing: 0.09em; color: var(--navy); text-transform: uppercase; }
+    .logo-sub { font-size: 7.5px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--orange); margin-top: 1px; }
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a { color: rgba(19, 35, 56, 0.72); font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta {
+      background: var(--orange);
+      color: var(--navy) !important;
+      padding: 9px 20px;
+      font-weight: 900;
+      font-size: 11.5px;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: opacity 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { opacity: 0.87; transform: translateY(-1px); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .nav-toggle span { width: 24px; height: 2px; background: var(--navy); border-radius: 1px; transition: transform 0.25s, opacity 0.25s; }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #ffffff;
+      z-index: 299;
+      padding: 24px 6vw;
+      overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--navy); font-size: 20px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .mob-book { background: var(--orange); color: var(--navy) !important; text-align: center; margin-top: 22px; border: none !important; border-radius: 2px; }
+    main {
+      width: min(100%, 980px);
+      display: grid;
+      gap: 22px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--navy);
+      text-decoration: none;
+      width: fit-content;
+    }
+    .brand img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+    .brand span {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .brand strong {
+      display: block;
+      font-size: clamp(1.25rem, 4vw, 1.8rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .notice {
+      padding: clamp(26px, 5vw, 48px);
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 80px rgba(19, 35, 56, 0.1);
+    }
+    .eyebrow {
+      font-family: "DM Mono", monospace;
+      font-size: clamp(1.05rem, 2.3vw, 1.45rem);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 18px;
+    }
+    h1 {
+      max-width: 820px;
+      color: var(--navy);
+      font-size: clamp(2.45rem, 6.2vw, 4.8rem);
+      font-weight: 900;
+      line-height: 0.96;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    h1 .accent-title { color: var(--orange); }
+    .lead {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2.4vw, 1.42rem);
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 13px 20px;
+      background: var(--orange);
+      color: var(--navy);
+      border: 1px solid transparent;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .button.secondary {
+      background: transparent;
+      color: var(--blue);
+      border-color: rgba(27, 79, 168, 0.24);
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(226, 238, 246, 0.78);
+      backdrop-filter: blur(18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      width: min(92vw, 400px);
+      max-height: min(760px, calc(100dvh - 32px));
+      overflow-y: auto;
+      background: linear-gradient(145deg, #ffffff 0%, #edf6fb 100%);
+      border: 1px solid var(--gb);
+      border-radius: 18px;
+      padding: clamp(1.35rem, 4vw, 2.3rem);
+      position: relative;
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 34px 90px rgba(19, 35, 56, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.72);
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+    .modal-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245, 130, 10, 0.6), transparent);
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--gb);
+      background: transparent;
+      color: var(--muted-s);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .modal-close:hover { background: rgba(27, 79, 168, 0.07); color: var(--blue); }
+    .modal-demo-ring {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin-bottom: 0.9rem;
+      border: 1px solid var(--gb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(245, 130, 10, 0.1);
+    }
+    .modal-demo-ring svg { width: 19px; height: 19px; stroke: var(--orange); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .modal-title { font-size: clamp(1.35rem, 5vw, 1.95rem); font-weight: 900; letter-spacing: 0; text-transform: uppercase; color: var(--navy); margin-bottom: 0.55rem; line-height: 1.05; }
+    .modal-sub { font-size: clamp(0.88rem, 2.5vw, 0.96rem); color: var(--muted-s); line-height: 1.5; margin-bottom: 1rem; }
+    .modal-form { display: flex; flex-direction: column; gap: 0.72rem; }
+    .modal-field { display: grid; gap: 0.35rem; }
+    .modal-label { font-family: "DM Mono", monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); }
+    .modal-input {
+      width: 100%;
+      min-height: 42px;
+      border-radius: 10px;
+      border: 1px solid rgba(19, 35, 56, 0.14);
+      background: #fff;
+      color: var(--navy);
+      font: inherit;
+      font-size: 0.97rem;
+      padding: 0 1.1rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .modal-input:focus { outline: none; border-color: rgba(245, 130, 10, 0.55); background: #fff; }
+    .modal-input::placeholder { color: rgba(26, 46, 68, 0.34); }
+    .modal-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--orange);
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 13px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.15rem;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .modal-submit:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 14px 36px var(--orange-glow); }
+    .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .modal-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 0.5rem; }
+    .modal-status { display: none; font-size: 0.97rem; font-weight: 600; padding: 0.8rem 1rem; border-radius: 8px; text-align: center; margin-top: 0.5rem; }
+    .modal-status.success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #047857; }
+    .modal-status.error { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.28); color: #b91c1c; }
+    .modal-confirmed { display: none; text-align: center; padding-top: 1.2rem; }
+    .modal-confirmed p { color: var(--muted-s); margin-bottom: 1.2rem; }
+    .modal-confirmed .modal-submit { width: 100%; }
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+    }
+    .redirect {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .feature {
+      min-height: 116px;
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+    .feature::before {
+      content: "";
+      display: block;
+      width: 32px;
+      height: 3px;
+      background: var(--orange);
+      margin-bottom: 16px;
+    }
+    .feature:nth-child(2)::before { background: #10b981; }
+    .feature:nth-child(3)::before { background: #8b5cf6; }
+    .feature h2 {
+      color: var(--navy);
+      font-size: 1.05rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .feature p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    @media (max-width: 720px) {
+      body { padding: 92px 18px 18px; place-items: start center; }
+      main { gap: 20px; }
+      .notice { padding: 24px 18px; }
+      .features { grid-template-columns: 1fr; }
+      .button { width: 100%; }
+      .redirect { width: 100%; text-align: center; }
+    }
+    @media (max-width: 520px) {
+      .modal-overlay { align-items: flex-start; padding: 88px 14px 14px; }
+      .modal-box { width: 100%; max-height: calc(100dvh - 104px); border-radius: 14px; }
+      .modal-label { font-size: 9px; }
+      .modal-note { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="nav-logo" href="https://www.striveptlv.com/index.html">
+      <img class="logo-img" src="./logo.png" alt="STRIVE INDEPENDENCE">
+      <div class="logo-wrap">
+        <div class="logo-text">STRIVE</div>
+        <div class="logo-sub">Independence</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="https://www.striveptlv.com/">Physical Therapy</a>
+      <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
+      <a class="nav-cta" href="#demo" onclick="openModal();return false;">Book A Free Demo</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://www.striveptlv.com/" onclick="toggleMenu(false)">Physical Therapy</a>
+    <a href="https://www.striveptlv.com/talk" onclick="toggleMenu(false)">STRIVE Talk</a>
+    <a href="#demo" class="mob-book" onclick="openModal();return false;">Book A Free Demo</a>
+  </div>
+
+  <main aria-labelledby="page-title">
+    <section class="notice">
+      <p class="eyebrow">We have moved</p>
+      <h1 id="page-title">Money Management is now <span class="accent-title">STRIVE Money Rehab.</span></h1>
+      <p class="lead">The Money Management simulator still exists as STRIVE Money Rehab, now under STRIVE INDEPENDENCE. Clinicians can continue using realistic practice for bill pay, online banking, and transportation tasks.</p>
+      <div class="actions">
+        <a class="button" href="https://www.striveptlv.com/index.html">Go To STRIVE INDEPENDENCE</a>
+        <a class="button secondary" href="#demo" onclick="openModal();return false;">Book A Free Demo</a>
+        <p class="redirect">STRIVE Money Rehab is now organized under STRIVE INDEPENDENCE.</p>
+      </div>
+
+      <div class="features" aria-label="STRIVE Money Rehab simulations">
+        <article class="feature">
+          <h2>Mock Bill Pay</h2>
+          <p>Practice reading statements, finding balances, and completing utility-payment steps with fictional information.</p>
+        </article>
+        <article class="feature">
+          <h2>Simulated Online Banking</h2>
+          <p>Navigate accounts, cards, payment screens, and everyday money-management decisions without real financial risk.</p>
+        </article>
+        <article class="feature">
+          <h2>Simulated Ride-Share App</h2>
+          <p>Work through pickup, destination, ride choice, confirmation, review, and cancellation in a safe practice environment.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+      <div class="modal-demo-ring">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+      </div>
+      <h2 class="modal-title">Book A Free Demo</h2>
+      <p class="modal-sub">Tell us where to reach you and we will walk you through STRIVE Talk, Money Rehab, and Community Mobility with your clinic's goals in mind.</p>
+      <form class="modal-form" id="accessForm" action="https://formspree.io/f/mykvqkpz" method="POST" onsubmit="handleModalSubmit(event)">
+        <div class="modal-field">
+          <label class="modal-label" for="mac-name">Full Name</label>
+          <input class="modal-input" id="mac-name" name="name" type="text" placeholder="Dr. Jane Smith" required>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="mac-email">Work Email</label>
+          <input class="modal-input" id="mac-email" name="email" type="email" placeholder="you@clinic.com" required>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="mac-phone">Mobile Number</label>
+          <input class="modal-input" id="mac-phone" name="mobile" type="tel" placeholder="(555) 123-4567" inputmode="tel" autocomplete="tel">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="mac-role">Role</label>
+          <input class="modal-input" id="mac-role" name="role" type="text" placeholder="Occupational Therapist">
+        </div>
+        <input type="hidden" name="source" value="STRIVE Money Rehab - free demo request">
+        <button class="modal-submit" type="submit" id="modalSubmit">Book A Free Demo</button>
+        <p class="modal-note">No spam. We will follow up within one business day.</p>
+        <div class="modal-status success" id="modalSuccess">Thanks. We will follow up to schedule your demo.</div>
+        <div class="modal-status error" id="modalError">Something went wrong. Please try again.</div>
+      </form>
+      <div class="modal-confirmed" id="modalConfirmed">
+        <p>Thanks. We will follow up to schedule your demo.</p>
+        <a href="https://www.striveptlv.com/index.html" class="modal-submit" onclick="closeModal()" style="display:inline-flex;text-decoration:none">Explore STRIVE INDEPENDENCE</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu(force) {
+      const menu = document.getElementById("mobileMenu");
+      const toggle = document.getElementById("navToggle");
+      const open = force === undefined ? !menu.classList.contains("open") : force;
+      menu.classList.toggle("open", open);
+      toggle.classList.toggle("open", open);
+      document.body.classList.toggle("locked", open);
+    }
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 960) toggleMenu(false);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        toggleMenu(false);
+        closeModal();
+      }
+    });
+
+    function openModal() {
+      const mobileMenu = document.getElementById("mobileMenu");
+      if (mobileMenu.classList.contains("open")) toggleMenu(false);
+      document.getElementById("modalOverlay").classList.add("open");
+      document.body.classList.add("locked");
+      document.getElementById("accessForm").style.display = "";
+      document.getElementById("modalConfirmed").style.display = "none";
+    }
+
+    function closeModal() {
+      document.getElementById("modalOverlay").classList.remove("open");
+      if (!document.getElementById("mobileMenu").classList.contains("open")) {
+        document.body.classList.remove("locked");
+      }
+    }
+
+    function closeModalOutside(event) {
+      if (event.target === document.getElementById("modalOverlay")) closeModal();
+    }
+
+    async function handleModalSubmit(event) {
+      event.preventDefault();
+      const button = document.getElementById("modalSubmit");
+      const success = document.getElementById("modalSuccess");
+      const error = document.getElementById("modalError");
+      success.style.display = "none";
+      error.style.display = "none";
+      button.disabled = true;
+      button.textContent = "Sending...";
+      try {
+        const response = await fetch(event.target.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(event.target)
+        });
+        if (!response.ok) throw new Error("Demo request failed");
+        document.getElementById("accessForm").style.display = "none";
+        document.getElementById("modalConfirmed").style.display = "block";
+      } catch (error) {
+        document.getElementById("modalError").style.display = "block";
+        button.disabled = false;
+        button.textContent = "Book A Free Demo";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Demo Access | STRIVE INDEPENDENCE</title>
+<meta name="description" content="Private 30-day demo access for STRIVE INDEPENDENCE invited clinicians, programs, and care teams.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#132338;
+  --ink:#1a2e44;
+  --muted:rgba(26,46,68,.62);
+  --soft:rgba(26,46,68,.78);
+  --blue:#1B4FA8;
+  --orange:#F5820A;
+  --line:rgba(19,35,56,.12);
+  --glass:rgba(255,255,255,.82);
+  --white:#fff;
+}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;font-family:'Outfit',sans-serif;color:var(--ink);
+  background:#f5fafc;line-height:1.6;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 42% at 50% -10%,rgba(27,79,168,.14),transparent 64%),
+    radial-gradient(ellipse 36% 34% at 95% 22%,rgba(245,130,10,.14),transparent 60%),
+    radial-gradient(ellipse 44% 34% at 4% 82%,rgba(27,79,168,.08),transparent 58%);
+}
+main,footer{position:relative;z-index:1}
+nav{
+  position:relative;z-index:10;
+  min-height:76px;display:flex;align-items:center;justify-content:space-between;
+  padding:18px 6vw;border-bottom:1px solid var(--line);background:rgba(255,255,255,.82);
+  backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy)}
+.brand img{width:44px;height:44px;object-fit:contain}
+.brand-word{display:block;font-size:20px;font-weight:900;letter-spacing:.09em;line-height:1;text-transform:uppercase}
+.brand-sub{display:block;margin-top:2px;font-size:8px;font-weight:800;letter-spacing:.25em;color:var(--orange);text-transform:uppercase}
+.nav-note{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);text-align:right;
+}
+.shell{width:min(1180px,88vw);margin:0 auto}
+.hero{
+  min-height:calc(100vh - 76px);display:grid;grid-template-columns:1.08fr .92fr;
+  gap:48px;align-items:center;padding:54px 0 54px;
+}
+.tag{
+  display:inline-flex;align-items:center;gap:10px;margin-bottom:26px;
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.22em;
+  color:var(--orange);text-transform:uppercase;
+}
+.tag::before{content:'';width:24px;height:1px;background:var(--orange)}
+h1{
+  max-width:780px;font-size:clamp(3.5rem,7.2vw,7.2rem);font-weight:900;line-height:.9;
+  letter-spacing:0;text-transform:uppercase;color:var(--navy);margin-bottom:28px;
+}
+h1 em{font-style:normal;color:var(--orange)}
+.hero-copy{max-width:620px;font-size:clamp(1.04rem,1.7vw,1.24rem);color:var(--soft);line-height:1.72}
+.privacy-note{
+  max-width:560px;margin-top:26px;padding:16px 18px;border-left:3px solid var(--orange);
+  background:rgba(255,255,255,.62);color:var(--muted);font-size:.94rem;
+}
+.access-card{
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(235,246,251,.96));
+  border:1px solid rgba(27,79,168,.16);border-radius:20px;
+  padding:clamp(1.5rem,4vw,2.5rem);
+  box-shadow:0 34px 92px rgba(19,35,56,.16);
+}
+.card-kicker{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:10px;
+}
+.card-title{
+  font-size:clamp(1.65rem,3vw,2.35rem);font-weight:900;letter-spacing:0;
+  line-height:1;text-transform:uppercase;color:var(--navy);margin-bottom:12px;
+}
+.card-copy{font-size:.98rem;color:var(--soft);line-height:1.62;margin-bottom:20px}
+.access-form{display:grid;gap:12px}
+.access-form.is-hidden{display:none}
+label{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--orange);
+}
+input{
+  width:100%;min-height:50px;border-radius:10px;border:1px solid rgba(19,35,56,.14);
+  background:#fff;color:var(--navy);font:inherit;font-size:1rem;padding:0 15px;
+}
+input:focus{outline:none;border-color:rgba(245,130,10,.58);box-shadow:0 0 0 4px rgba(245,130,10,.1)}
+.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+button,.button{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;
+  padding:13px 20px;border-radius:6px;border:none;text-decoration:none;cursor:pointer;
+  font-size:12.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+  transition:opacity .2s,transform .2s,box-shadow .2s;
+}
+button:hover,.button:hover{opacity:.92;transform:translateY(-1px)}
+.primary{background:var(--orange);color:var(--navy);box-shadow:0 14px 34px rgba(245,130,10,.22)}
+.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.status{
+  display:none;margin-top:16px;padding:14px;border-radius:10px;font-size:.94rem;font-weight:700;line-height:1.45;
+}
+.status.show{display:block}
+.status.ok{background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.3);color:#047857}
+.status.warn{background:rgba(245,130,10,.12);border:1px solid rgba(245,130,10,.28);color:#9a4b00}
+.status.no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.24);color:#b91c1c}
+.modules{display:none;margin-top:22px}
+.modules.show{display:block}
+.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px;align-items:stretch}
+.module{
+  min-height:154px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;
+  padding:18px;border-radius:14px;border:1px solid rgba(27,79,168,.14);
+  background:rgba(255,255,255,.82);text-decoration:none;color:var(--navy);
+  box-shadow:0 12px 28px rgba(19,35,56,.06);
+  transition:border-color .2s,transform .2s,box-shadow .2s,background .2s;
+}
+.module:hover{transform:translateY(-2px);border-color:rgba(245,130,10,.34);background:#fff;box-shadow:0 18px 42px rgba(19,35,56,.1)}
+.module strong{display:block;font-size:.96rem;font-weight:900;text-transform:uppercase;line-height:1.12;margin-bottom:8px}
+.module span{display:block;font-size:.86rem;color:var(--muted);line-height:1.45}
+.module::after{
+  content:'Open demo';display:block;justify-self:end;
+  font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--orange);
+}
+.demo-disclaimer{
+  margin-top:14px;padding:13px 14px;border-radius:12px;border:1px solid rgba(245,130,10,.22);
+  background:rgba(245,130,10,.08);color:var(--muted);
+  font-size:.84rem;line-height:1.45;text-align:center;
+}
+footer{padding:28px 6vw;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--navy);text-decoration:none;font-weight:800}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;gap:30px;padding-top:54px}
+}
+@media(max-width:560px){
+  nav{align-items:flex-start;gap:18px;flex-direction:column}
+  .nav-note{text-align:left}
+  .shell{width:min(100% - 32px,1180px)}
+  h1{font-size:3.05rem;line-height:.94}
+  .button-row{flex-direction:column}
+  button,.button{width:100%}
+  .module-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/index.html" aria-label="STRIVE INDEPENDENCE home">
+    <img src="logo.png" alt="">
+    <span>
+      <span class="brand-word">STRIVE</span>
+      <span class="brand-sub">Independence</span>
+    </span>
+  </a>
+  <div class="nav-note">Private demo · 20 invited emails</div>
+</nav>
+
+<main>
+  <section class="hero shell">
+    <div>
+      <div class="tag">Invitation Required</div>
+      <h1>Private <em>30-Day</em> Demo</h1>
+      <p class="hero-copy">This access page is for clinicians, programs, facilities, and care teams personally invited by STRIVE. Enter the same email used for your demo request to unlock the demo modules during your approval window.</p>
+      <p class="privacy-note">Access is intentionally limited while STRIVE INDEPENDENCE is being previewed with a small group. Your invitation is tied to your email and expires after 30 days.</p>
+    </div>
+
+    <div class="access-card" id="access">
+      <div class="card-kicker">Access Check</div>
+      <h2 class="card-title">Enter Your Invited Email</h2>
+      <p class="card-copy">If your email has been approved, the full demo modules will appear below. If not, book a free demo and STRIVE can add you to the demo list manually.</p>
+      <form class="access-form" onsubmit="checkAccess(event)">
+        <label for="demoEmail">Work Email</label>
+        <input id="demoEmail" name="email" type="email" placeholder="you@clinic.com" autocomplete="email" required>
+        <div class="button-row">
+          <button class="primary" type="submit" id="accessButton">Unlock Demo</button>
+          <a class="button secondary" href="/index.html#demo">Book Demo</a>
+        </div>
+      </form>
+      <div class="status" id="accessStatus" role="status" aria-live="polite"></div>
+      <div class="modules" id="demoModules">
+        <div class="card-kicker">Unlocked Demo Links</div>
+        <div class="module-grid">
+          <a class="module" href="https://www.striveptlv.com/moneymanagement/Bill%20Pay/Bill%20Pay%20Homepage.html" target="_blank" rel="noopener"><strong>Bill Pay</strong><span>Practice utility payment tasks with realistic account navigation and payment workflow steps.</span></a>
+          <a class="module" href="https://www.striveptlv.com/moneymanagement/Visa/Visa%20Credit%20Homepage.html" target="_blank" rel="noopener"><strong>Credit Card</strong><span>Practice card management, online form completion, and attention to details across multiple screens.</span></a>
+          <a class="module" href="https://www.striveptlv.com/moneymanagement/Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html" target="_blank" rel="noopener"><strong>Online Bank</strong><span>Practice personal account navigation, account review, and everyday money management skills.</span></a>
+          <a class="module" href="https://www.striveptlv.com/ride" target="_blank" rel="noopener"><strong>Ride Share</strong><span>Practice a ride-share style request, including pickup, destination, ride choice, confirmation, and cancellation steps.</span></a>
+        </div>
+        <p class="demo-disclaimer">By using these links, you understand they are demo practice environments. Names, accounts, balances, payments, rides, and other details are fictional and not connected to real services or real financial information.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>STRIVE INDEPENDENCE · Private demo access</span>
+  <a href="/index.html">Return to main site</a>
+</footer>
+
+<script>
+/*
+  Recommended real setup:
+  - Best secure option: Supabase Auth magic links + an access table with Row Level Security.
+  - Light no-code option: Airtable base with columns email, granted_at, expires_at, status, then an automation sends this page URL when status changes to active.
+  - Prototype option below: keep up to 20 emails in DEMO_ACCESS_LIST or load a published CSV.
+
+  CSV columns: email, granted_at, expires_at, status
+  Date format: YYYY-MM-DD
+*/
+const DEMO_ACCESS_CSV_URL='';
+const DEMO_ACCESS_LIST=[
+  {email:'Kbielecki@kessler-rehab.com',granted_at:'2026-06-05',expires_at:'2026-07-05',status:'active'}
+];
+const MAX_DEMO_EMAILS=20;
+const ACCESS_COOKIE_NAME='striveDemoAccess';
+
+const modules=document.getElementById('demoModules');
+const statusBox=document.getElementById('accessStatus');
+const accessForm=document.querySelector('.access-form');
+const emailInput=document.getElementById('demoEmail');
+const params=new URLSearchParams(window.location.search);
+const prefilledEmail=params.get('email');
+if(prefilledEmail)emailInput.value=prefilledEmail;
+
+function normalizeEmail(email){
+  return String(email||'').trim().toLowerCase();
+}
+
+function parseDate(dateValue){
+  if(!dateValue)return null;
+  const date=new Date(String(dateValue).trim()+'T00:00:00');
+  return Number.isNaN(date.getTime())?null:date;
+}
+
+function showStatus(type,message){
+  statusBox.className='status show '+type;
+  statusBox.textContent=message;
+}
+
+function daysRemaining(expiresAt){
+  const end=parseDate(expiresAt);
+  if(!end)return 0;
+  return Math.max(0,Math.ceil((end.getTime()-Date.now())/86400000));
+}
+
+function csvToRows(csv){
+  const lines=csv.trim().split(/\r?\n/).filter(Boolean);
+  if(lines.length<2)return [];
+  const headers=lines.shift().split(',').map(h=>h.trim().toLowerCase());
+  return lines.map(line=>{
+    const cells=line.split(',').map(cell=>cell.trim());
+    return headers.reduce((row,header,index)=>{
+      row[header]=cells[index]||'';
+      return row;
+    },{});
+  });
+}
+
+async function getAccessList(){
+  if(!DEMO_ACCESS_CSV_URL)return DEMO_ACCESS_LIST.slice(0,MAX_DEMO_EMAILS);
+  const response=await fetch(DEMO_ACCESS_CSV_URL,{cache:'no-store'});
+  if(!response.ok)throw new Error('Access list could not be loaded.');
+  const rows=csvToRows(await response.text());
+  return rows.slice(0,MAX_DEMO_EMAILS);
+}
+
+function setCookie(name,value,expiresAt){
+  const expires=parseDate(expiresAt);
+  if(!expires)return;
+  document.cookie=[
+    name+'='+encodeURIComponent(value),
+    'expires='+expires.toUTCString(),
+    'path=/',
+    'SameSite=Lax'
+  ].join('; ');
+}
+
+function getCookie(name){
+  const match=document.cookie.split('; ').find(row=>row.startsWith(name+'='));
+  return match?decodeURIComponent(match.slice(name.length+1)):null;
+}
+
+function saveAccess(record){
+  const payload=JSON.stringify({
+    email:normalizeEmail(record.email),
+    expires_at:record.expires_at,
+    saved_at:new Date().toISOString()
+  });
+  setCookie(ACCESS_COOKIE_NAME,payload,record.expires_at);
+}
+
+function restoreAccess(){
+  try{
+    const saved=JSON.parse(getCookie(ACCESS_COOKIE_NAME)||'null');
+    if(!saved||daysRemaining(saved.expires_at)<1)return;
+    emailInput.value=saved.email;
+    accessForm.classList.add('is-hidden');
+    modules.classList.add('show');
+    showStatus('ok','Demo access is active on this device. '+daysRemaining(saved.expires_at)+' day(s) remaining.');
+  }catch(e){}
+}
+
+async function checkAccess(event){
+  event.preventDefault();
+  modules.classList.remove('show');
+  const button=document.getElementById('accessButton');
+  const email=normalizeEmail(emailInput.value);
+  button.disabled=true;
+  button.textContent='Checking...';
+  try{
+    const list=await getAccessList();
+    const record=list.find(item=>normalizeEmail(item.email)===email);
+    if(!record){
+      showStatus('no','This email is not on the private demo list yet. Book a free demo or contact STRIVE to request access.');
+      return;
+    }
+    if(String(record.status||'').toLowerCase()!=='active'){
+      showStatus('warn','This invitation is not active yet. Contact STRIVE if you believe it should be active.');
+      return;
+    }
+    const remaining=daysRemaining(record.expires_at);
+    if(remaining<1){
+      showStatus('warn','This 30-day demo invitation has expired. Contact STRIVE if you need more time.');
+      return;
+    }
+    saveAccess(record);
+    accessForm.classList.add('is-hidden');
+    modules.classList.add('show');
+    showStatus('ok','Access approved. You have '+remaining+' day(s) remaining in your private demo.');
+  }catch(error){
+    showStatus('no','Access could not be checked right now. Please try again or contact STRIVE.');
+  }finally{
+    button.disabled=false;
+    button.textContent='Unlock Demo';
+  }
+}
+
+restoreAccess();
+</script>
+</body>
+</html>

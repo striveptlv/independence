@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f5f1">
+  <title>Online Banking &amp; Bill Pay Simulator | STRIVE Physical Therapy</title>
+  <meta name="description" content="Practice online banking, bill pay, and money-management tasks with STRIVE Physical Therapy's realistic simulator for stroke and brain injury recovery.">
+  <link rel="canonical" href="https://striveptlv.com/moneymanagement/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --paper: #f6f5f1;
+      --paper-deep: #ece9df;
+      --panel: rgba(255, 255, 255, 0.84);
+      --panel-solid: #ffffff;
+      --line: rgba(18, 23, 21, 0.1);
+      --line-strong: rgba(18, 23, 21, 0.18);
+      --ink: #121715;
+      --text: #18211e;
+      --text-mid: #51615a;
+      --text-soft: #708078;
+      --accent: #b7d63b;
+      --accent-deep: #8ea91c;
+      --accent-pale: rgba(183, 214, 59, 0.12);
+      --navy: #214a7a;
+      --navy-deep: #163456;
+      --sage: #5d8b6f;
+      --sage-deep: #41614e;
+      --gold: #d2a54b;
+      --gold-deep: #9a7428;
+      --shadow: 0 24px 48px rgba(18, 23, 21, 0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(33, 74, 122, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(210, 165, 75, 0.12), transparent 18%),
+        radial-gradient(circle at bottom left, rgba(93, 139, 111, 0.12), transparent 22%),
+        linear-gradient(180deg, #fbfcfe 0%, #f5f7f2 52%, #edf2ea 100%);
+      color: var(--text);
+      overflow-x: hidden;
+      padding-top: 70px;
+    }
+    body.menu-open { overflow: hidden; }
+    img { max-width: 100%; height: auto; }
+    a { color: inherit; }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      height: 70px;
+      background: rgba(246, 245, 241, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+    .logo-img { width: 46px; height: 46px; object-fit: contain; flex-shrink: 0; }
+    .logo-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 27px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--ink);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .logo-sub {
+      font-size: 9px;
+      color: var(--accent-deep);
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 22px; }
+    .nav-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-book {
+      background: var(--ink) !important;
+      color: white !important;
+      padding: 10px 18px;
+      border-radius: 2px;
+    }
+    .nav-book:hover { background: var(--accent-deep) !important; }
+    .nav-dropdown { position: relative; display: flex; align-items: center; justify-content: center; }
+    .nav-dropdown > a { display: flex; align-items: center; gap: 5px; padding: 24px 0; }
+    .nav-dropdown > a::after {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid rgba(81, 97, 90, 0.7);
+      transition: transform 0.2s;
+    }
+    .nav-dropdown:hover > a::after { transform: rotate(180deg); border-top-color: var(--ink); }
+    .dropdown-menu {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 178px;
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 30px rgba(18, 23, 21, 0.08);
+      text-align: center;
+      transition: opacity 0.15s;
+    }
+    .nav-dropdown:hover .dropdown-menu { opacity: 1; pointer-events: auto; }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--text-mid);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      text-align: center;
+    }
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover { background: var(--accent-pale); color: var(--ink); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-toggle span { width: 24px; height: 2px; background: var(--ink); }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--paper);
+      z-index: 199;
+      padding: 28px 6vw;
+      overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none;
+      color: var(--ink);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .mob-book {
+      background: var(--ink);
+      color: white !important;
+      text-align: center;
+      border-radius: 2px;
+      margin-top: 24px;
+      border: none !important;
+    }
+    .mob-dropdown { border-bottom: 1px solid var(--line); }
+    .mob-dropdown-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--ink);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 15px 0;
+      cursor: pointer;
+    }
+    .mob-arrow { font-size: 20px; color: var(--accent-deep); transition: transform 0.25s; }
+    .mob-arrow.open { transform: rotate(90deg); }
+    .mob-dropdown-items { display: none; flex-direction: column; padding-left: 14px; }
+    .mob-dropdown-items.open { display: flex; }
+    .mob-dropdown-items a {
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px !important;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text-mid);
+      padding: 12px 0 !important;
+    }
+
+    .schedule-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 240;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(8, 12, 14, 0.42);
+      backdrop-filter: blur(8px);
+    }
+    .schedule-modal.open { display: flex; }
+    .schedule-dialog {
+      position: relative;
+      width: min(100%, 520px);
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+      box-shadow: 0 28px 64px rgba(18, 23, 21, 0.14);
+      padding: 30px 28px 26px;
+      border-radius: 28px;
+    }
+    .schedule-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      border-radius: 999px;
+    }
+    .schedule-close:hover { background: var(--accent-pale); }
+    .schedule-kicker {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-bottom: 12px;
+    }
+    .schedule-dialog h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(36px, 5vw, 44px);
+      line-height: 0.96;
+      color: var(--ink);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .schedule-dialog p {
+      color: var(--text-mid);
+      font-size: 15px;
+      line-height: 1.75;
+      margin-bottom: 22px;
+    }
+    .schedule-contact {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(18, 23, 21, 0.06);
+      color: var(--ink);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+    .schedule-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .schedule-option {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      min-height: 190px;
+      padding: 22px 20px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      text-decoration: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(236,233,223,0.72));
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .schedule-option > div {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .schedule-option:hover {
+      border-color: var(--line-strong);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(18, 23, 21, 0.08);
+    }
+    .schedule-option-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+    }
+    .schedule-option h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      line-height: 0.98;
+      color: var(--ink);
+      margin: 10px 0 8px;
+      text-transform: uppercase;
+    }
+    .schedule-option strong {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 42px;
+    }
+    .hero,
+    .card,
+    .content-footer {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    .hero { padding: 34px; }
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 12px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .lead {
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: var(--text-mid);
+    }
+    .info-strip {
+      margin-top: 22px;
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(246, 245, 241, 0.95), rgba(255, 255, 255, 0.78));
+      border: 1px solid rgba(18, 23, 21, 0.08);
+    }
+    .info-strip p { margin: 0; line-height: 1.7; }
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 24px;
+    }
+    .card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .label {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .label.utility { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); }
+    .label.credit { background: linear-gradient(135deg, var(--navy), var(--navy-deep)); }
+    .label.bank { background: linear-gradient(135deg, var(--sage), var(--sage-deep)); }
+    .card h2 {
+      margin: 16px 0 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .card p {
+      margin-bottom: 22px;
+      line-height: 1.65;
+      color: var(--text-mid);
+      flex: 1;
+    }
+    .launch-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #fff;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .launch-link:hover { transform: translateY(-1px); }
+    .launch-link.utility {
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+      box-shadow: 0 14px 28px rgba(154, 116, 40, 0.22);
+    }
+    .launch-link.credit {
+      background: linear-gradient(135deg, var(--navy), var(--navy-deep));
+      box-shadow: 0 14px 28px rgba(22, 52, 86, 0.24);
+    }
+    .launch-link.bank {
+      background: linear-gradient(135deg, var(--sage), var(--sage-deep));
+      box-shadow: 0 14px 28px rgba(65, 97, 78, 0.24);
+    }
+
+    .donate-card {
+      margin-top: 24px;
+      background: #121715;
+      border: 1px solid rgba(183, 214, 59, 0.18);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 36px 40px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .donate-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(183, 214, 59, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .donate-heart-wrap {
+      position: relative;
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .donate-pulse-ring,
+    .donate-pulse-ring-2 {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(183, 214, 59, 0.45);
+      animation: donate-pulse 2s ease-out infinite;
+    }
+    .donate-pulse-ring-2 {
+      border-color: rgba(183, 214, 59, 0.22);
+      animation-delay: 0.7s;
+    }
+    .donate-heart-bg {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(183, 214, 59, 0.12);
+      border: 1px solid rgba(183, 214, 59, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .donate-heart-svg { animation: donate-hb 1.6s ease-in-out infinite; }
+    .donate-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .donate-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: white;
+      margin: 0 0 8px;
+    }
+    .donate-card p {
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.68);
+      line-height: 1.75;
+      margin: 0;
+      max-width: 420px;
+    }
+    .donate-text { flex: 1; }
+    .donate-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 190px;
+      flex-shrink: 0;
+    }
+    .donate-btn {
+      display: block;
+      padding: 13px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: white;
+      text-align: center;
+      background: var(--accent-deep);
+      transition: background 0.2s;
+    }
+    .donate-btn:hover { background: #a9c921; }
+    .donate-note {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .content-footer {
+      margin-top: 24px;
+      padding: 20px 24px;
+      text-align: center;
+      color: var(--text-mid);
+      font-size: 0.95rem;
+    }
+
+    @keyframes donate-hb {
+      0%, 100% { transform: scale(1); }
+      30% { transform: scale(1.18); }
+      60% { transform: scale(1.08); }
+    }
+    @keyframes donate-pulse {
+      0% { transform: scale(0.85); opacity: 0.6; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .launch-grid { grid-template-columns: 1fr; }
+      .page { width: min(100% - 20px, 1120px); padding-top: 20px; padding-bottom: 28px; }
+      .hero, .card, .content-footer { border-radius: 24px; }
+      .hero, .card { padding: 22px; }
+      .donate-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 28px 22px;
+        gap: 24px;
+      }
+      .donate-actions { min-width: unset; width: 100%; }
+      .donate-card p { max-width: unset; }
+    }
+
+    @media (max-width: 720px) {
+      .schedule-dialog { padding: 28px 20px 22px; }
+      .schedule-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Primary">
+    <a href="/" class="nav-logo">
+      <img src="/logo.png" alt="STRIVE PT Logo" class="logo-img">
+      <div>
+        <div class="logo-text">STRIVE</div>
+        <div class="logo-sub">Physical Therapy · Las Vegas</div>
+      </div>
+    </a>
+
+      <div class="nav-links">
+    <a href="/about.html">About</a>
+    <div class="nav-dropdown">
+      <a href="/#services">Services</a>
+      <div class="dropdown-menu">
+        <a href="/wellness.html">Wellness Classes</a>
+        <a href="/stroke.html">Stroke Rehab</a>
+        <a href="/sci.html">SCI Rehab</a>
+        <a href="/vestibular-rehab.html">Vestibular Rehab</a>
+        <a href="/fnd.html">FND Rehab</a>
+      </div>
+    </div>
+    <a href="/private.html">Pricing</a>
+    <div class="nav-dropdown">
+      <a href="#">Resources</a>
+      <div class="dropdown-menu">
+        <a href="/talk">STRIVE TALK</a>
+        <a href="/index.html">STRIVE INDEPENDENCE</a>
+        <a href="https://open.spotify.com/show/2nbFBV45QpM37SAdHtobgF?si=Gns3Ft-7SgCNdGbmnOcpag" target="_blank" rel="noopener">PODCAST</a>
+        <a href="/insights">ARTICLES</a>
+        <a href="/money.html">STRIVE MONEY REHAB</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <a href="#">Clinicians</a>
+      <div class="dropdown-menu">
+        <a href="/moneymanagement/">OT Bank App</a>
+        <a href="/vo">Vestibular App</a>
+      </div>
+    </div>
+    <a href="#scheduling" data-schedule-trigger class="nav-book">Book Now</a>
+  </div><div class="nav-toggle" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+  <a href="/" onclick="toggleMenu(false)">Home</a>
+  <a href="/about.html" onclick="toggleMenu(false)">About</a>
+  <div class="mob-dropdown">
+    <div class="mob-dropdown-toggle" onclick="toggleMobileDropdown('servicesItems', this.querySelector('.mob-arrow'))">
+      Services <span class="mob-arrow">›</span>
+    </div>
+    <div class="mob-dropdown-items" id="servicesItems">
+      <a href="/wellness.html" onclick="toggleMenu(false)">Wellness Classes</a>
+      <a href="/stroke.html" onclick="toggleMenu(false)">Stroke Rehab</a>
+      <a href="/sci.html" onclick="toggleMenu(false)">SCI Rehab</a>
+      <a href="/vestibular-rehab.html" onclick="toggleMenu(false)">Vestibular Rehab</a>
+      <a href="/fnd.html" onclick="toggleMenu(false)">FND Rehab</a>
+    </div>
+  </div>
+  <a href="/private.html" onclick="toggleMenu(false)">Pricing</a>
+  <div class="mob-dropdown">
+    <div class="mob-dropdown-toggle" onclick="toggleMobileDropdown('patientResourceItems', this.querySelector('.mob-arrow'))">
+      Resources <span class="mob-arrow">›</span>
+    </div>
+    <div class="mob-dropdown-items" id="patientResourceItems">
+      <a href="/talk" onclick="toggleMenu(false)">STRIVE TALK</a>
+      <a href="/index.html" onclick="toggleMenu(false)">STRIVE INDEPENDENCE</a>
+      <a href="https://open.spotify.com/show/2nbFBV45QpM37SAdHtobgF?si=Gns3Ft-7SgCNdGbmnOcpag" target="_blank" rel="noopener">PODCAST</a>
+      <a href="/insights" onclick="toggleMenu(false)">ARTICLES</a>
+      <a href="/money.html" onclick="toggleMenu(false)">STRIVE MONEY REHAB</a>
+    </div>
+  </div>
+  <div class="mob-dropdown">
+    <div class="mob-dropdown-toggle" onclick="toggleMobileDropdown('cliniciansItems', this.querySelector('.mob-arrow'))">
+      Clinicians <span class="mob-arrow">›</span>
+    </div>
+    <div class="mob-dropdown-items" id="cliniciansItems">
+      <a href="/moneymanagement/" onclick="toggleMenu(false)">OT Bank App</a>
+      <a href="/vo" onclick="toggleMenu(false)">Vestibular App</a>
+    </div>
+  </div>
+  <a href="#scheduling" data-schedule-trigger class="mob-book" onclick="toggleMenu(false)">Book Now</a>
+</div>
+
+<div class="schedule-modal" id="scheduleModal" aria-hidden="true">
+    <div class="schedule-dialog" role="dialog" aria-modal="true" aria-labelledby="scheduleTitle">
+      <button type="button" class="schedule-close" aria-label="Close scheduling options" data-schedule-close>&times;</button>
+      <div class="schedule-kicker">Scheduling</div>
+      <h2 id="scheduleTitle">Are you a new client or a returning client?</h2>
+      <p>Choose the option that matches where you are in the process, and we’ll send you to the right scheduling page.</p>
+      <div class="schedule-contact">Call/Text: 702 381 4197</div>
+      <div class="schedule-options">
+        <a href="https://calendly.com/dpt-striveptlv/30min" target="_blank" rel="noopener" class="schedule-option">
+          <div>
+            <div class="schedule-option-label">First Visit</div>
+            <h3>New Client</h3>
+            <p>Start with your free consultation so we can learn about your needs and confirm the best next step.</p>
+          </div>
+          <strong>Open Calendly</strong>
+        </a>
+        <a href="https://striveptlv.janeapp.com" target="_blank" rel="noopener" class="schedule-option">
+          <div>
+            <div class="schedule-option-label">Ongoing Care</div>
+            <h3>Returning Client</h3>
+            <p>Use JaneApp if you are already established with STRIVE and need to book a follow-up visit.</p>
+          </div>
+          <strong>Open JaneApp</strong>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">Money Management Task</p>
+      <h1>Online Banking &amp; Bill Pay Simulator</h1>
+      <p class="lead">
+        This program gives patients and clients a safe way to practice financial management,
+        app navigation, computer use, typing, multi-tasking, divided attention, and managing
+        distraction while completing realistic online tasks. These activities support improved
+        independence and safety with IADLs, especially for people recovering after a stroke or
+        brain injury.
+      </p>
+      <div class="info-strip">
+        <p>
+          Choose one of the practice environments below to work on logging in, locating account
+          details, switching attention between screens, following task steps, and completing
+          functional payment or banking activities.
+        </p>
+      </div>
+    </section>
+
+    <section class="launch-grid" aria-label="Practice program launch options">
+      <article class="card">
+        <span class="label utility">Mock Electric Bill</span>
+        <h2>Bill Pay Simulation</h2>
+        <p>
+          Opens the bill-pay practice homepage for utility payment tasks with realistic account
+          navigation and payment workflow practice.
+        </p>
+        <a class="launch-link utility" href="./Bill%20Pay/Bill%20Pay%20Homepage.html">Begin Bill Pay Simulation</a>
+      </article>
+
+      <article class="card">
+        <span class="label credit">Mock Credit Card</span>
+        <h2>Credit Card Account Simulation</h2>
+        <p>
+          Opens the Visa credit practice homepage to support card management tasks, online form
+          completion, and attention to details across multiple screens.
+        </p>
+        <a class="launch-link credit" href="./Visa/Visa%20Credit%20Homepage.html">Begin Credit Card Simulation</a>
+      </article>
+
+      <article class="card">
+        <span class="label bank">Mock Credit Union</span>
+        <h2>Online Bank Simulation</h2>
+        <p>
+          Opens the credit union banking simulation for personal account practice, navigation,
+          account review, and everyday money management skills.
+        </p>
+        <a class="launch-link bank" href="./Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html">Begin Online Banking Simulation</a>
+      </article>
+    </section>
+
+    <aside class="donate-card">
+      <div class="donate-heart-wrap">
+        <div class="donate-pulse-ring"></div>
+        <div class="donate-pulse-ring-2"></div>
+        <div class="donate-heart-bg">
+          <svg class="donate-heart-svg" width="36" height="36" viewBox="0 0 24 24" fill="#b7d63b" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="donate-text">
+        <div class="donate-eyebrow">Free for stroke patients &amp; families</div>
+        <h3>Help us keep this tool free.</h3>
+        <p>No paywalls, no subscriptions, no memberships. If this helped someone you love on their recovery journey, a small donation keeps it running for everyone who needs it.</p>
+      </div>
+      <div class="donate-actions">
+        <a class="donate-btn" href="https://ko-fi.com/joshdpt" target="_blank" rel="noopener">Support on Ko-fi</a>
+        <p class="donate-note">No account needed · any amount welcome</p>
+      </div>
+    </aside>
+
+    <footer class="content-footer">
+      Created by Strive Physical Therapy.<br>
+      © 2026 STRIVE Physical Therapy · Las Vegas, NV · All rights reserved.
+    </footer>
+  </main>
+
+  <script>
+    const scheduleModal = document.getElementById('scheduleModal');
+    const scheduleTriggers = document.querySelectorAll('[data-schedule-trigger]');
+
+    function setScheduleModalState(isOpen) {
+      if (!scheduleModal) return;
+      scheduleModal.classList.toggle('open', isOpen);
+      scheduleModal.setAttribute('aria-hidden', String(!isOpen));
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    function openScheduleModal(event) {
+      if (event) event.preventDefault();
+      setScheduleModalState(true);
+    }
+
+    function closeScheduleModal() {
+      setScheduleModalState(false);
+    }
+
+    scheduleTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', openScheduleModal);
+    });
+
+    if (scheduleModal) {
+      scheduleModal.addEventListener('click', (event) => {
+        if (event.target === scheduleModal || event.target.hasAttribute('data-schedule-close')) {
+          closeScheduleModal();
+        }
+      });
+    }
+
+    function toggleMenu(forceState) {
+      const menu = document.getElementById('mobileMenu');
+      const shouldOpen = typeof forceState === 'boolean'
+        ? forceState
+        : !menu.classList.contains('open');
+
+      menu.classList.toggle('open', shouldOpen);
+      document.body.classList.toggle('menu-open', shouldOpen);
+    }
+
+    function toggleMobileDropdown(itemsId, arrowEl) {
+      const dropdown = document.getElementById(itemsId);
+      if (!dropdown || !arrowEl) return;
+      dropdown.classList.toggle('open');
+      arrowEl.classList.toggle('open');
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 960) toggleMenu(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        toggleMenu(false);
+        closeScheduleModal();
+      }
+    });
+  </script>
+</body>
+</html>
