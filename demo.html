@@ -169,14 +169,14 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
     <div>
       <div class="tag">Invitation Required</div>
       <h1>Private <em>30-Day</em> Demo</h1>
-      <p class="hero-copy">This access page is for clinicians, programs, facilities, and care teams personally invited by STRIVE. Enter the same email used for your demo request to unlock the demo modules during your approval window.</p>
+      <p class="hero-copy">This access page is for clinicians, programs, facilities, and care teams personally invited by STRIVE. Enter the same email used for your trial request to unlock the demo modules during your approval window.</p>
       <p class="privacy-note">Access is intentionally limited while STRIVE INDEPENDENCE is being previewed with a small group. Your invitation is tied to your email and expires after 30 days.</p>
     </div>
 
     <div class="access-card" id="access">
       <div class="card-kicker">Access Check</div>
       <h2 class="card-title">Enter Your Invited Email</h2>
-      <p class="card-copy">If your email has been approved, the full demo modules will appear below. If not, book a free demo and STRIVE can add you to the demo list manually.</p>
+      <p class="card-copy">If your email has been approved, the full demo modules will appear below. If not, request a free trial and STRIVE can add you to the demo list manually.</p>
       <form class="access-form" onsubmit="checkAccess(event)">
         <label for="demoEmail">Work Email</label>
         <input id="demoEmail" name="email" type="email" placeholder="you@clinic.com" autocomplete="email" required>
@@ -321,7 +321,7 @@ async function checkAccess(event){
     const list=await getAccessList();
     const record=list.find(item=>normalizeEmail(item.email)===email);
     if(!record){
-      showStatus('no','This email is not on the private demo list yet. Book a free demo or contact STRIVE to request access.');
+      showStatus('no','This email is not on the private demo list yet. Request a free trial or contact STRIVE to request access.');
       return;
     }
     if(String(record.status||'').toLowerCase()!=='active'){
