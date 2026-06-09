@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Access | STRIVE INDEPENDENCE</title>
+<meta name="description" content="Create or access your STRIVE INDEPENDENCE account for therapy teams, clinics, and care programs.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#132338;
+  --ink:#1a2e44;
+  --muted:rgba(26,46,68,.62);
+  --soft:rgba(26,46,68,.78);
+  --blue:#1B4FA8;
+  --orange:#F5820A;
+  --line:rgba(19,35,56,.12);
+  --glass:rgba(255,255,255,.82);
+  --white:#fff;
+}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;font-family:'Outfit',sans-serif;color:var(--ink);
+  background:#f5fafc;line-height:1.6;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 42% at 50% -10%,rgba(27,79,168,.14),transparent 64%),
+    radial-gradient(ellipse 36% 34% at 95% 22%,rgba(245,130,10,.14),transparent 60%),
+    radial-gradient(ellipse 44% 34% at 4% 82%,rgba(27,79,168,.08),transparent 58%);
+}
+main,footer{position:relative;z-index:1}
+nav{
+  position:relative;z-index:10;
+  min-height:76px;display:flex;align-items:center;justify-content:space-between;
+  padding:18px 6vw;border-bottom:1px solid var(--line);background:rgba(255,255,255,.82);
+  backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy)}
+.brand img{width:44px;height:44px;object-fit:contain}
+.brand-word{display:block;font-size:20px;font-weight:900;letter-spacing:.09em;line-height:1;text-transform:uppercase}
+.brand-sub{display:block;margin-top:2px;font-size:8px;font-weight:800;letter-spacing:.25em;color:var(--orange);text-transform:uppercase}
+.shell{width:min(1180px,88vw);margin:0 auto}
+.hero{
+  min-height:calc(100vh - 76px);display:grid;grid-template-columns:.9fr 1.1fr;
+  gap:48px;align-content:center;align-items:center;justify-items:stretch;padding:54px 0;
+}
+.hero-heading{text-align:left}
+h1{
+  max-width:560px;font-size:clamp(2.8rem,4.4vw,4.65rem);font-weight:900;line-height:.94;
+  letter-spacing:0;text-transform:uppercase;color:var(--navy);margin:0;
+}
+h1 span{display:block}
+h1 em{font-style:normal;color:var(--orange)}
+.auth-card{
+  width:min(100%,620px);
+  justify-self:end;
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(235,246,251,.96));
+  border:1px solid rgba(27,79,168,.16);border-radius:20px;
+  padding:clamp(1.35rem,3.4vw,2.3rem);
+  box-shadow:0 34px 92px rgba(19,35,56,.16);
+}
+.card-kicker{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:10px;
+}
+.card-title{
+  font-size:clamp(1.65rem,3vw,2.35rem);font-weight:900;letter-spacing:0;
+  line-height:1;text-transform:uppercase;color:var(--navy);margin-bottom:12px;
+}
+.card-copy{font-size:.98rem;color:var(--soft);line-height:1.62;margin-bottom:20px}
+.card-copy:empty{display:none}
+.auth-form{display:none;gap:13px}
+.auth-form.active{display:grid}
+.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.field{display:grid;gap:7px}
+label{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--orange);
+}
+input,select,textarea{
+  width:100%;min-height:50px;border-radius:10px;border:1px solid rgba(19,35,56,.14);
+  background:#fff;color:var(--navy);font:inherit;font-size:1rem;padding:0 15px;
+}
+textarea{min-height:82px;resize:vertical;padding:13px 15px;line-height:1.45}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(245,130,10,.58);box-shadow:0 0 0 4px rgba(245,130,10,.1)}
+.form-link{
+  justify-self:start;border:0;background:transparent;color:var(--blue);cursor:pointer;
+  font:inherit;font-size:.82rem;font-weight:800;text-decoration:none;padding:0;
+}
+.form-link:hover{text-decoration:underline}
+.forgot-link{margin-top:-4px}
+.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+button,.button{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;
+  padding:13px 20px;border-radius:6px;border:none;text-decoration:none;cursor:pointer;
+  font-size:12.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+  transition:opacity .2s,transform .2s,box-shadow .2s;
+}
+button:hover,.button:hover{opacity:.92;transform:translateY(-1px)}
+.primary{background:var(--orange);color:var(--navy);box-shadow:0 14px 34px rgba(245,130,10,.22)}
+.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.status{
+  display:none;margin-top:16px;padding:14px;border-radius:10px;font-size:.94rem;font-weight:700;line-height:1.45;
+}
+.status.show{display:block}
+.status.ok{background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.3);color:#047857}
+.status.warn{background:rgba(245,130,10,.12);border:1px solid rgba(245,130,10,.28);color:#9a4b00}
+.status.no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.24);color:#b91c1c}
+.supabase-note{
+  margin-top:18px;padding:13px 14px;border-radius:12px;border:1px solid rgba(27,79,168,.14);
+  background:rgba(255,255,255,.66);color:var(--muted);font-size:.84rem;line-height:1.45;
+}
+footer{padding:28px 6vw;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--navy);text-decoration:none;font-weight:800}
+@media(max-width:640px){
+  nav{min-height:58px;padding:9px 16px}
+  .brand{gap:9px}
+  .brand img{width:34px;height:34px}
+  .brand-word{font-size:16px}
+  .brand-sub{font-size:6.5px;letter-spacing:.2em}
+  .shell{width:min(100% - 32px,1180px)}
+  .hero{min-height:calc(100vh - 58px);grid-template-columns:1fr;gap:18px;align-content:start;align-items:start;padding:24px 0 34px}
+  .hero-heading{text-align:left}
+  h1{font-size:2.65rem;line-height:.94}
+  .auth-card{justify-self:stretch;padding:1.2rem}
+  .field-grid{grid-template-columns:1fr}
+  .button-row{flex-direction:column}
+  button,.button{width:100%}
+  .form-link{justify-self:center;font-size:.78rem}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/index.html" aria-label="STRIVE INDEPENDENCE home">
+    <img src="logo.png" alt="">
+    <span>
+      <span class="brand-word">STRIVE</span>
+      <span class="brand-sub">Independence</span>
+    </span>
+  </a>
+</nav>
+
+<main>
+  <section class="hero shell">
+    <div class="hero-heading">
+      <h1><span>STRIVE</span> <em>Independence</em></h1>
+    </div>
+
+    <div class="auth-card" id="account">
+      <div class="card-kicker">Welcome</div>
+      <h2 class="card-title" id="formTitle">Access Your Account</h2>
+      <p class="card-copy" id="formCopy"></p>
+      <form class="auth-form active" id="loginForm" data-title="Access Your Account" data-copy="" onsubmit="handleAuthSubmit(event,'login')">
+        <div class="field">
+          <label for="loginEmail">Work Email</label>
+          <input id="loginEmail" name="email" type="email" placeholder="you@clinic.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+        <div class="button-row">
+          <button class="primary" type="submit">Access Your Account</button>
+          <button class="secondary" type="button" data-panel="create">Create Account</button>
+        </div>
+        <button class="form-link forgot-link" type="button" data-panel="forgot">Forgot your password?</button>
+      </form>
+
+      <form class="auth-form" id="createForm" data-title="Create Account" data-copy="Tell STRIVE who you are so your account can be reviewed and connected to the correct team later." onsubmit="handleAuthSubmit(event,'create')">
+        <div class="field-grid">
+          <div class="field">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" name="full_name" type="text" placeholder="Jane Smith" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="signupEmail">Work Email</label>
+            <input id="signupEmail" name="email" type="email" placeholder="jane@clinic.com" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="phoneNumber">Phone Number</label>
+            <input id="phoneNumber" name="phone" type="tel" placeholder="(555) 123-4567" autocomplete="tel" required>
+          </div>
+          <div class="field">
+            <label for="company">Company</label>
+            <input id="company" name="company" type="text" placeholder="Clinic or program name" autocomplete="organization" required>
+          </div>
+          <div class="field">
+            <label for="role">Role</label>
+            <select id="role" name="role" required>
+              <option value="">Select role</option>
+              <option value="admin">Admin</option>
+              <option value="therapist">Therapist</option>
+              <option value="owner">Owner</option>
+              <option value="staff">Staff</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="signupPassword">Password</label>
+            <input id="signupPassword" name="password" type="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="heardFrom">Where Did You Hear From Us?</label>
+          <textarea id="heardFrom" name="heard_from" placeholder="Referral, conference, search, social media, email, or another source" required></textarea>
+        </div>
+        <div class="button-row">
+          <button class="primary" type="submit">Create Account</button>
+          <button class="secondary" type="button" data-panel="login">Back To Access</button>
+        </div>
+      </form>
+
+      <form class="auth-form" id="forgotForm" data-title="Forgot Password" data-copy="Enter your account email and STRIVE will send password reset instructions once Supabase Auth is connected." onsubmit="handleAuthSubmit(event,'forgot')">
+        <div class="field">
+          <label for="resetEmail">Account Email</label>
+          <input id="resetEmail" name="email" type="email" placeholder="account@clinic.com" autocomplete="email" required>
+        </div>
+        <div class="button-row">
+          <button class="primary" type="submit">Send Reset Link</button>
+          <button class="secondary" type="button" data-panel="login">Back To Access</button>
+        </div>
+      </form>
+
+      <div class="status" id="authStatus" role="status" aria-live="polite"></div>
+      <p class="supabase-note">Supabase note: keep the email and password fields for <strong>auth.signUp</strong>, <strong>auth.signInWithPassword</strong>, and <strong>auth.resetPasswordForEmail</strong>. Store full name, phone, company, role, and referral source in a profile table after signup.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>STRIVE INDEPENDENCE · Account access</span>
+  <a href="/index.html">Return to main site</a>
+</footer>
+
+<script>
+const panelTriggers=[...document.querySelectorAll('[data-panel]')];
+const forms={
+  login:document.getElementById('loginForm'),
+  create:document.getElementById('createForm'),
+  forgot:document.getElementById('forgotForm')
+};
+const formTitle=document.getElementById('formTitle');
+const formCopy=document.getElementById('formCopy');
+const statusBox=document.getElementById('authStatus');
+
+function showPanel(panelName){
+  Object.entries(forms).forEach(([name,form])=>{
+    form.classList.toggle('active',name===panelName);
+  });
+  const activeForm=forms[panelName];
+  formTitle.textContent=activeForm.dataset.title;
+  formCopy.textContent=activeForm.dataset.copy;
+  statusBox.className='status';
+  statusBox.textContent='';
+}
+
+function showStatus(type,message){
+  statusBox.className='status show '+type;
+  statusBox.textContent=message;
+}
+
+panelTriggers.forEach(trigger=>{
+  trigger.addEventListener('click',()=>{
+    const panelName=trigger.dataset.panel;
+    if(forms[panelName])showPanel(panelName);
+  });
+});
+
+function getFormData(form){
+  return Object.fromEntries(new FormData(form).entries());
+}
+
+function handleAuthSubmit(event,type){
+  event.preventDefault();
+  const data=getFormData(event.currentTarget);
+
+  if(type==='login'){
+    console.log('Ready for supabase.auth.signInWithPassword',data);
+    showStatus('warn','Account access form captured. Connect this submit handler to supabase.auth.signInWithPassword when you are ready.');
+    return;
+  }
+
+  if(type==='create'){
+    console.log('Ready for supabase.auth.signUp plus profile insert',data);
+    showStatus('ok','Account details captured. Later, send email and password to Supabase Auth, then save the remaining details to a profile table.');
+    event.currentTarget.reset();
+    return;
+  }
+
+  console.log('Ready for supabase.auth.resetPasswordForEmail',data);
+  showStatus('warn','Password reset email captured. Connect this handler to supabase.auth.resetPasswordForEmail when Supabase is set up.');
+}
+</script>
+</body>
+</html>
