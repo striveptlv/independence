@@ -176,10 +176,10 @@ nav{
           <div class="tier-name">Clinic</div>
           <div class="tier-tagline">The same STRIVE account for small teams.</div>
           <div class="tier-price">$79.99</div>
-          <div class="tier-price-note">/ month · up to 5 users</div>
+          <div class="tier-price-note">/ month · up to 10 users</div>
           <div class="tier-sep"></div>
           <ul class="tier-features">
-            <li><span class="chk">✓</span>Up to 5 user accounts</li>
+            <li><span class="chk">✓</span>Up to 10 user accounts</li>
             <li><span class="chk">✓</span>Shared clinic or team access</li>
             <li><span class="chk">✓</span>Full STRIVE Talk access</li>
             <li><span class="chk">✓</span>Full Money Rehab and Community Mobility access</li>
@@ -249,16 +249,12 @@ async function startCheckout(plan) {
     });
 
     const result = await response.json();
-
-    if (!response.ok) {
-      alert(result.error || "Checkout failed.");
-      return;
-    }
+    console.log("Checkout result:", result);
 
     if (result.url) {
       window.location.href = result.url;
     } else {
-      alert("No checkout URL returned.");
+      alert("Checkout failed: " + (result.error || JSON.stringify(result)));
     }
   } catch (err) {
     console.error(err);
