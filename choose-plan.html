@@ -228,20 +228,12 @@ async function startCheckout(plan) {
   try {
     try{localStorage.setItem("striveSelectedPlan", plan)}catch(e){}
 
-    const { data: sessionData, error: sessionError } =
-      await supabaseClient.auth.getSession();
-
-    if (sessionError || !sessionData.session) {
-      alert("Please log in first.");
-      window.location.href = "auth.html";
-      return;
-    }
-
     const response = await fetch(CHECKOUT_FUNCTION_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionData.session.access_token}`
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
       },
       body: JSON.stringify({
         plan: plan
