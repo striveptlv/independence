@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose Your Plan | STRIVE INDEPENDENCE</title>
+<meta name="description" content="Choose a STRIVE INDEPENDENCE plan after creating or accessing your account.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#132338;
+  --ink:#1a2e44;
+  --muted:rgba(26,46,68,.52);
+  --muted-s:rgba(26,46,68,.74);
+  --blue:#1B4FA8;
+  --orange:#F5820A;
+  --line:rgba(19,35,56,.10);
+  --line-m:rgba(19,35,56,.18);
+  --gb:rgba(27,79,168,.13);
+  --white:#fff;
+}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;font-family:'Outfit',sans-serif;color:var(--ink);
+  background:#f5fafc;line-height:1.6;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 42% at 50% -10%,rgba(27,79,168,.14),transparent 64%),
+    radial-gradient(ellipse 36% 34% at 95% 22%,rgba(245,130,10,.14),transparent 60%),
+    radial-gradient(ellipse 44% 34% at 4% 82%,rgba(27,79,168,.08),transparent 58%);
+}
+a{color:inherit;text-decoration:none}
+main{position:relative;z-index:1}
+nav{
+  position:relative;z-index:10;
+  min-height:68px;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 6vw;border-bottom:1px solid var(--line);background:rgba(255,255,255,.82);
+  backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy)}
+.brand img{width:38px;height:38px;object-fit:contain}
+.brand-word{display:block;font-size:20px;font-weight:900;letter-spacing:.09em;line-height:1;text-transform:uppercase}
+.brand-sub{display:block;margin-top:2px;font-size:8px;font-weight:800;letter-spacing:.25em;color:var(--orange);text-transform:uppercase}
+.pricing-section{padding:clamp(1.15rem,2.6vw,2rem) 6vw 1rem}
+.pricing-inner{max-width:1200px;margin:0 auto}
+.pricing-header{
+  margin-bottom:1rem;
+}
+.section-tag{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:.45rem;
+  display:flex;align-items:center;gap:8px;
+}
+.section-tag::before{content:'';width:18px;height:1px;background:var(--orange)}
+.section-h2{
+  font-size:clamp(1.45rem,2vw,2rem);font-weight:900;line-height:1;
+  letter-spacing:0;text-transform:uppercase;color:var(--navy);margin-bottom:0;
+}
+.section-h2 .light{font-weight:300;color:rgba(19,35,56,.55)}
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.tier-card{
+  background:rgba(255,255,255,.88);border:1px solid var(--gb);border-radius:18px;padding:1.45rem 1.55rem;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:100%;
+  transition:transform .18s,border-color .2s,box-shadow .2s;
+}
+.tier-card:not(.featured):hover{
+  transform:translateY(-5px);border-color:var(--line-m);box-shadow:0 24px 64px rgba(19,35,56,.12);
+}
+.tier-card.featured{
+  background:linear-gradient(155deg,#ffffff 0%,#edf5fb 100%);
+  border:1px solid rgba(245,130,10,.28);
+  box-shadow:0 0 0 1px rgba(245,130,10,.09),0 36px 90px rgba(245,130,10,.1);
+}
+.tier-card.featured:hover{transform:translateY(-5px)}
+.tier-card.featured::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--orange),transparent);
+}
+.tier-badge{
+  position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+  background:var(--orange);color:var(--navy);
+  font-size:9px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;
+  padding:5px 18px;white-space:nowrap;
+}
+.tier-name{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:.4rem;margin-top:.6rem;
+}
+.tier-tagline{font-size:.86rem;color:var(--muted);line-height:1.38;margin-bottom:.8rem}
+.tier-price{font-size:clamp(2.9rem,5.1vw,4.25rem);font-weight:900;line-height:.88;letter-spacing:0;color:var(--navy)}
+.tier-price-note{font-size:12px;color:var(--muted);margin-top:.5rem;letter-spacing:.04em}
+.tier-sep{height:1px;background:var(--line);margin:.85rem 0}
+.tier-features{list-style:none;display:flex;flex-direction:column;gap:.36rem;margin-bottom:.95rem;flex:1}
+.tier-features li{font-size:.84rem;color:var(--muted-s);display:flex;align-items:flex-start;gap:9px;line-height:1.28}
+.chk{
+  width:16px;height:16px;border-radius:50%;flex-shrink:0;margin-top:1px;
+  background:rgba(245,130,10,.18);border:1px solid rgba(245,130,10,.38);
+  display:flex;align-items:center;justify-content:center;font-size:8.5px;color:var(--orange);font-weight:900;
+}
+.tier-cta{
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:15px 20px;
+  font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;
+  border-radius:6px;transition:opacity .2s,transform .15s,box-shadow .2s;
+  margin-top:auto;min-height:44px;border:0;cursor:pointer;font-family:inherit;
+}
+.tier-cta.outline{background:transparent;color:var(--navy);border:1px solid var(--line-m)}
+.tier-cta.outline:hover{border-color:rgba(27,79,168,.28);background:#fff}
+.tier-cta.solid{background:var(--orange);color:var(--navy);box-shadow:0 8px 32px rgba(245,130,10,.3)}
+.tier-cta.solid:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 18px 48px rgba(245,130,10,.42)}
+.pricing-note{display:none}
+@media(max-width:980px){
+  .pricing-header{grid-template-columns:1fr;align-items:start}
+  .tier-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto}
+}
+@media(max-width:640px){
+  nav{min-height:58px;padding:9px 16px}
+  .brand{gap:9px}
+  .brand img{width:34px;height:34px}
+  .brand-word{font-size:16px}
+  .brand-sub{font-size:6.5px;letter-spacing:.2em}
+  .pricing-section{padding:2rem 16px 3.5rem}
+  .pricing-header{margin-bottom:1.5rem}
+  .section-h2{font-size:2rem;line-height:.98}
+  .tier-card{padding:2rem 1.25rem}
+  .tier-price{font-size:3.7rem}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/index.html" aria-label="STRIVE INDEPENDENCE home">
+    <img src="logo.png" alt="">
+    <span>
+      <span class="brand-word">STRIVE</span>
+      <span class="brand-sub">Independence</span>
+    </span>
+  </a>
+</nav>
+
+<main>
+  <section class="pricing-section" id="pricing">
+    <div class="pricing-inner">
+      <div class="pricing-header">
+        <div>
+          <div class="section-tag">Plans &amp; Pricing</div>
+          <h1 class="section-h2">Choose Your <span class="light">Account</span></h1>
+        </div>
+      </div>
+
+      <div class="tier-grid">
+        <div class="tier-card featured">
+          <div class="tier-badge">Start Here</div>
+          <div class="tier-name">Individual</div>
+          <div class="tier-tagline">The STRIVE account for one user.</div>
+          <div class="tier-price">$14.99</div>
+          <div class="tier-price-note">/ month · one user</div>
+          <div class="tier-sep"></div>
+          <ul class="tier-features">
+            <li><span class="chk">✓</span>One user account</li>
+            <li><span class="chk">✓</span>Full STRIVE account access</li>
+            <li><span class="chk">✓</span>Money management practice</li>
+            <li><span class="chk">✓</span>Ride share practice</li>
+            <li><span class="chk">✓</span>Independent living skill practice</li>
+            <li><span class="chk">✓</span>Email support</li>
+          </ul>
+          <button class="tier-cta solid" type="button" onclick="startCheckout('individual')">Start Individual Trial</button>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-name">Clinic</div>
+          <div class="tier-tagline">The same STRIVE account for small teams.</div>
+          <div class="tier-price">$79.99</div>
+          <div class="tier-price-note">/ month · up to 5 users</div>
+          <div class="tier-sep"></div>
+          <ul class="tier-features">
+            <li><span class="chk">✓</span>Up to 5 user accounts</li>
+            <li><span class="chk">✓</span>Shared clinic or team access</li>
+            <li><span class="chk">✓</span>Full STRIVE Talk access</li>
+            <li><span class="chk">✓</span>Full Money Rehab and Community Mobility access</li>
+            <li><span class="chk">✓</span>Team use across treatment sessions</li>
+            <li><span class="chk">✓</span>Email support</li>
+          </ul>
+          <button class="tier-cta outline" type="button" onclick="startCheckout('clinic')">Start Clinic Trial</button>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-name">Enterprise</div>
+          <div class="tier-tagline">The same STRIVE account for larger organizations.</div>
+          <div class="tier-price">$299</div>
+          <div class="tier-price-note">/ month · up to 50 users</div>
+          <div class="tier-sep"></div>
+          <ul class="tier-features">
+            <li><span class="chk">✓</span>Everything in Clinic</li>
+            <li><span class="chk">✓</span>Up to 50 user accounts</li>
+            <li><span class="chk">✓</span>Multiple clinics or locations</li>
+            <li><span class="chk">✓</span>Organization-level account access</li>
+            <li><span class="chk">✓</span>Custom onboarding and setup</li>
+            <li><span class="chk">✓</span>Priority support for custom needs</li>
+          </ul>
+          <button class="tier-cta outline" type="button" onclick="startCheckout('enterprise')">Choose Enterprise</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjZnBkZ21td2tnaGpzemtibnpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NzM4MjYsImV4cCI6MjA5NjQ0OTgyNn0.c2ocYnK9bvQo4uTJtxXbjk6KdizCI_vaNDCt0HFYXuk";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+const CHECKOUT_FUNCTION_URL =
+  "https://ccfpdgmmwkghjszkbnzs.supabase.co/functions/v1/create-checkout-session";
+
+async function startCheckout(plan) {
+  try {
+    try{localStorage.setItem("striveSelectedPlan", plan)}catch(e){}
+
+    const { data: sessionData, error: sessionError } =
+      await supabaseClient.auth.getSession();
+
+    if (sessionError || !sessionData.session) {
+      alert("Please log in first.");
+      window.location.href = "auth.html";
+      return;
+    }
+
+    const response = await fetch(CHECKOUT_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionData.session.access_token}`
+      },
+      body: JSON.stringify({
+        plan: plan
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      alert(result.error || "Checkout failed.");
+      return;
+    }
+
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      alert("No checkout URL returned.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong starting checkout.");
+  }
+}
+</script>
+</body>
+</html>

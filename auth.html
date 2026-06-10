@@ -231,8 +231,8 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
             <input id="joinPhone" name="phone" type="tel" placeholder="(555) 123-4567" autocomplete="tel" required>
           </div>
           <div class="field">
-            <label for="inviteCode">Invite Code</label>
-            <input id="inviteCode" name="invite_code" type="text" placeholder="STRIVE-12345" autocomplete="off" required>
+            <label for="teamCode">Team Code</label>
+            <input id="teamCode" name="team_code" type="text" placeholder="A7K92Q" autocomplete="off" required>
           </div>
           <div class="field">
             <label for="joinPassword">Password</label>
@@ -278,6 +278,7 @@ const forms={
 const formTitle=document.getElementById('formTitle');
 const formCopy=document.getElementById('formCopy');
 const statusBox=document.getElementById('authStatus');
+const PLAN_PAGE="/choose-plan.html";
 const SUPABASE_URL='https://ccfpdgmmwkghjszkbnzs.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui';
 const supabaseClient=SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase
@@ -337,10 +338,8 @@ async function handleAuthSubmit(event, type) {
       }
 
       console.log("Supabase login data", loginData);
-      showStatus("ok", "Logged in successfully.");
-
-      // When you have a dashboard page, uncomment this:
-      // window.location.href = "dashboard.html";
+      showStatus("ok", "Logged in successfully. Taking you to plan selection...");
+      window.location.href = PLAN_PAGE;
 
       return;
     }
@@ -436,62 +435,74 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      showStatus("ok", "Account and practice created successfully. You can now log in.");
-      form.reset();
-      showPanel("login");
+      showStatus("ok", "Account and practice created successfully. Taking you to plan selection...");
+      window.location.href = PLAN_PAGE;
       return;
     }
 
     // -----------------------------
     // JOIN EXISTING PRACTICE
-    // For invited therapists/staff.
-    // Role comes from invite code, not user choice.
+    // Uses teams.team_code
     // -----------------------------
     if (type === "joinPractice") {
       const {
         full_name,
         email,
         phone,
-        invite_code,
+        team_code,
         password
       } = data;
 
-      showStatus("warn", "Checking invite code...");
+      const cleanTeamCode = team_code.trim().toUpperCase();
 
-      // 1. Look up invite code
-      const { data: inviteData, error: inviteError } = await supabaseClient
-        .from("team_invites")
-        .select("id, team_id, role, email, accepted_at, expires_at")
-        .eq("invite_code", invite_code)
-        .is("accepted_at", null)
+      showStatus("warn", "Checking team code...");
+
+      // 1. Look up team by team code
+      const { data: teamData, error: teamError } = await supabaseClient
+        .from("teams")
+        .select("id, name, team_code, plan, max_users, subscription_status")
+        .eq("team_code", cleanTeamCode)
         .maybeSingle();
 
-      if (inviteError) {
-        showStatus("no", "Invite lookup failed: " + inviteError.message);
+      if (teamError) {
+        showStatus("no", "Team lookup failed: " + teamError.message);
         return;
       }
 
-      if (!inviteData) {
-        showStatus("no", "Invalid or already used invite code.");
+      if (!teamData) {
+        showStatus("no", "Invalid team code. Please check the code and try again.");
         return;
       }
 
-      if (inviteData.expires_at && new Date(inviteData.expires_at) <= new Date()) {
-        showStatus("no", "This invite code has expired.");
-        return;
-      }
-
+      // 2. Optional: block if team is not active/trialing
       if (
-        inviteData.email &&
-        inviteData.email.toLowerCase() !== email.toLowerCase()
+        teamData.subscription_status &&
+        !["trialing", "active"].includes(teamData.subscription_status)
       ) {
-        showStatus("no", "This invite code is assigned to a different email address.");
+        showStatus("no", "This team is not currently active. Please contact your team owner.");
+        return;
+      }
+
+      // 3. Count current team members
+      const { count: memberCount, error: countError } = await supabaseClient
+        .from("members")
+        .select("*", { count: "exact", head: true })
+        .eq("team_id", teamData.id);
+
+      if (countError) {
+        showStatus("no", "Could not check team member limit: " + countError.message);
+        return;
+      }
+
+      // 4. Block if team is full
+      if (teamData.max_users && memberCount >= teamData.max_users) {
+        showStatus("no", "This team has reached its user limit.");
         return;
       }
 
       showStatus("warn", "Creating your account...");
 
-      // 2. Create Supabase Auth user
+      // 5. Create Supabase Auth user
       const { data: signupData, error: signupError } = await supabaseClient.auth.signUp({
         email,
         password,
@@ -499,8 +510,8 @@ async function handleAuthSubmit(event, type) {
           data: {
             full_name,
             phone,
-            invite_code,
-            role: inviteData.role
+            team_code: cleanTeamCode,
+            role: "member"
           }
         }
       });
@@ -517,27 +528,15 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      // 3. Get team name so profile.clinic_name can be filled
-      const { data: teamInfo, error: teamInfoError } = await supabaseClient
-        .from("teams")
-        .select("name")
-        .eq("id", inviteData.team_id)
-        .single();
-
-      if (teamInfoError) {
-        showStatus("no", "Account created, but team lookup failed: " + teamInfoError.message);
-        return;
-      }
-
-      // 4. Insert user profile
+      // 6. Create profile
       const { error: profileError } = await supabaseClient
         .from("profile")
         .insert({
           user_id: user.id,
           email,
           full_name,
-          clinic_name: teamInfo.name,
-          role: inviteData.role
+          clinic_name: teamData.name,
+          role: "member"
         });
 
       if (profileError) {
@@ -545,13 +544,13 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      // 5. Add user to existing team
+      // 7. Add user to team
       const { error: memberError } = await supabaseClient
         .from("members")
         .insert({
-          team_id: inviteData.team_id,
+          team_id: teamData.id,
           user_id: user.id,
-          role: inviteData.role
+          role: "member"
         });
 
       if (memberError) {
@@ -559,23 +558,10 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      // 6. Mark invite as accepted
-      const { error: inviteUpdateError } = await supabaseClient
-        .from("team_invites")
-        .update({
-          accepted_by: user.id,
-          accepted_at: new Date().toISOString()
-        })
-        .eq("id", inviteData.id);
+      showStatus("ok", "Account created and joined to team successfully.");
 
-      if (inviteUpdateError) {
-        showStatus("warn", "Account created, but invite status was not updated: " + inviteUpdateError.message);
-        return;
-      }
-
-      showStatus("ok", "Account created and joined to practice successfully. You can now log in.");
-      form.reset();
-      showPanel("login");
+      // 8. Send to dashboard
+      window.location.href = "dashboard.html";
       return;
     }
 
