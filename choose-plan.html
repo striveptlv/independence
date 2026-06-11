@@ -63,6 +63,18 @@ nav{
   letter-spacing:0;text-transform:uppercase;color:var(--navy);margin-bottom:0;
 }
 .section-h2 .light{font-weight:300;color:rgba(19,35,56,.55)}
+.checkout-status{
+  display:none;position:fixed;right:6vw;top:84px;z-index:20;
+  width:min(360px,calc(100vw - 32px));padding:14px 16px;border-radius:10px;
+  background:rgba(255,255,255,.94);border:1px solid rgba(245,130,10,.28);
+  box-shadow:0 18px 48px rgba(19,35,56,.14);color:var(--muted-s);
+  font-size:.9rem;line-height:1.42;
+}
+.checkout-status.show{display:block}
+.checkout-status strong{
+  display:block;color:var(--navy);font-size:.78rem;letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:2px;
+}
 .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
 .tier-card{
   background:rgba(255,255,255,.88);border:1px solid var(--gb);border-radius:18px;padding:1.45rem 1.55rem;
@@ -127,6 +139,7 @@ nav{
   .pricing-section{padding:2rem 16px 3.5rem}
   .pricing-header{margin-bottom:1.5rem}
   .section-h2{font-size:2rem;line-height:.98}
+  .checkout-status{position:static;width:auto;margin:0 16px 14px}
   .tier-card{padding:2rem 1.25rem}
   .tier-price{font-size:3.7rem}
 }
@@ -144,6 +157,10 @@ nav{
 </nav>
 
 <main>
+  <div class="checkout-status" id="checkoutStatus" role="status" aria-live="polite">
+    <strong>Checkout cancelled</strong>
+    No worries. Your account was not charged. Choose a plan when you're ready.
+  </div>
   <section class="pricing-section" id="pricing">
     <div class="pricing-inner">
       <div class="pricing-header">
@@ -223,6 +240,12 @@ const supabaseClient = window.supabase.createClient(
 
 const CHECKOUT_FUNCTION_URL =
   "https://ccfpdgmmwkghjszkbnzs.supabase.co/functions/v1/create-checkout-session";
+
+const checkoutStatus = document.getElementById("checkoutStatus");
+const checkoutParam = new URLSearchParams(window.location.search).get("checkout");
+if (checkoutParam === "cancelled" && checkoutStatus) {
+  checkoutStatus.classList.add("show");
+}
 
 async function startCheckout(plan) {
   try {
