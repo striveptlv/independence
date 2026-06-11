@@ -147,7 +147,7 @@ nav{
 </head>
 <body>
 <nav>
-  <a class="brand" href="/index.html" aria-label="STRIVE INDEPENDENCE home">
+  <a class="brand" href="https://www.striveptlv.com/independence.html" aria-label="STRIVE INDEPENDENCE home">
     <img src="logo.png" alt="">
     <span>
       <span class="brand-word">STRIVE</span>
@@ -159,7 +159,6 @@ nav{
 <main>
   <div class="checkout-status" id="checkoutStatus" role="status" aria-live="polite">
     <strong>Checkout cancelled</strong>
-    No worries. Your account was not charged. Choose a plan when you're ready.
   </div>
   <section class="pricing-section" id="pricing">
     <div class="pricing-inner">
@@ -249,12 +248,21 @@ if (checkoutParam === "cancelled" && checkoutStatus) {
 
 async function startCheckout(plan) {
   try {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error || !data.session) {
+      alert("Please log in first.");
+      window.location.href = "auth.html";
+      return;
+    }
+
     const response = await fetch(
       "https://ccfpdgmmwkghjszkbnzs.supabase.co/functions/v1/create-checkout-session",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${data.session.access_token}`
         },
         body: JSON.stringify({ plan })
       }
