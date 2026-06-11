@@ -239,10 +239,13 @@ async function startCheckout(plan) {
 
     const result = await response.json();
 
-    console.log("Supabase test status:", response.status);
-    console.log("Supabase test result:", result);
+    console.log("Checkout result:", result);
 
-    alert(JSON.stringify(result));
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      alert("Checkout failed: " + JSON.stringify(result));
+    }
   } catch (error) {
     console.error("Supabase connection error:", error);
     alert("Could not reach Supabase function");
