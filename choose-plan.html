@@ -285,7 +285,7 @@ async function getCurrentUser() {
 
 async function getProfileAccess(userId) {
   const { data: profile, error: profileError } = await supabaseClient
-    .from("profiles")
+    .from("profile")
     .select("user_id, has_access")
     .eq("user_id", userId)
     .single();
