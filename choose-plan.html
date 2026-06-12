@@ -273,7 +273,7 @@ async function getCurrentUser() {
 async function getProfileAccess(userId) {
   const { data: profile, error } = await supabaseClient
     .from("profiles")
-    .select("has_access")
+    .select("user_id, has_access")
     .eq("user_id", userId)
     .single();
 
@@ -292,7 +292,7 @@ async function checkAccessOrRedirect() {
 
     const profile = await getProfileAccess(user.id);
 
-    if (profile && profile.has_access === true) {
+    if (profile && profile.user_id === user.id && profile.has_access === true) {
       window.location.href = DASHBOARD_PAGE;
       return null;
     }
