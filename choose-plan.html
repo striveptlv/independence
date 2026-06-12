@@ -264,20 +264,37 @@ function showPlans() {
   if (planGrid) planGrid.classList.add("ready");
 }
 
+function showAccountCheckError(message) {
+  if (accountCheck) {
+    accountCheck.textContent = message;
+    accountCheck.classList.remove("hide");
+  }
+  if (planGrid) planGrid.classList.remove("ready");
+}
+
 async function getCurrentUser() {
-  const { data, error } = await supabaseClient.auth.getUser();
-  if (error || !data.user) return null;
+  const { data, error: userError } = await supabaseClient.auth.getUser();
+  if (userError) {
+    console.log("User error:", userError);
+    showAccountCheckError("Could not check your account access: " + userError.message);
+    throw userError;
+  }
+  if (!data.user) return null;
   return data.user;
 }
 
 async function getProfileAccess(userId) {
-  const { data: profile, error } = await supabaseClient
+  const { data: profile, error: profileError } = await supabaseClient
     .from("profiles")
     .select("user_id, has_access")
     .eq("user_id", userId)
     .single();
 
-  if (error) throw error;
+  if (profileError) {
+    console.log("Profile error:", profileError);
+    showAccountCheckError("Could not check your account access: " + profileError.message);
+    throw profileError;
+  }
   return profile;
 }
 
@@ -300,8 +317,6 @@ async function checkAccessOrRedirect() {
     return { user, profile };
   } catch (error) {
     console.error("Account access check failed:", error);
-    alert("Could not check your account access. Please log in again.");
-    window.location.href = AUTH_PAGE;
     return null;
   }
 }
