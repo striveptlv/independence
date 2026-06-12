@@ -547,14 +547,22 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.2em;
   text-transform:uppercase;color:var(--orange);
 }
-.email-capture-form input{
+.email-capture-form input,.email-capture-form select{
   width:100%;min-height:48px;border-radius:10px;border:1px solid rgba(19,35,56,.14);
   background:#fff;color:var(--navy);font:inherit;font-size:.97rem;padding:0 1rem;
 }
 .email-capture-form input::placeholder{color:rgba(26,46,68,.34)}
-.email-capture-form input:focus{outline:none;border-color:rgba(245,130,10,.55)}
+.email-capture-form input:focus,.email-capture-form select:focus{outline:none;border-color:rgba(245,130,10,.55)}
+.email-capture-form select{
+  appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--orange) 50%),linear-gradient(135deg,var(--orange) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 21px,calc(100% - 12px) 21px;
+  background-size:6px 6px,6px 6px;background-repeat:no-repeat;
+}
 .email-capture-form button{width:100%;justify-content:center}
 .email-capture-note{font-size:12px;color:var(--muted);text-align:center}
+.waitlist-popup-actions{display:grid;gap:.7rem;margin-top:1rem}
+.waitlist-popup-actions .modal-submit{text-decoration:none}
 @media(max-width:860px){.email-capture-inner{grid-template-columns:1fr}.email-capture{padding-bottom:5rem}}
 
 /* ─────────────────────────
@@ -1201,17 +1209,46 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
         <li>30 days free once the website app launches.</li>
       </ul>
     </div>
-    <form class="email-capture-form" action="https://formspree.io/f/mykvqkpz" method="POST">
-      <label for="capture-email">Waitlist Email</label>
+    <form class="email-capture-form" action="https://formspree.io/f/mykvqkpz" method="POST" onsubmit="handleWaitlistSubmit(event)">
+      <label for="capture-name">Full Name</label>
+      <input id="capture-name" name="name" type="text" placeholder="Your name" autocomplete="name" required>
+      <label for="capture-email">Email</label>
       <input id="capture-email" name="email" type="email" placeholder="you@organization.com" autocomplete="email" required>
-      <label for="capture-org">Organization</label>
-      <input id="capture-org" name="organization" type="text" placeholder="Clinic, university, ALF, ILF, or agency">
+      <label for="capture-phone">Phone Number</label>
+      <input id="capture-phone" name="phone" type="tel" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+      <label for="capture-profession">Profession</label>
+      <input id="capture-profession" name="profession" type="text" placeholder="OT, SLP, caregiver, administrator" autocomplete="organization-title" required>
+      <label for="capture-source">How Did You Hear About Us?</label>
+      <select id="capture-source" name="heard_about" required>
+        <option value="" selected disabled>Select one</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="Instagram">Instagram</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Colleague">Colleague</option>
+        <option value="Other">Other</option>
+      </select>
       <input type="hidden" name="source" value="STRIVE INDEPENDENCE — launch waitlist 30 day trial">
       <button class="btn-primary" type="submit">Join The Waitlist</button>
-      <p class="email-capture-note">Waitlist members receive launch details and a 30-day free trial offer. No spam.</p>
+      <p class="email-capture-note" data-waitlist-status>Waitlist members receive launch details and a 30-day free trial offer. No spam.</p>
     </form>
   </div>
 </section>
+
+<!-- WAITLIST LIMIT POPUP -->
+<div class="modal-overlay" id="waitlistLimitOverlay" onclick="closeWaitlistLimitOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeWaitlistLimitModal()" aria-label="Close">&times;</button>
+    <div class="modal-demo-ring">
+      <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+    </div>
+    <h2 class="modal-title">Demo Access Limit Reached</h2>
+    <p class="modal-sub">Thanks. Your waitlist information was sent. We have reached the current limit for demo access, but you can create an account now so you are ready when access opens.</p>
+    <div class="waitlist-popup-actions">
+      <a class="modal-submit" href="https://www.striveptlv.com/independence/auth.html">Create Account</a>
+      <button class="modal-submit" type="button" onclick="closeWaitlistLimitModal()" style="background:#fff;border:1px solid var(--line-m)">Stay Here</button>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1242,7 +1279,7 @@ function toggleMobileDropdown(id,arrow){
   if(arrow)arrow.classList.toggle('open');
 }
 window.addEventListener('resize',()=>{if(window.innerWidth>960)toggleMenu(false)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleMenu(false);closeModal()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleMenu(false);closeModal();closeWaitlistLimitModal()}});
 
 /* ── DEMO MODAL ── */
 const DEMO_KEY='striveDemoRequested';
@@ -1271,6 +1308,20 @@ function closeModal(){
 }
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
 
+function openWaitlistLimitModal(){
+  const overlay=document.getElementById('waitlistLimitOverlay');
+  overlay.classList.add('open');
+  document.body.classList.add('locked');
+}
+function closeWaitlistLimitModal(){
+  const overlay=document.getElementById('waitlistLimitOverlay');
+  if(!overlay)return;
+  overlay.classList.remove('open');
+  if(!document.getElementById('mobileMenu').classList.contains('open')&&!document.getElementById('modalOverlay').classList.contains('open'))
+    document.body.classList.remove('locked');
+}
+function closeWaitlistLimitOutside(e){if(e.target===document.getElementById('waitlistLimitOverlay'))closeWaitlistLimitModal()}
+
 async function handleModalSubmit(e){
   e.preventDefault();
   const btn=document.getElementById('modalSubmit');
@@ -1287,6 +1338,29 @@ async function handleModalSubmit(e){
   }catch(err){
     error.style.display='block';
     btn.disabled=false;btn.textContent='Request Free Trial';
+  }
+}
+
+async function handleWaitlistSubmit(e){
+  e.preventDefault();
+  const form=e.target;
+  const btn=form.querySelector('button[type="submit"]');
+  const status=form.querySelector('[data-waitlist-status]');
+  const originalText=btn.textContent;
+  btn.disabled=true;
+  btn.textContent='Sending...';
+  status.textContent='Sending your waitlist information...';
+  try{
+    const r=await fetch(form.action,{method:'POST',headers:{Accept:'application/json'},body:new FormData(form)});
+    if(!r.ok)throw new Error();
+    form.reset();
+    status.textContent='Your information was sent.';
+    openWaitlistLimitModal();
+  }catch(err){
+    status.textContent='Something went wrong. Please try again.';
+  }finally{
+    btn.disabled=false;
+    btn.textContent=originalText;
   }
 }
 

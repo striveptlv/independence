@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | STRIVE INDEPENDENCE</title>
+<meta name="description" content="Contact STRIVE INDEPENDENCE for account help and support.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#132338;
+  --ink:#1a2e44;
+  --muted:rgba(26,46,68,.68);
+  --blue:#1b4fa8;
+  --orange:#f5820a;
+  --paper:#f6fafc;
+  --line:rgba(19,35,56,.12);
+}
+body{
+  min-height:100vh;
+  font-family:"Outfit",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(ellipse 72% 44% at 50% -10%,rgba(27,79,168,.15),transparent 62%),
+    radial-gradient(ellipse 42% 34% at 94% 15%,rgba(245,130,10,.14),transparent 58%),
+    var(--paper);
+  line-height:1.6;
+}
+a{color:inherit;text-decoration:none}
+nav{
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 5vw;
+  background:rgba(255,255,255,.9);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(22px) saturate(1.5);
+}
+.nav-logo{display:flex;align-items:center;gap:11px}
+.logo-img{width:44px;height:44px;object-fit:contain;flex-shrink:0}
+.logo-wrap{display:flex;flex-direction:column;line-height:1}
+.logo-text{font-size:21px;font-weight:900;letter-spacing:.09em;color:var(--navy);text-transform:uppercase}
+.logo-sub{font-size:7.5px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);margin-top:1px}
+.nav-link{
+  color:rgba(19,35,56,.72);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+main{
+  width:min(100%,760px);
+  margin:0 auto;
+  padding:clamp(42px,8vw,84px) 5vw;
+}
+.card{
+  background:rgba(255,255,255,.88);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:0 28px 80px rgba(19,35,56,.12);
+  padding:clamp(26px,5vw,42px);
+}
+.eyebrow{
+  font-family:"DM Mono",monospace;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--orange);
+  margin-bottom:12px;
+}
+h1{
+  color:var(--navy);
+  font-size:clamp(2.2rem,7vw,4rem);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:0;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.intro{
+  max-width:560px;
+  color:var(--muted);
+  font-size:1.04rem;
+  line-height:1.6;
+  margin-bottom:24px;
+}
+form{display:grid;gap:14px}
+.field{display:grid;gap:6px}
+label{
+  font-family:"DM Mono",monospace;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.18em;
+  color:var(--orange);
+  text-transform:uppercase;
+}
+input,textarea{
+  width:100%;
+  border:1px solid rgba(19,35,56,.16);
+  border-radius:8px;
+  background:#fff;
+  color:var(--navy);
+  font:inherit;
+  font-size:1rem;
+  padding:12px 14px;
+}
+textarea{min-height:150px;resize:vertical}
+input:focus,textarea:focus{
+  outline:none;
+  border-color:rgba(245,130,10,.62);
+  box-shadow:0 0 0 3px rgba(245,130,10,.12);
+}
+button{
+  min-height:50px;
+  border:0;
+  border-radius:6px;
+  background:var(--orange);
+  color:var(--navy);
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.note{
+  color:rgba(26,46,68,.52);
+  font-size:.9rem;
+  line-height:1.5;
+}
+@media(max-width:560px){
+  nav{padding:0 18px}
+  .logo-img{width:38px;height:38px}
+  .logo-text{font-size:18px}
+  .logo-sub{font-size:6.8px}
+  .nav-link{font-size:11px}
+  main{padding:30px 18px}
+  .card{padding:24px 18px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="dashboard.html" aria-label="Back to STRIVE INDEPENDENCE dashboard">
+    <img class="logo-img" src="./logo.png" alt="STRIVE INDEPENDENCE">
+    <div class="logo-wrap">
+      <div class="logo-text">STRIVE</div>
+      <div class="logo-sub">Independence</div>
+    </div>
+  </a>
+  <a class="nav-link" href="dashboard.html">Dashboard</a>
+</nav>
+
+<main>
+  <section class="card">
+    <div class="eyebrow">Support</div>
+    <h1>Contact Us</h1>
+    <p class="intro">Need help with your account, access, or one of the STRIVE apps? Send a message and the STRIVE team will follow up.</p>
+
+    <form action="https://formspree.io/f/mjgdwkdp" method="POST">
+      <input type="hidden" name="source" value="STRIVE INDEPENDENCE dashboard contact page">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="message">How can we help?</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <button type="submit">Send Message</button>
+      <p class="note">Please do not include real banking, credit card, password, or protected health information in this form.</p>
+    </form>
+  </section>
+</main>
+</body>
+</html>

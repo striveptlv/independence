@@ -97,28 +97,23 @@ nav{
 .mobile-menu a{color:var(--navy);font-size:20px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:15px 0;border-bottom:1px solid var(--line)}
 .mobile-menu .mob-book{background:var(--orange);color:var(--navy)!important;text-align:center;margin-top:22px;border:0!important;border-radius:6px}
 main{position:relative;z-index:1}
-.shell{width:min(1180px,100%);margin:0 auto;padding:clamp(28px,5vw,62px) 5vw 56px}
+.shell{width:min(1180px,100%);margin:0 auto;padding:clamp(10px,2vw,24px) 5vw 56px}
 .hero{
   min-height:auto;
-  max-width:900px;
-  padding:clamp(54px,8vw,96px) 0 clamp(36px,6vw,64px);
+  max-width:100%;
+  padding:clamp(12px,2.8vw,28px) 0 18px;
 }
-.eyebrow{
-  font-family:"DM Mono",monospace;font-size:10.5px;font-weight:500;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:20px;
-}
-.eyebrow::before{content:"";width:24px;height:1px;background:var(--orange)}
 #dashboardTitle{margin:0 0 4px;line-height:.9}
 .hero-welcome{
   display:block;color:rgba(19,35,56,.62);font-size:clamp(1.35rem,3.2vw,2.35rem);
   font-weight:800;line-height:1;letter-spacing:.02em;text-transform:none;margin-bottom:10px;
 }
 .hero-brand{
-  display:block;max-width:740px;color:var(--navy);font-size:clamp(2.85rem,6.5vw,5.95rem);
-  font-weight:900;line-height:.88;letter-spacing:0;text-transform:uppercase;margin-bottom:22px;
+  display:block;max-width:none;color:var(--navy);font-size:clamp(3.1rem,6vw,5.6rem);
+  font-weight:900;line-height:.9;letter-spacing:0;text-transform:uppercase;margin-bottom:22px;white-space:nowrap;
 }
 .hero-brand .accent{color:var(--orange)}
-.lead{max-width:650px;color:var(--muted-s);font-size:clamp(1rem,1.75vw,1.24rem);line-height:1.55;margin-bottom:28px}
+.lead{max-width:680px;color:var(--muted-s);font-size:clamp(1rem,1.75vw,1.24rem);line-height:1.55;margin:22px 0 0}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .button{
   display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:13px 20px;border-radius:6px;
@@ -127,11 +122,13 @@ main{position:relative;z-index:1}
 .button.primary{background:var(--orange);color:var(--navy);box-shadow:0 12px 34px var(--orange-glow)}
 .button.secondary{background:rgba(255,255,255,.72);border-color:var(--line-m);color:var(--blue)}
 .button:hover{transform:translateY(-1px);opacity:.92}
-.quicklinks{margin-top:18px}
+.quicklinks{margin-top:0}
 .section-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:18px}
 .section-tag{font-family:"DM Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:7px}
 .section-title{color:var(--navy);font-size:clamp(1.7rem,3.3vw,2.55rem);font-weight:900;letter-spacing:0;text-transform:uppercase;line-height:1}
 .section-note{max-width:430px;color:var(--muted);font-size:.96rem;text-align:right}
+.launch-title{margin-bottom:16px;color:var(--navy);font-size:clamp(1.45rem,2.8vw,2.15rem);font-weight:900;letter-spacing:0;text-transform:uppercase;line-height:1}
+.launch-copy{width:100%;max-width:none;margin:clamp(30px,4vw,48px) 0 0;color:var(--muted-s);font-size:clamp(1rem,1.75vw,1.18rem);line-height:1.58}
 .link-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
 .app-card{
   min-height:210px;display:flex;flex-direction:column;justify-content:space-between;padding:19px;
@@ -157,20 +154,20 @@ main{position:relative;z-index:1}
 .support-strip span{display:block;color:rgba(255,255,255,.72);font-size:.92rem;margin-top:2px}
 .support-strip a{color:var(--orange);font-weight:900;letter-spacing:.1em;text-transform:uppercase;font-size:12px;white-space:nowrap}
 @media(max-width:980px){
-  .nav-links{display:none}.nav-toggle{display:flex}
+  .nav-links{display:flex}.nav-toggle{display:none}
   .link-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .section-head{display:block}.section-note{text-align:left;margin-top:10px}
 }
 @media(max-width:620px){
   body{padding-top:64px}nav{height:64px;padding:0 18px}.mobile-menu{top:64px}
   .logo-img{width:38px;height:38px}.logo-text{font-size:18px}.logo-sub{font-size:6.8px}
-  .shell{padding:20px 18px 34px}
-  .hero{padding:34px 0 36px}
-  .eyebrow{font-size:9.5px;letter-spacing:.18em;margin-bottom:16px}
+  .shell{padding:10px 18px 34px}
+  .hero{padding:14px 0 18px}
   #dashboardTitle{line-height:1}
   .hero-welcome{font-size:1.35rem;margin-bottom:8px}
-  .hero-brand{font-size:clamp(2.35rem,11.8vw,3.45rem);line-height:.94;margin-bottom:18px}
-  .lead{font-size:1rem;line-height:1.52;margin-bottom:22px}
+  .hero-brand{font-size:clamp(2rem,10vw,3.1rem);line-height:.96;margin-bottom:18px;white-space:normal}
+  .lead,.launch-copy{font-size:1rem;line-height:1.52}
+  .launch-copy{margin-top:28px}
   .hero-actions .button{width:100%}.link-grid{grid-template-columns:1fr}
   .support-strip{display:block}.support-strip a{display:inline-flex;margin-top:12px}
 }
@@ -186,19 +183,7 @@ main{position:relative;z-index:1}
     </div>
   </a>
   <div class="nav-links">
-    <div class="nav-dropdown">
-      <a href="#quicklinks">Apps</a>
-      <div class="dropdown-menu" aria-label="STRIVE app links">
-        <a href="https://www.striveptlv.com/ride" target="_blank" rel="noopener">STRIDE Ride Share</a>
-        <a href="https://www.striveptlv.com/moneymanagement/Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html" target="_blank" rel="noopener">Online Banking</a>
-        <a href="https://www.striveptlv.com/moneymanagement/Visa/Visa%20Credit%20Homepage.html" target="_blank" rel="noopener">Credit Card</a>
-        <a href="https://www.striveptlv.com/moneymanagement/Bill%20Pay/Bill%20Pay%20Homepage.html" target="_blank" rel="noopener">Bill Pay</a>
-        <a href="https://www.striveptlv.com/talk" target="_blank" rel="noopener">STRIVE Talk</a>
-      </div>
-    </div>
-    <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
-    <a href="https://www.striveptlv.com/">Physical Therapy</a>
-    <a class="nav-cta" href="https://www.striveptlv.com/ride" target="_blank" rel="noopener">Open STRIDE</a>
+    <a class="nav-cta" href="contact.html">Contact Us</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -206,37 +191,19 @@ main{position:relative;z-index:1}
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#quicklinks" onclick="toggleMenu(false)">Apps</a>
-  <a href="https://www.striveptlv.com/ride" target="_blank" rel="noopener" onclick="toggleMenu(false)">STRIDE Ride Share</a>
-  <a href="https://www.striveptlv.com/moneymanagement/Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html" target="_blank" rel="noopener" onclick="toggleMenu(false)">Online Banking</a>
-  <a href="https://www.striveptlv.com/moneymanagement/Visa/Visa%20Credit%20Homepage.html" target="_blank" rel="noopener" onclick="toggleMenu(false)">Credit Card</a>
-  <a href="https://www.striveptlv.com/moneymanagement/Bill%20Pay/Bill%20Pay%20Homepage.html" target="_blank" rel="noopener" onclick="toggleMenu(false)">Bill Pay</a>
-  <a href="https://www.striveptlv.com/talk" onclick="toggleMenu(false)">STRIVE Talk</a>
-  <a href="https://www.striveptlv.com/" onclick="toggleMenu(false)">Physical Therapy</a>
+  <a href="contact.html" onclick="toggleMenu(false)">Contact Us</a>
 </div>
 
 <main>
   <div class="shell">
     <section class="hero" aria-labelledby="dashboardTitle">
       <div>
-        <div class="eyebrow">Dashboard Ready</div>
         <h1 id="dashboardTitle"><span class="hero-welcome">Welcome to</span><span class="hero-brand">STRIVE <span class="accent">INDEPENDENCE</span></span></h1>
-        <p class="lead">Build everyday independence with guided practice for the digital tasks of daily life: transportation, banking, bill pay, card management, and AAC communication.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="https://www.striveptlv.com/ride" target="_blank" rel="noopener">Launch STRIDE</a>
-          <a class="button secondary" href="#quicklinks">View All Apps</a>
-        </div>
       </div>
     </section>
 
     <section class="quicklinks" id="quicklinks" aria-labelledby="quicklinksTitle">
-      <div class="section-head">
-        <div>
-          <div class="section-tag">Quicklinks</div>
-          <h2 class="section-title" id="quicklinksTitle">Launch Practice Apps</h2>
-        </div>
-        <p class="section-note">Use fictional information only. These tools are built for safe practice, repetition, and carryover between sessions.</p>
-      </div>
+      <h2 class="launch-title" id="quicklinksTitle">Launch Apps</h2>
 
       <div class="link-grid">
         <a class="app-card stride" href="https://www.striveptlv.com/ride" target="_blank" rel="noopener">
@@ -275,7 +242,7 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card talk" href="https://www.striveptlv.com/talk" target="_blank" rel="noopener">
+        <a class="app-card talk" href="https://talk.striveptlv.com" target="_blank" rel="noopener">
           <div>
             <div class="app-top"><div class="app-num">05</div></div>
             <h2>STRIVE Talk</h2>
@@ -284,6 +251,8 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
       </div>
+
+      <p class="launch-copy">Build everyday independence with guided practice for the digital tasks of daily life: transportation, banking, bill pay, card management, and AAC communication. Use fictional information only; these tools are built for safe practice, repetition, and carryover between sessions.</p>
 
       <div class="support-strip">
         <div>
