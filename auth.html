@@ -388,6 +388,36 @@ function passwordsMatch(data) {
   return data.password === data.password_confirm;
 }
 
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function updateProfileAfterSignup(userId, profileDetails) {
+  const updateProfile = () => supabaseClient
+    .from("profile")
+    .update(profileDetails)
+    .eq("user_id", userId)
+    .select("user_id")
+    .maybeSingle();
+
+  const firstAttempt = await updateProfile();
+
+  if (!firstAttempt.error && firstAttempt.data) {
+    return firstAttempt;
+  }
+
+  await wait(750);
+  const secondAttempt = await updateProfile();
+
+  if (secondAttempt.error || secondAttempt.data) {
+    return secondAttempt;
+  }
+
+  return {
+    error: new Error("Profile row was not ready. Please try logging in again.")
+  };
+}
+
 async function handleAuthSubmit(event, type) {
   event.preventDefault();
 
@@ -471,16 +501,12 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      // 2. Insert user profile
-      const { error: profileError } = await supabaseClient
-        .from("profile")
-        .insert({
-          user_id: user.id,
-          email,
-          full_name,
-          clinic_name,
-          role
-        });
+      // 2. Update profile details created by the database trigger
+      const { error: profileError } = await updateProfileAfterSignup(user.id, {
+        full_name,
+        clinic_name,
+        role
+      });
 
       if (profileError) {
         showStatus("no", "Account created, but profile setup failed: " + profileError.message);
@@ -499,7 +525,7 @@ async function handleAuthSubmit(event, type) {
         });
 
       if (teamError) {
-        showStatus("no", "Profile created, but practice setup failed: " + teamError.message);
+        showStatus("no", "Profile updated, but practice setup failed: " + teamError.message);
         return;
       }
 
@@ -616,16 +642,12 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      // 6. Create profile
-      const { error: profileError } = await supabaseClient
-        .from("profile")
-        .insert({
-          user_id: user.id,
-          email,
-          full_name,
-          clinic_name: teamData.name,
-          role: "member"
-        });
+      // 6. Update profile details created by the database trigger
+      const { error: profileError } = await updateProfileAfterSignup(user.id, {
+        full_name,
+        clinic_name: teamData.name,
+        role: "member"
+      });
 
       if (profileError) {
         showStatus("no", "Account created, but profile setup failed: " + profileError.message);
@@ -642,14 +664,14 @@ async function handleAuthSubmit(event, type) {
         });
 
       if (memberError) {
-        showStatus("no", "Profile created, but team membership failed: " + memberError.message);
+        showStatus("no", "Profile updated, but team membership failed: " + memberError.message);
         return;
       }
 
       showStatus("ok", "Account created and joined to team successfully.");
 
-      // 8. Send to dashboard
-      window.location.href = "dashboard.html";
+      // 8. Send to plan selection
+      window.location.href = PLAN_PAGE;
       return;
     }
 
