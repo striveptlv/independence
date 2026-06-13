@@ -164,14 +164,14 @@ function showLoginNeeded() {
 function showStillActivating() {
   stopLoading();
   statusTitle.textContent = "Checking your access";
-  statusMessage.textContent = "Still activating your account. Your payment may still be processing. Please refresh this page in a few seconds.";
+  statusMessage.textContent = "Still activating your account.";
   refreshButton.classList.add("show");
 }
 
-function showQueryError() {
+function showQueryError(message) {
   stopLoading();
   statusTitle.textContent = "Checking your access";
-  statusMessage.textContent = "Still checking your account. We could not confirm your access yet. Please refresh this page in a few seconds.";
+  statusMessage.textContent = message || "Still checking your account.";
   refreshButton.classList.add("show");
 }
 
@@ -187,6 +187,8 @@ function showAccessConfirmed() {
 async function checkAccess() {
   const { data: userData, error: userError } = await supabase.auth.getUser();
   const user = userData && userData.user;
+  console.log("Supabase user id:", user ? user.id : null);
+  console.log("Supabase user email:", user ? user.email : null);
 
   if (userError || !user) {
     showLoginNeeded();
@@ -194,13 +196,16 @@ async function checkAccess() {
   }
 
   const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("has_access")
+    .from("profile")
+    .select("has_access, user_id")
     .eq("user_id", user.id)
-    .maybeSingle();
+    .single();
+
+  console.log("Profile result:", profile);
+  console.log("Profile error:", profileError);
 
   if (profileError) {
-    showQueryError();
+    showQueryError(profileError.message);
     return;
   }
 
@@ -213,7 +218,7 @@ async function checkAccess() {
 }
 
 checkAccess().catch(() => {
-  showQueryError();
+  showQueryError("Unexpected error while checking your account.");
 });
 </script>
 </body>
