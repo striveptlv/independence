@@ -60,8 +60,12 @@ nav{
 .logo-text{font-size:21px;font-weight:900;letter-spacing:.09em;color:var(--navy);text-transform:uppercase}
 .logo-sub{font-size:7.5px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);margin-top:1px}
 .nav-links{display:flex;align-items:center;gap:18px}
-.nav-links a{color:rgba(19,35,56,.72);font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;transition:color .18s}
-.nav-links a:hover{color:var(--blue)}
+.nav-links a,.nav-link-button{color:rgba(19,35,56,.72);font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;transition:color .18s}
+.nav-links a:hover,.nav-link-button:hover{color:var(--blue)}
+.nav-link-button{
+  appearance:none;background:none;border:0;padding:0;font-family:inherit;line-height:1.2;cursor:pointer;
+}
+.nav-link-button:disabled{cursor:wait;opacity:.62}
 .nav-dropdown{position:relative;display:flex;align-items:center}
 .nav-dropdown>a{display:flex;align-items:center;gap:6px;padding:25px 0}
 .nav-dropdown>a::after{
@@ -94,7 +98,8 @@ nav{
   flex-direction:column;background:#fff;padding:24px 6vw;overflow:auto;
 }
 .mobile-menu.open{display:flex}
-.mobile-menu a{color:var(--navy);font-size:20px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:15px 0;border-bottom:1px solid var(--line)}
+.mobile-menu a,.mobile-menu button{color:var(--navy);font-size:20px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:15px 0;border-bottom:1px solid var(--line)}
+.mobile-menu button{appearance:none;background:none;border-top:0;border-left:0;border-right:0;text-align:left;font-family:inherit;cursor:pointer}
 .mobile-menu .mob-book{background:var(--orange);color:var(--navy)!important;text-align:center;margin-top:22px;border:0!important;border-radius:6px}
 main{position:relative;z-index:1}
 .shell{width:min(1180px,100%);margin:0 auto;padding:clamp(10px,2vw,24px) 5vw 56px}
@@ -153,6 +158,7 @@ main{position:relative;z-index:1}
 .support-strip strong{display:block;font-size:.92rem;letter-spacing:.08em;text-transform:uppercase}
 .support-strip span{display:block;color:rgba(255,255,255,.72);font-size:.92rem;margin-top:2px}
 .support-strip a{color:var(--orange);font-weight:900;letter-spacing:.1em;text-transform:uppercase;font-size:12px;white-space:nowrap}
+#billingMessage{min-height:18px;color:rgba(255,255,255,.72);font-size:.86rem;line-height:1.25;text-align:left}
 @media(max-width:980px){
   .nav-links{display:flex}.nav-toggle{display:none}
   .link-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -169,20 +175,22 @@ main{position:relative;z-index:1}
   .lead,.launch-copy{font-size:1rem;line-height:1.52}
   .launch-copy{margin-top:28px}
   .hero-actions .button{width:100%}.link-grid{grid-template-columns:1fr}
-  .support-strip{display:block}.support-strip a{display:inline-flex;margin-top:12px}
+  .support-strip{display:block}
+  #billingMessage{text-align:left}.support-strip a{display:inline-flex;margin-top:12px}
 }
 </style>
 </head>
 <body>
 <nav aria-label="Primary">
-  <a class="nav-logo" href="/index.html" aria-label="STRIVE INDEPENDENCE home">
+  <div class="nav-logo" aria-label="STRIVE INDEPENDENCE">
     <img class="logo-img" src="./logo.png" alt="STRIVE INDEPENDENCE">
     <div class="logo-wrap">
       <div class="logo-text">STRIVE</div>
       <div class="logo-sub">Independence</div>
     </div>
-  </a>
+  </div>
   <div class="nav-links">
+    <button class="nav-link-button" id="manageBillingBtn" type="button">Manage Billing</button>
     <a class="nav-cta" href="contact.html">Contact Us</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMenu()">
@@ -191,6 +199,7 @@ main{position:relative;z-index:1}
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
+  <button id="mobileManageBillingBtn" type="button">Manage Billing</button>
   <a href="contact.html" onclick="toggleMenu(false)">Contact Us</a>
 </div>
 
@@ -259,6 +268,7 @@ main{position:relative;z-index:1}
           <strong>Need help getting started?</strong>
           <span>Use the same login email from checkout. For access issues, contact STRIVE support.</span>
         </div>
+        <p id="billingMessage"></p>
         <a href="mailto:dpt@striveptlv.com">Email Support</a>
       </div>
     </section>
@@ -274,6 +284,106 @@ function toggleMenu(force){
   toggle.classList.toggle("open",open);
   document.body.classList.toggle("locked",open);
 }
+</script>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjZnBkZ21td2tnaGpzemtibnpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NzM4MjYsImV4cCI6MjA5NjQ0OTgyNn0.c2ocYnK9bvQo4uTJtxXbjk6KdizCI_vaNDCt0HFYXuk";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+window.addEventListener("DOMContentLoaded", () => {
+  const manageBillingBtn = document.getElementById("manageBillingBtn");
+  const mobileManageBillingBtn = document.getElementById("mobileManageBillingBtn");
+  const manageBillingButtons = [
+    manageBillingBtn,
+    mobileManageBillingBtn
+  ].filter(Boolean);
+  const billingMessage = document.getElementById("billingMessage");
+
+  function setBillingButtonsDisabled(disabled) {
+    manageBillingButtons.forEach(button => {
+      button.disabled = disabled;
+    });
+  }
+
+  async function openBillingPortal() {
+    console.log("Manage Billing clicked");
+    toggleMenu(false);
+    billingMessage.textContent = "Opening billing portal...";
+    setBillingButtonsDisabled(true);
+
+    try {
+      const {
+        data: { session },
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      console.log("Current session", session ? "exists" : "missing", {
+        sessionError
+      });
+
+      if (sessionError || !session) {
+        billingMessage.textContent = "Please log in again to manage billing.";
+        setBillingButtonsDisabled(false);
+        return;
+      }
+
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/create-customer-portal-session`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({})
+        }
+      );
+
+      console.log("Function response status", response.status, response.statusText);
+
+      const responseText = await response.text();
+      console.log("Function response body", responseText);
+
+      let result = null;
+      try {
+        result = responseText ? JSON.parse(responseText) : null;
+      } catch (parseError) {
+        console.error("Could not parse billing portal response as JSON", parseError);
+      }
+
+      if (!response.ok) {
+        billingMessage.textContent =
+          result?.error ||
+          result?.message ||
+          responseText ||
+          `Could not open billing portal. Status ${response.status}.`;
+        setBillingButtonsDisabled(false);
+        return;
+      }
+
+      if (!result?.url) {
+        billingMessage.textContent = "Billing portal did not return a URL.";
+        setBillingButtonsDisabled(false);
+        return;
+      }
+
+      window.location.href = result.url;
+    } catch (error) {
+      console.error("Could not open billing portal", error);
+      billingMessage.textContent =
+        error?.message || "Could not open billing portal.";
+      setBillingButtonsDisabled(false);
+    }
+  }
+
+  manageBillingButtons.forEach(button => {
+    button.addEventListener("click", openBillingPortal);
+  });
+});
 </script>
 </body>
 </html>

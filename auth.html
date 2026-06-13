@@ -75,19 +75,33 @@ h1 em{font-style:normal;color:var(--orange)}
 }
 .card-copy{font-size:.98rem;color:var(--soft);line-height:1.62;margin-bottom:20px}
 .card-copy:empty{display:none}
-.auth-form{display:none;gap:13px}
+.auth-form{display:none;gap:16px}
 .auth-form.active{display:grid}
-.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.field{display:grid;gap:7px}
+.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:grid;gap:9px}
 label{
-  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.18em;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.12em;
   text-transform:uppercase;color:var(--orange);
 }
 input,select,textarea{
-  width:100%;min-height:50px;border-radius:10px;border:1px solid rgba(19,35,56,.14);
-  background:#fff;color:var(--navy);font:inherit;font-size:1rem;padding:0 15px;
+  width:100%;min-height:56px;border-radius:10px;border:1px solid rgba(19,35,56,.14);
+  background:#fff;color:var(--navy);font:inherit;font-size:1.08rem;padding:0 16px;
 }
-textarea{min-height:82px;resize:vertical;padding:13px 15px;line-height:1.45}
+.password-wrap{position:relative;display:flex;align-items:center}
+.password-wrap input{padding-right:88px}
+.password-toggle{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  min-height:34px;width:40px;padding:0;border-radius:7px;
+  background:rgba(27,79,168,.07);border:1px solid rgba(19,35,56,.12);
+  color:var(--blue);
+  box-shadow:none;
+}
+.password-toggle:hover{transform:translateY(-50%);box-shadow:none}
+.password-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.password-toggle .eye-off{display:none}
+.password-toggle.is-visible .eye{display:none}
+.password-toggle.is-visible .eye-off{display:block}
+textarea{min-height:92px;resize:vertical;padding:14px 16px;line-height:1.45}
 input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(245,130,10,.58);box-shadow:0 0 0 4px rgba(245,130,10,.1)}
 .form-link{
   justify-self:start;border:0;background:transparent;color:var(--blue);cursor:pointer;
@@ -136,7 +150,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
 </head>
 <body>
 <nav>
-  <a class="brand" href="/index.html" aria-label="STRIVE INDEPENDENCE home">
+  <a class="brand" href="https://striveptlv.com/independence.html" aria-label="STRIVE INDEPENDENCE home">
     <img src="logo.png" alt="">
     <span>
       <span class="brand-word">STRIVE</span>
@@ -174,7 +188,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
         </div>
       </form>
 
-      <form class="auth-form" id="createPracticeForm" data-title="Create New Account" data-copy="Start a practice for yourself or your clinical team. Solo practitioners use this same flow and become the first member of their practice." onsubmit="handleAuthSubmit(event,'createPractice')">
+      <form class="auth-form" id="createPracticeForm" data-title="Create New Account" data-copy="Start a practice for yourself or your clinical team." onsubmit="handleAuthSubmit(event,'createPractice')">
         <div class="field-grid">
           <div class="field">
             <label for="practiceFullName">Full Name</label>
@@ -183,6 +197,26 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
           <div class="field">
             <label for="practiceEmail">Work Email</label>
             <input id="practiceEmail" name="email" type="email" placeholder="jane@practice.com" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="practicePassword">Password</label>
+            <div class="password-wrap">
+              <input id="practicePassword" name="password" type="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
+              <button class="password-toggle" type="button" data-toggle-password="practicePassword" aria-label="Show password" aria-pressed="false">
+                <svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 10.6A3 3 0 0 0 13.4 13.4"></path><path d="M9.9 4.4A10.6 10.6 0 0 1 12 4c6.5 0 10 8 10 8a18.4 18.4 0 0 1-3.1 4.2"></path><path d="M6.1 6.8C3.5 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 5.9-1.8"></path></svg>
+              </button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="practicePasswordConfirm">Confirm Password</label>
+            <div class="password-wrap">
+              <input id="practicePasswordConfirm" name="password_confirm" type="password" placeholder="Retype password" autocomplete="new-password" minlength="8" required>
+              <button class="password-toggle" type="button" data-toggle-password="practicePasswordConfirm" aria-label="Show confirmed password" aria-pressed="false">
+                <svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 10.6A3 3 0 0 0 13.4 13.4"></path><path d="M9.9 4.4A10.6 10.6 0 0 1 12 4c6.5 0 10 8 10 8a18.4 18.4 0 0 1-3.1 4.2"></path><path d="M6.1 6.8C3.5 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 5.9-1.8"></path></svg>
+              </button>
+            </div>
           </div>
           <div class="field">
             <label for="practicePhone">Phone Number</label>
@@ -198,16 +232,19 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
               <option value="">Select role</option>
               <option value="owner">Owner</option>
               <option value="supervisor">Supervisor</option>
+              <option value="therapist">Therapist</option>
             </select>
           </div>
           <div class="field">
-            <label for="practicePassword">Password</label>
-            <input id="practicePassword" name="password" type="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
+            <label for="heardFrom">Where Did You Hear From Us?</label>
+            <select id="heardFrom" name="heard_from" required>
+              <option value="">Select source</option>
+              <option value="linked_in">LinkedIn</option>
+              <option value="instagram">Instagram</option>
+              <option value="clinic">Clinic</option>
+              <option value="friend">Friend</option>
+            </select>
           </div>
-        </div>
-        <div class="field">
-          <label for="heardFrom">Where Did You Hear From Us?</label>
-          <textarea id="heardFrom" name="heard_from" placeholder="Referral, conference, search, social media, email, or another source" required></textarea>
         </div>
         <div class="button-row">
           <button class="primary" type="submit">Create New Account</button>
@@ -236,7 +273,23 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
           </div>
           <div class="field">
             <label for="joinPassword">Password</label>
-            <input id="joinPassword" name="password" type="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
+            <div class="password-wrap">
+              <input id="joinPassword" name="password" type="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
+              <button class="password-toggle" type="button" data-toggle-password="joinPassword" aria-label="Show password" aria-pressed="false">
+                <svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 10.6A3 3 0 0 0 13.4 13.4"></path><path d="M9.9 4.4A10.6 10.6 0 0 1 12 4c6.5 0 10 8 10 8a18.4 18.4 0 0 1-3.1 4.2"></path><path d="M6.1 6.8C3.5 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 5.9-1.8"></path></svg>
+              </button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="joinPasswordConfirm">Confirm Password</label>
+            <div class="password-wrap">
+              <input id="joinPasswordConfirm" name="password_confirm" type="password" placeholder="Retype password" autocomplete="new-password" minlength="8" required>
+              <button class="password-toggle" type="button" data-toggle-password="joinPasswordConfirm" aria-label="Show confirmed password" aria-pressed="false">
+                <svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 10.6A3 3 0 0 0 13.4 13.4"></path><path d="M9.9 4.4A10.6 10.6 0 0 1 12 4c6.5 0 10 8 10 8a18.4 18.4 0 0 1-3.1 4.2"></path><path d="M6.1 6.8C3.5 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 5.9-1.8"></path></svg>
+              </button>
+            </div>
           </div>
         </div>
         <div class="button-row">
@@ -278,7 +331,7 @@ const forms={
 const formTitle=document.getElementById('formTitle');
 const formCopy=document.getElementById('formCopy');
 const statusBox=document.getElementById('authStatus');
-const PLAN_PAGE="https://www.striveptlv.com/independence/choose-plan.html";
+const PLAN_PAGE="https://striveptlv.com/independence/choose-plan.html";
 const SUPABASE_URL='https://ccfpdgmmwkghjszkbnzs.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui';
 const supabaseClient=SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase
@@ -308,8 +361,31 @@ panelTriggers.forEach(trigger=>{
   });
 });
 
+document.querySelectorAll("[data-toggle-password]").forEach(button => {
+  button.addEventListener("click", () => {
+    const input = document.getElementById(button.dataset.togglePassword);
+    if (!input) return;
+    const shouldShow = input.type === "password";
+    input.type = shouldShow ? "text" : "password";
+    button.classList.toggle("is-visible", shouldShow);
+    button.setAttribute("aria-pressed", String(shouldShow));
+    button.setAttribute("aria-label", shouldShow ? "Hide password" : "Show password");
+  });
+});
+
+const initialPanelParam = new URLSearchParams(window.location.search).get("panel");
+const initialHashPanel = window.location.hash ? window.location.hash.slice(1) : "";
+const initialPanel = initialPanelParam || initialHashPanel;
+if (initialPanel && forms[initialPanel]) {
+  showPanel(initialPanel);
+}
+
 function getFormData(form){
   return Object.fromEntries(new FormData(form).entries());
+}
+
+function passwordsMatch(data) {
+  return data.password === data.password_confirm;
 }
 
 async function handleAuthSubmit(event, type) {
@@ -357,8 +433,14 @@ async function handleAuthSubmit(event, type) {
         clinic_name,
         role,
         password,
+        password_confirm,
         heard_from
       } = data;
+
+      if (!passwordsMatch({ password, password_confirm })) {
+        showStatus("no", "Passwords do not match. Please retype your password.");
+        return;
+      }
 
       showStatus("warn", "Creating your account...");
 
@@ -450,8 +532,14 @@ async function handleAuthSubmit(event, type) {
         email,
         phone,
         team_code,
-        password
+        password,
+        password_confirm
       } = data;
+
+      if (!passwordsMatch({ password, password_confirm })) {
+        showStatus("no", "Passwords do not match. Please retype your password.");
+        return;
+      }
 
       const cleanTeamCode = team_code.trim().toUpperCase();
 
