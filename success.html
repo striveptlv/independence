@@ -128,7 +128,7 @@ h1{
   <div class="spinner" id="spinner" aria-hidden="true"></div>
   <p id="statusMessage">We are confirming whether your STRIVE INDEPENDENCE access is active.</p>
   <a class="action" id="loginButton" href="auth.html">Log in again</a>
-  <button class="action" id="refreshButton" type="button">Refresh page</button>
+  <button class="action" id="refreshButton" type="button">Click here if this page does not redirect you</button>
   <p class="note">Access is confirmed from your account record. This page does not grant access.</p>
 </main>
 
@@ -147,7 +147,7 @@ const loginButton = document.getElementById("loginButton");
 const refreshButton = document.getElementById("refreshButton");
 
 refreshButton.addEventListener("click", () => {
-  window.location.reload();
+  window.location.href = "dashboard.html";
 });
 
 function stopLoading() {
