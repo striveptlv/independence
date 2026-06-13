@@ -34,7 +34,7 @@
   ],
   "offers": [
     { "@type": "Offer", "name": "Individual", "price": "14.99", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "14.99", "priceCurrency": "USD", "billingDuration": "P1M" } },
-    { "@type": "Offer", "name": "Clinic", "price": "99.99", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "99.99", "priceCurrency": "USD", "billingDuration": "P1M" } },
+    { "@type": "Offer", "name": "Clinic", "price": "99", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "99", "priceCurrency": "USD", "billingDuration": "P1M" } },
     { "@type": "Offer", "name": "Enterprise", "price": "299", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "299", "priceCurrency": "USD", "billingDuration": "P1M" } }
   ]
 }
@@ -646,6 +646,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
 }
 .tier-tagline{font-size:.93rem;color:var(--muted);line-height:1.5;margin-bottom:1.7rem}
 .tier-price{font-size:clamp(3.8rem,7vw,5.8rem);font-weight:900;line-height:.88;letter-spacing:-.04em;color:var(--navy)}
+.price-cents{font-size:.28em;vertical-align:super;letter-spacing:0;margin-left:2px}
 .tier-price-note{font-size:12px;color:var(--muted);margin-top:.5rem;letter-spacing:.04em}
 .tier-sep{height:1px;background:var(--line);margin:1.6rem 0}
 .tier-card.featured .tier-sep{background:rgba(255,255,255,.09)}
@@ -1086,12 +1087,12 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
         <div class="tier-badge">Start Here</div>
         <div class="tier-name">Individual</div>
         <div class="tier-tagline">For solo users, therapists, caregivers, or single clinicians.</div>
-        <div class="tier-price">$14.99</div>
-        <div class="tier-price-note">/ month · one user</div>
+        <div class="tier-price">$14<span class="price-cents">.99</span></div>
+        <div class="tier-price-note">/ month · 30-day free trial</div>
         <div class="tier-sep"></div>
         <ul class="tier-features">
           <li><span class="chk">✓</span>One user account</li>
-          <li><span class="chk">✓</span>Full access to STRIVE demo tools</li>
+          <li><span class="chk">✓</span>Full access to STRIVE practice tools</li>
           <li><span class="chk">✓</span>Money management practice</li>
           <li><span class="chk">✓</span>Ride share practice</li>
           <li><span class="chk">✓</span>Independent living skill practice</li>
@@ -1103,8 +1104,8 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
       <div class="tier-card">
         <div class="tier-name">Clinic</div>
         <div class="tier-tagline">For one clinic or team with multiple staff members.</div>
-        <div class="tier-price">$99.99</div>
-        <div class="tier-price-note">/ month · $49.99/month for nonprofits</div>
+        <div class="tier-price">$99</div>
+        <div class="tier-price-note">/ month · 30-day free trial</div>
         <div class="tier-sep"></div>
         <ul class="tier-features">
           <li><span class="chk">✓</span>Up to 10 team members</li>
@@ -1135,7 +1136,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
       </div>
 
     </div>
-    <p class="pricing-note">All plans include STRIVE account access. Pricing is based on user count and organization size. Nonprofit Clinic pricing is $49.99/month.</p>
+    <p class="pricing-note">All plans include STRIVE account access. Pricing is based on user count and organization size.</p>
   </div>
 </section>
 
