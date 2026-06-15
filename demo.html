@@ -113,29 +113,6 @@ button:hover,.button:hover{opacity:.92;transform:translateY(-1px)}
 .status.ok{background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.3);color:#047857}
 .status.warn{background:rgba(245,130,10,.12);border:1px solid rgba(245,130,10,.28);color:#9a4b00}
 .status.no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.24);color:#b91c1c}
-.modules{display:none;margin-top:22px}
-.modules.show{display:block}
-.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px;align-items:stretch}
-.module{
-  min-height:154px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;
-  padding:18px;border-radius:14px;border:1px solid rgba(27,79,168,.14);
-  background:rgba(255,255,255,.82);text-decoration:none;color:var(--navy);
-  box-shadow:0 12px 28px rgba(19,35,56,.06);
-  transition:border-color .2s,transform .2s,box-shadow .2s,background .2s;
-}
-.module:hover{transform:translateY(-2px);border-color:rgba(245,130,10,.34);background:#fff;box-shadow:0 18px 42px rgba(19,35,56,.1)}
-.module strong{display:block;font-size:.96rem;font-weight:900;text-transform:uppercase;line-height:1.12;margin-bottom:8px}
-.module span{display:block;font-size:.86rem;color:var(--muted);line-height:1.45}
-.module::after{
-  content:'Open demo';display:block;justify-self:end;
-  font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--orange);
-}
-.demo-disclaimer{
-  margin-top:14px;padding:13px 14px;border-radius:12px;border:1px solid rgba(245,130,10,.22);
-  background:rgba(245,130,10,.08);color:var(--muted);
-  font-size:.84rem;line-height:1.45;text-align:center;
-}
 footer{padding:28px 6vw;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer a{color:var(--navy);text-decoration:none;font-weight:800}
 @media(max-width:900px){
@@ -148,7 +125,6 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
   h1{font-size:3.05rem;line-height:.94}
   .button-row{flex-direction:column}
   button,.button{width:100%}
-  .module-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -176,26 +152,16 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
     <div class="access-card" id="access">
       <div class="card-kicker">Access Check</div>
       <h2 class="card-title">Enter Your Invited Email</h2>
-      <p class="card-copy">If your email has been approved, the full demo modules will appear below. If not, request a free trial and STRIVE can add you to the demo list manually.</p>
+      <p class="card-copy">If your email has been approved, you'll be taken directly to the demo dashboard. If not, request a free trial and STRIVE can add you to the demo list manually.</p>
       <form class="access-form" onsubmit="checkAccess(event)">
         <label for="demoEmail">Work Email</label>
         <input id="demoEmail" name="email" type="email" placeholder="you@clinic.com" autocomplete="email" required>
         <div class="button-row">
           <button class="primary" type="submit" id="accessButton">Unlock Demo</button>
-          <a class="button secondary" href="/independence">Unlock Demo</a>
+          <a class="button secondary" href="/independence">Request Access</a>
         </div>
       </form>
       <div class="status" id="accessStatus" role="status" aria-live="polite"></div>
-      <div class="modules" id="demoModules">
-        <div class="card-kicker">Unlocked Demo Links</div>
-        <div class="module-grid">
-          <a class="module" href="https://www.striveptlv.com/moneymanagement/Bill%20Pay/Bill%20Pay%20Homepage.html" target="_blank" rel="noopener"><strong>Bill Pay</strong><span>Practice utility payment tasks with realistic account navigation and payment workflow steps.</span></a>
-          <a class="module" href="https://www.striveptlv.com/moneymanagement/Visa/Visa%20Credit%20Homepage.html" target="_blank" rel="noopener"><strong>Credit Card</strong><span>Practice card management, online form completion, and attention to details across multiple screens.</span></a>
-          <a class="module" href="https://www.striveptlv.com/moneymanagement/Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html" target="_blank" rel="noopener"><strong>Online Bank</strong><span>Practice personal account navigation, account review, and everyday money management skills.</span></a>
-          <a class="module" href="https://www.striveptlv.com/ride" target="_blank" rel="noopener"><strong>Ride Share</strong><span>Practice a ride-share style request, including pickup, destination, ride choice, confirmation, and cancellation steps.</span></a>
-        </div>
-        <p class="demo-disclaimer">By using these links, you understand they are demo practice environments. Names, accounts, balances, payments, rides, and other details are fictional and not connected to real services or real financial information.</p>
-      </div>
     </div>
   </section>
 </main>
@@ -215,137 +181,134 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
   CSV columns: email, granted_at, expires_at, status
   Date format: YYYY-MM-DD
 */
-const DEMO_ACCESS_CSV_URL='';
-const DEMO_ACCESS_LIST=[
+const DEMO_ACCESS_CSV_URL = '';
+const DASHBOARD_URL = 'https://www.striveptlv.com/independence/dashboard';
+const DEMO_ACCESS_LIST = [
   {email:'Kbielecki@kessler-rehab.com',granted_at:'2026-06-05',expires_at:'2026-07-05',status:'active'},
   {email:'TFeliconio@kessler-rehab.com',granted_at:'2026-06-07',expires_at:'2026-07-07',status:'active'},
   {email:'Gemma.brouder@slu.edu',granted_at:'2026-06-07',expires_at:'2026-07-07',status:'active'},
   {email:'holliefleming@hfspeechtherapy.com',granted_at:'2026-06-09',expires_at:'2026-07-09',status:'active'},
   {email:'jmcgarr@kessler-rehab.com',granted_at:'2026-06-10',expires_at:'2026-07-10',status:'active'},
   {email:'annie.jenkins@bhsi.com',granted_at:'2026-06-10',expires_at:'2026-07-10',status:'active'},
-    {email:'gpaiotti@kessler-rehab.com',granted_at:'2026-06-15',expires_at:'2026-07-15',status:'active'}
+  {email:'gpaiotti@kessler-rehab.com',granted_at:'2026-06-15',expires_at:'2026-07-15',status:'active'}
 ];
-const MAX_DEMO_EMAILS=20;
-const ACCESS_COOKIE_NAME='striveDemoAccess';
+const MAX_DEMO_EMAILS = 20;
+const ACCESS_COOKIE_NAME = 'striveDemoAccess';
 
-const modules=document.getElementById('demoModules');
-const statusBox=document.getElementById('accessStatus');
-const accessForm=document.querySelector('.access-form');
-const emailInput=document.getElementById('demoEmail');
-const params=new URLSearchParams(window.location.search);
-const prefilledEmail=params.get('email');
-if(prefilledEmail)emailInput.value=prefilledEmail;
+const statusBox = document.getElementById('accessStatus');
+const accessForm = document.querySelector('.access-form');
+const emailInput = document.getElementById('demoEmail');
+const params = new URLSearchParams(window.location.search);
+const prefilledEmail = params.get('email');
+if (prefilledEmail) emailInput.value = prefilledEmail;
 
-function normalizeEmail(email){
-  return String(email||'').trim().toLowerCase();
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
 }
 
-function parseDate(dateValue){
-  if(!dateValue)return null;
-  const date=new Date(String(dateValue).trim()+'T00:00:00');
-  return Number.isNaN(date.getTime())?null:date;
+function parseDate(dateValue) {
+  if (!dateValue) return null;
+  const date = new Date(String(dateValue).trim() + 'T00:00:00');
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function showStatus(type,message){
-  statusBox.className='status show '+type;
-  statusBox.textContent=message;
+function showStatus(type, message) {
+  statusBox.className = 'status show ' + type;
+  statusBox.textContent = message;
 }
 
-function daysRemaining(expiresAt){
-  const end=parseDate(expiresAt);
-  if(!end)return 0;
-  return Math.max(0,Math.ceil((end.getTime()-Date.now())/86400000));
+function daysRemaining(expiresAt) {
+  const end = parseDate(expiresAt);
+  if (!end) return 0;
+  return Math.max(0, Math.ceil((end.getTime() - Date.now()) / 86400000));
 }
 
-function csvToRows(csv){
-  const lines=csv.trim().split(/\r?\n/).filter(Boolean);
-  if(lines.length<2)return [];
-  const headers=lines.shift().split(',').map(h=>h.trim().toLowerCase());
-  return lines.map(line=>{
-    const cells=line.split(',').map(cell=>cell.trim());
-    return headers.reduce((row,header,index)=>{
-      row[header]=cells[index]||'';
+function csvToRows(csv) {
+  const lines = csv.trim().split(/\r?\n/).filter(Boolean);
+  if (lines.length < 2) return [];
+  const headers = lines.shift().split(',').map(h => h.trim().toLowerCase());
+  return lines.map(line => {
+    const cells = line.split(',').map(cell => cell.trim());
+    return headers.reduce((row, header, index) => {
+      row[header] = cells[index] || '';
       return row;
-    },{});
+    }, {});
   });
 }
 
-async function getAccessList(){
-  if(!DEMO_ACCESS_CSV_URL)return DEMO_ACCESS_LIST.slice(0,MAX_DEMO_EMAILS);
-  const response=await fetch(DEMO_ACCESS_CSV_URL,{cache:'no-store'});
-  if(!response.ok)throw new Error('Access list could not be loaded.');
-  const rows=csvToRows(await response.text());
-  return rows.slice(0,MAX_DEMO_EMAILS);
+async function getAccessList() {
+  if (!DEMO_ACCESS_CSV_URL) return DEMO_ACCESS_LIST.slice(0, MAX_DEMO_EMAILS);
+  const response = await fetch(DEMO_ACCESS_CSV_URL, {cache: 'no-store'});
+  if (!response.ok) throw new Error('Access list could not be loaded.');
+  const rows = csvToRows(await response.text());
+  return rows.slice(0, MAX_DEMO_EMAILS);
 }
 
-function setCookie(name,value,expiresAt){
-  const expires=parseDate(expiresAt);
-  if(!expires)return;
-  document.cookie=[
-    name+'='+encodeURIComponent(value),
-    'expires='+expires.toUTCString(),
+function setCookie(name, value, expiresAt) {
+  const expires = parseDate(expiresAt);
+  if (!expires) return;
+  document.cookie = [
+    name + '=' + encodeURIComponent(value),
+    'expires=' + expires.toUTCString(),
     'path=/',
     'SameSite=Lax'
   ].join('; ');
 }
 
-function getCookie(name){
-  const match=document.cookie.split('; ').find(row=>row.startsWith(name+'='));
-  return match?decodeURIComponent(match.slice(name.length+1)):null;
+function getCookie(name) {
+  const match = document.cookie.split('; ').find(row => row.startsWith(name + '='));
+  return match ? decodeURIComponent(match.slice(name.length + 1)) : null;
 }
 
-function saveAccess(record){
-  const payload=JSON.stringify({
-    email:normalizeEmail(record.email),
-    expires_at:record.expires_at,
-    saved_at:new Date().toISOString()
+function saveAccess(record) {
+  const payload = JSON.stringify({
+    email: normalizeEmail(record.email),
+    expires_at: record.expires_at,
+    saved_at: new Date().toISOString()
   });
-  setCookie(ACCESS_COOKIE_NAME,payload,record.expires_at);
+  setCookie(ACCESS_COOKIE_NAME, payload, record.expires_at);
 }
 
-function restoreAccess(){
-  try{
-    const saved=JSON.parse(getCookie(ACCESS_COOKIE_NAME)||'null');
-    if(!saved||daysRemaining(saved.expires_at)<1)return;
-    emailInput.value=saved.email;
-    accessForm.classList.add('is-hidden');
-    modules.classList.add('show');
-    showStatus('ok','Demo access is active on this device. '+daysRemaining(saved.expires_at)+' day(s) remaining.');
-  }catch(e){}
+function restoreAccess() {
+  try {
+    const saved = JSON.parse(getCookie(ACCESS_COOKIE_NAME) || 'null');
+    if (!saved || daysRemaining(saved.expires_at) < 1) return;
+    // Valid cookie found — redirect straight to dashboard
+    window.location.replace(DASHBOARD_URL);
+  } catch(e) {}
 }
 
-async function checkAccess(event){
+async function checkAccess(event) {
   event.preventDefault();
-  modules.classList.remove('show');
-  const button=document.getElementById('accessButton');
-  const email=normalizeEmail(emailInput.value);
-  button.disabled=true;
-  button.textContent='Checking...';
-  try{
-    const list=await getAccessList();
-    const record=list.find(item=>normalizeEmail(item.email)===email);
-    if(!record){
-      showStatus('no','This email is not on the private demo list yet. Request a free trial or contact STRIVE to request access.');
+  const button = document.getElementById('accessButton');
+  const email = normalizeEmail(emailInput.value);
+  button.disabled = true;
+  button.textContent = 'Checking...';
+  try {
+    const list = await getAccessList();
+    const record = list.find(item => normalizeEmail(item.email) === email);
+    if (!record) {
+      showStatus('no', 'This email is not on the private demo list yet. Request a free trial or contact STRIVE to request access.');
       return;
     }
-    if(String(record.status||'').toLowerCase()!=='active'){
-      showStatus('warn','This invitation is not active yet. Contact STRIVE if you believe it should be active.');
+    if (String(record.status || '').toLowerCase() !== 'active') {
+      showStatus('warn', 'This invitation is not active yet. Contact STRIVE if you believe it should be active.');
       return;
     }
-    const remaining=daysRemaining(record.expires_at);
-    if(remaining<1){
-      showStatus('warn','This 30-day demo invitation has expired. Contact STRIVE if you need more time.');
+    const remaining = daysRemaining(record.expires_at);
+    if (remaining < 1) {
+      showStatus('warn', 'This 30-day demo invitation has expired. Contact STRIVE if you need more time.');
       return;
     }
+    // Access approved — save cookie and redirect to dashboard
     saveAccess(record);
-    accessForm.classList.add('is-hidden');
-    modules.classList.add('show');
-    showStatus('ok','Access approved. You have '+remaining+' day(s) remaining in your private demo.');
-  }catch(error){
-    showStatus('no','Access could not be checked right now. Please try again or contact STRIVE.');
-  }finally{
-    button.disabled=false;
-    button.textContent='Unlock Demo';
+    showStatus('ok', 'Access approved! Redirecting to your demo dashboard…');
+    setTimeout(() => { window.location.href = DASHBOARD_URL; }, 900);
+  } catch(error) {
+    showStatus('no', 'Access could not be checked right now. Please try again or contact STRIVE.');
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Unlock Demo';
   }
 }
 
