@@ -59,7 +59,7 @@ nav{
 .logo-wrap{display:flex;flex-direction:column;line-height:1}
 .logo-text{font-size:21px;font-weight:900;letter-spacing:.09em;color:var(--navy);text-transform:uppercase}
 .logo-sub{font-size:7.5px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);margin-top:1px}
-.nav-links{display:flex;align-items:center;gap:18px}
+.nav-links{display:none;align-items:center;gap:18px}
 .nav-links a,.nav-link-button{color:rgba(19,35,56,.72);font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;transition:color .18s}
 .nav-links a:hover,.nav-link-button:hover{color:var(--blue)}
 .nav-link-button{
@@ -88,18 +88,21 @@ nav{
   background:var(--orange);color:var(--navy)!important;padding:9px 18px;border-radius:6px;
   font-weight:900;box-shadow:0 10px 28px rgba(245,130,10,.2);
 }
-.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:0;padding:4px}
+.nav-toggle{display:flex;flex-direction:column;gap:5px;cursor:pointer;background:none;border:0;padding:4px}
 .nav-toggle span{width:24px;height:2px;background:var(--navy);border-radius:1px;transition:transform .25s,opacity .25s}
 .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-toggle.open span:nth-child(2){opacity:0}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .mobile-menu{
-  display:none;position:fixed;top:72px;left:0;right:0;bottom:0;z-index:19;
-  flex-direction:column;background:#fff;padding:24px 6vw;overflow:auto;
+  display:none;position:fixed;top:82px;right:5vw;z-index:19;width:min(320px,calc(100vw - 36px));
+  flex-direction:column;background:rgba(255,255,255,.98);padding:8px;border:1px solid var(--line-m);
+  border-radius:8px;box-shadow:0 24px 70px rgba(19,35,56,.16);overflow:auto;
 }
 .mobile-menu.open{display:flex}
-.mobile-menu a,.mobile-menu button{color:var(--navy);font-size:20px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:15px 0;border-bottom:1px solid var(--line)}
-.mobile-menu button{appearance:none;background:none;border-top:0;border-left:0;border-right:0;text-align:left;font-family:inherit;cursor:pointer}
+.mobile-menu a,.mobile-menu button{color:var(--navy);font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;padding:13px 14px;border:0;border-radius:6px}
+.mobile-menu a:hover,.mobile-menu button:hover{background:rgba(27,79,168,.06);color:var(--blue)}
+.mobile-menu button{appearance:none;background:none;text-align:left;font-family:inherit;cursor:pointer}
+.mobile-menu button:disabled{cursor:wait;opacity:.62}
 .mobile-menu .mob-book{background:var(--orange);color:var(--navy)!important;text-align:center;margin-top:22px;border:0!important;border-radius:6px}
 main{position:relative;z-index:1}
 .shell{width:min(1180px,100%);margin:0 auto;padding:clamp(10px,2vw,24px) 5vw 56px}
@@ -160,13 +163,14 @@ main{position:relative;z-index:1}
 .support-strip a{color:var(--orange);font-weight:900;letter-spacing:.1em;text-transform:uppercase;font-size:12px;white-space:nowrap}
 #billingMessage{min-height:18px;color:rgba(255,255,255,.72);font-size:.86rem;line-height:1.25;text-align:left}
 @media(max-width:980px){
-  .nav-links{display:flex}.nav-toggle{display:none}
   .link-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .section-head{display:block}.section-note{text-align:left;margin-top:10px}
 }
 @media(max-width:620px){
   body{padding-top:64px}nav{height:64px;padding:0 18px}.mobile-menu{top:64px}
-  .nav-links{display:none}.nav-toggle{display:flex}
+  .mobile-menu{left:0;right:0;bottom:0;width:auto;padding:24px 6vw;border:0;border-radius:0;box-shadow:none}
+  .mobile-menu a,.mobile-menu button{font-size:20px;font-weight:800;letter-spacing:.06em;padding:15px 0;border-bottom:1px solid var(--line);border-radius:0}
+  .mobile-menu a:hover,.mobile-menu button:hover{background:none}
   .logo-img{width:38px;height:38px}.logo-text{font-size:18px}.logo-sub{font-size:6.8px}
   .shell{padding:10px 18px 34px}
   .hero{padding:14px 0 18px}
@@ -192,6 +196,7 @@ main{position:relative;z-index:1}
   </div>
   <div class="nav-links">
     <button class="nav-link-button" id="manageBillingBtn" type="button">Manage Billing</button>
+    <button class="nav-link-button" id="signOutBtn" type="button">Sign Out</button>
     <a class="nav-cta" href="contact.html">Contact Us</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">
@@ -201,6 +206,7 @@ main{position:relative;z-index:1}
 
 <div class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
   <button id="mobileManageBillingBtn" type="button">Manage Billing</button>
+  <button id="mobileSignOutBtn" type="button">Sign Out</button>
   <a href="contact.html" onclick="toggleMenu(false)">Contact Us</a>
 </div>
 
@@ -291,21 +297,46 @@ function toggleMenu(force){
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjZnBkZ21td2tnaGpzemtibnpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NzM4MjYsImV4cCI6MjA5NjQ0OTgyNn0.c2ocYnK9bvQo4uTJtxXbjk6KdizCI_vaNDCt0HFYXuk";
+const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 window.addEventListener("DOMContentLoaded", () => {
   const manageBillingBtn = document.getElementById("manageBillingBtn");
   const mobileManageBillingBtn = document.getElementById("mobileManageBillingBtn");
+  const signOutBtn = document.getElementById("signOutBtn");
+  const mobileSignOutBtn = document.getElementById("mobileSignOutBtn");
   const manageBillingButtons = [
     manageBillingBtn,
     mobileManageBillingBtn
   ].filter(Boolean);
+  const signOutButtons = [
+    signOutBtn,
+    mobileSignOutBtn
+  ].filter(Boolean);
   const billingMessage = document.getElementById("billingMessage");
+
+  async function requireActiveSession() {
+    const {
+      data: { session }
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      window.location.href = "auth.html";
+      return false;
+    }
+
+    return true;
+  }
 
   function setBillingButtonsDisabled(disabled) {
     manageBillingButtons.forEach(button => {
+      button.disabled = disabled;
+    });
+  }
+
+  function setSignOutButtonsDisabled(disabled) {
+    signOutButtons.forEach(button => {
       button.disabled = disabled;
     });
   }
@@ -382,8 +413,29 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  manageBillingButtons.forEach(button => {
-    button.addEventListener("click", openBillingPortal);
+  requireActiveSession().then(hasSession => {
+    if (!hasSession) return;
+
+    manageBillingButtons.forEach(button => {
+      button.addEventListener("click", openBillingPortal);
+    });
+
+    signOutButtons.forEach(button => {
+      button.addEventListener("click", async () => {
+        toggleMenu(false);
+        setSignOutButtonsDisabled(true);
+
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+          alert("Sign out failed: " + error.message);
+          setSignOutButtonsDisabled(false);
+          return;
+        }
+
+        window.location.href = "auth.html";
+      });
+    });
   });
 });
 </script>
