@@ -252,7 +252,9 @@ const AUTH_PAGE = "auth.html";
 const DASHBOARD_PAGE = "dashboard.html";
 
 const checkoutStatus = document.getElementById("checkoutStatus");
-const checkoutParam = new URLSearchParams(window.location.search).get("checkout");
+const pageParams = new URLSearchParams(window.location.search);
+const checkoutParam = pageParams.get("checkout");
+const upgradeIntent = pageParams.get("upgrade") === "1";
 if (checkoutParam === "cancelled" && checkoutStatus) {
   checkoutStatus.classList.add("show");
 }
@@ -326,6 +328,20 @@ function hasActiveAccess(profile) {
   return trialActive || paidActive || teamActive || adminActive;
 }
 
+function hasActiveTrial(profile) {
+  if (!profile) return false;
+
+  const trialEndsAt = profile.trial_ends_at
+    ? new Date(profile.trial_ends_at)
+    : null;
+
+  return (
+    profile.access_type === "trial" &&
+    trialEndsAt &&
+    trialEndsAt > new Date()
+  );
+}
+
 async function checkAccessOrRedirect() {
   try {
     const user = await getCurrentUser();
@@ -336,6 +352,10 @@ async function checkAccessOrRedirect() {
     }
 
     const profile = await getProfileAccess(user.id);
+
+    if (upgradeIntent && hasActiveTrial(profile)) {
+      return { user, profile };
+    }
 
     if (profile && profile.user_id === user.id && hasActiveAccess(profile)) {
       window.location.href = DASHBOARD_PAGE;
