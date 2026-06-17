@@ -398,6 +398,36 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  async function signOutAndRedirect() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      alert("Sign out failed: " + error.message);
+      setSignOutButtonsDisabled(false);
+      return;
+    }
+
+    window.location.href = "auth.html";
+  }
+
+  function startInactivitySignOutTimer() {
+    const INACTIVITY_LIMIT_MS = 30 * 60 * 1000;
+    let inactivityTimer = null;
+
+    function resetInactivityTimer() {
+      window.clearTimeout(inactivityTimer);
+      inactivityTimer = window.setTimeout(() => {
+        signOutAndRedirect();
+      }, INACTIVITY_LIMIT_MS);
+    }
+
+    ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach(eventName => {
+      window.addEventListener(eventName, resetInactivityTimer, { passive: true });
+    });
+
+    resetInactivityTimer();
+  }
+
   async function openBillingPortal() {
     console.log("Manage Billing clicked");
     toggleMenu(false);
@@ -475,6 +505,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (!accessData) return;
 
+    startInactivitySignOutTimer();
+
     const { profile, trialEndsAt } = accessData;
     const trialBanner = document.getElementById("trialBanner");
 
@@ -500,16 +532,7 @@ window.addEventListener("DOMContentLoaded", () => {
       button.addEventListener("click", async () => {
         toggleMenu(false);
         setSignOutButtonsDisabled(true);
-
-        const { error } = await supabase.auth.signOut();
-
-        if (error) {
-          alert("Sign out failed: " + error.message);
-          setSignOutButtonsDisabled(false);
-          return;
-        }
-
-        window.location.href = "auth.html";
+        await signOutAndRedirect();
       });
     });
   }
