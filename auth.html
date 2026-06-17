@@ -332,6 +332,7 @@ const formTitle=document.getElementById('formTitle');
 const formCopy=document.getElementById('formCopy');
 const statusBox=document.getElementById('authStatus');
 const PLAN_PAGE="https://striveptlv.com/independence/choose-plan.html";
+const DASHBOARD_PAGE="dashboard.html";
 const SUPABASE_URL='https://ccfpdgmmwkghjszkbnzs.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui';
 const supabaseClient=SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase
@@ -386,6 +387,33 @@ function getFormData(form){
 
 function passwordsMatch(data) {
   return data.password === data.password_confirm;
+}
+
+async function setupTrialAccess(userId) {
+  const trialStart = new Date();
+  const trialEnd = new Date();
+  trialEnd.setDate(trialEnd.getDate() + 10);
+
+  const { error: trialError } = await supabaseClient
+    .from("profile")
+    .update({
+      has_access: true,
+      access_type: "trial",
+      trial_started_at: trialStart.toISOString(),
+      trial_ends_at: trialEnd.toISOString()
+    })
+    .eq("user_id", userId)
+    .select("user_id")
+    .single();
+
+  if (trialError) {
+    console.error("Trial setup failed:", trialError.message);
+    alert("Account created, but trial setup failed. Please contact support.");
+    showStatus("no", "Account created, but trial setup failed. Please contact support.");
+    return false;
+  }
+
+  return true;
 }
 
 async function handleAuthSubmit(event, type) {
@@ -501,8 +529,11 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      showStatus("ok", "Account and practice created successfully. Taking you to plan selection...");
-      window.location.href = PLAN_PAGE;
+      const trialReady = await setupTrialAccess(user.id);
+      if (!trialReady) return;
+
+      showStatus("ok", "Account and practice created successfully. Taking you to your dashboard...");
+      window.location.href = DASHBOARD_PAGE;
       return;
     }
 
@@ -616,10 +647,11 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      showStatus("ok", "Account created and joined to team successfully.");
+      const trialReady = await setupTrialAccess(user.id);
+      if (!trialReady) return;
 
-      // 7. Send to plan selection
-      window.location.href = PLAN_PAGE;
+      showStatus("ok", "Account created and joined to team successfully. Taking you to your dashboard...");
+      window.location.href = DASHBOARD_PAGE;
       return;
     }
 

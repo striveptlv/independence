@@ -286,7 +286,7 @@ async function getCurrentUser() {
 async function getProfileAccess(userId) {
   const { data: profile, error: profileError } = await supabaseClient
     .from("profile")
-    .select("user_id, has_access")
+    .select("user_id, has_access, access_type, trial_ends_at")
     .eq("user_id", userId)
     .single();
 
@@ -296,6 +296,34 @@ async function getProfileAccess(userId) {
     throw profileError;
   }
   return profile;
+}
+
+function hasActiveAccess(profile) {
+  if (!profile) return false;
+
+  const now = new Date();
+  const trialEndsAt = profile.trial_ends_at
+    ? new Date(profile.trial_ends_at)
+    : null;
+
+  const trialActive =
+    profile.access_type === "trial" &&
+    trialEndsAt &&
+    trialEndsAt > now;
+
+  const paidActive =
+    profile.access_type === "paid" &&
+    profile.has_access === true;
+
+  const teamActive =
+    profile.access_type === "team" &&
+    profile.has_access === true;
+
+  const adminActive =
+    profile.access_type === "admin" &&
+    profile.has_access === true;
+
+  return trialActive || paidActive || teamActive || adminActive;
 }
 
 async function checkAccessOrRedirect() {
@@ -309,7 +337,7 @@ async function checkAccessOrRedirect() {
 
     const profile = await getProfileAccess(user.id);
 
-    if (profile && profile.user_id === user.id && profile.has_access === true) {
+    if (profile && profile.user_id === user.id && hasActiveAccess(profile)) {
       window.location.href = DASHBOARD_PAGE;
       return null;
     }

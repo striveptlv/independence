@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trial Ended | STRIVE Independence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Your STRIVE Independence trial has ended. Choose an Individual, Clinic, or Enterprise plan to continue using STRIVE." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #132338;
+      --ink: #1a2e44;
+      --muted: rgba(26, 46, 68, .58);
+      --muted-strong: rgba(26, 46, 68, .76);
+      --blue: #1B4FA8;
+      --orange: #F5820A;
+      --line: rgba(19, 35, 56, .12);
+      --line-strong: rgba(19, 35, 56, .2);
+      --glass: rgba(255, 255, 255, .86);
+      --white: #fff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      font-family: "Outfit", Arial, sans-serif;
+      color: var(--ink);
+      background: #f6fafc;
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(27, 79, 168, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(27, 79, 168, .045) 1px, transparent 1px),
+        radial-gradient(ellipse 70% 42% at 50% -10%, rgba(27, 79, 168, .14), transparent 64%),
+        radial-gradient(ellipse 38% 34% at 96% 18%, rgba(245, 130, 10, .15), transparent 60%),
+        radial-gradient(ellipse 48% 36% at 5% 86%, rgba(27, 79, 168, .08), transparent 58%);
+      background-size: 70px 70px, 70px 70px, auto, auto, auto;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    nav {
+      position: relative;
+      z-index: 2;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 12px 6vw;
+      background: rgba(255, 255, 255, .88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--navy);
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .brand-word {
+      display: block;
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: .09em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      display: block;
+      margin-top: 2px;
+      color: var(--orange);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .26em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: rgba(19, 35, 56, .7);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a:hover { color: var(--blue); }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: clamp(42px, 7vw, 86px) 0 54px;
+    }
+
+    .hero {
+      max-width: 840px;
+      margin-bottom: clamp(32px, 5vw, 56px);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: var(--orange);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--orange);
+    }
+
+    h1 {
+      max-width: 760px;
+      color: var(--navy);
+      font-size: clamp(3.3rem, 8.5vw, 7.8rem);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: .88;
+      text-transform: uppercase;
+    }
+
+    .accent { color: var(--orange); }
+
+    .lead {
+      max-width: 640px;
+      margin-top: 24px;
+      color: var(--muted-strong);
+      font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+      line-height: 1.64;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 14px 20px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      transition: opacity .2s, transform .15s, box-shadow .2s, border-color .2s, background .2s;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: var(--navy);
+      box-shadow: 0 12px 32px rgba(245, 130, 10, .28);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, .78);
+      border: 1px solid var(--line-strong);
+      color: var(--navy);
+    }
+
+    .button:hover {
+      opacity: .9;
+      transform: translateY(-1px);
+    }
+
+    .status-card {
+      position: relative;
+      overflow: hidden;
+      max-width: 760px;
+      margin: clamp(28px, 5vw, 52px) auto 0;
+      padding: clamp(24px, 3vw, 34px);
+      border: 1px solid rgba(27, 79, 168, .14);
+      border-radius: 8px;
+      background: var(--glass);
+      box-shadow: 0 30px 90px rgba(19, 35, 56, .11);
+    }
+
+    .status-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--blue));
+    }
+
+    .status-card h2 {
+      margin-bottom: 10px;
+      color: var(--navy);
+      font-size: clamp(1.45rem, 2vw, 2rem);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .status-card p {
+      color: var(--muted-strong);
+      font-size: 1rem;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 10px;
+      margin: 20px 0 24px;
+      list-style: none;
+    }
+
+    .mini-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--muted-strong);
+      font-size: .94rem;
+      line-height: 1.35;
+    }
+
+    .chk {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      margin-top: 1px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(245, 130, 10, .38);
+      border-radius: 50%;
+      background: rgba(245, 130, 10, .18);
+      color: var(--orange);
+      font-size: 9px;
+      font-weight: 900;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+
+    .section-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--orange);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .section-tag::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: var(--orange);
+    }
+
+    .section-title {
+      color: var(--navy);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: .96;
+      text-transform: uppercase;
+    }
+
+    .section-copy {
+      max-width: 440px;
+      color: var(--muted);
+      font-size: .98rem;
+    }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .tier-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      overflow: hidden;
+      padding: 1.45rem 1.55rem;
+      border: 1px solid rgba(27, 79, 168, .13);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .88);
+      transition: transform .18s, border-color .2s, box-shadow .2s;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--line-strong);
+      box-shadow: 0 24px 64px rgba(19, 35, 56, .12);
+    }
+
+    .tier-card.featured {
+      border-color: rgba(245, 130, 10, .3);
+      background: linear-gradient(155deg, #fff 0%, #edf5fb 100%);
+      box-shadow: 0 0 0 1px rgba(245, 130, 10, .09), 0 36px 90px rgba(245, 130, 10, .1);
+    }
+
+    .tier-badge {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 5px 18px;
+      background: var(--orange);
+      color: var(--navy);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .tier-name {
+      margin: .6rem 0 .4rem;
+      color: var(--orange);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .tier-tagline {
+      min-height: 2.4em;
+      margin-bottom: .8rem;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.38;
+    }
+
+    .tier-price {
+      color: var(--navy);
+      font-size: clamp(3rem, 5.1vw, 4.25rem);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: .88;
+    }
+
+    .tier-price-note {
+      margin-top: .5rem;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+
+    .tier-sep {
+      height: 1px;
+      margin: .9rem 0;
+      background: var(--line);
+    }
+
+    .tier-features {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: .38rem;
+      margin-bottom: 1rem;
+      list-style: none;
+    }
+
+    .tier-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: var(--muted-strong);
+      font-size: .84rem;
+      line-height: 1.28;
+    }
+
+    .tier-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      margin-top: auto;
+      padding: 14px 18px;
+      border-radius: 6px;
+      border: 1px solid var(--line-strong);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-align: center;
+      text-transform: uppercase;
+      transition: opacity .2s, transform .15s, box-shadow .2s, background .2s;
+    }
+
+    .tier-cta.solid {
+      border-color: transparent;
+      background: var(--orange);
+      color: var(--navy);
+      box-shadow: 0 8px 32px rgba(245, 130, 10, .3);
+    }
+
+    .tier-cta.outline {
+      background: transparent;
+      color: var(--navy);
+    }
+
+    .tier-cta:hover {
+      opacity: .9;
+      transform: translateY(-1px);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px 22px;
+      margin-top: 34px;
+      color: rgba(19, 35, 56, .62);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .footer-links a:hover { color: var(--blue); }
+
+    @media (max-width: 980px) {
+      .tier-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+
+    @media (max-width: 680px) {
+      nav { min-height: 62px; padding: 10px 16px; }
+      .brand img { width: 36px; height: 36px; }
+      .brand-word { font-size: 17px; }
+      .brand-sub { font-size: 6.8px; letter-spacing: .22em; }
+      .nav-links { display: none; }
+      main { width: min(100% - 28px, 1180px); padding-top: 36px; }
+      h1 { font-size: clamp(3rem, 16vw, 4.5rem); }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .button { width: 100%; }
+      .tier-card { padding: 1.65rem 1.2rem; }
+      .tier-price { font-size: 3.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="brand" href="https://www.striveptlv.com/independence.html" aria-label="STRIVE Independence home">
+      <img src="logo.png" alt="">
+      <span>
+        <span class="brand-word">STRIVE</span>
+        <span class="brand-sub">Independence</span>
+      </span>
+    </a>
+    <div class="nav-links" aria-label="STRIVE links">
+      <a href="https://www.striveptlv.com/independence.html">Independence</a>
+      <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
+      <a href="https://www.striveptlv.com/">STRIVE PT</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" aria-labelledby="trial-title">
+      <div>
+        <div class="eyebrow">Trial ended</div>
+        <h1 id="trial-title">Your 10-day trial has <span class="accent">ended.</span></h1>
+        <p class="lead">Activate Individual to keep using STRIVE Independence, or compare plans if you need clinic or organization access.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="choose-plan.html">Activate Individual</a>
+          <a class="button secondary" href="#plans">Choose a Plan</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="plans" aria-labelledby="plans-title">
+      <div class="section-head">
+        <div>
+          <div class="section-tag">Plans &amp; Pricing</div>
+          <h2 class="section-title" id="plans-title">Choose Your <span class="accent">Plan</span></h2>
+        </div>
+        <p class="section-copy">Pricing matches the STRIVE Independence plan page. Each option links to plan selection so you can activate access.</p>
+      </div>
+
+      <div class="tier-grid">
+        <article class="tier-card featured">
+          <div class="tier-badge">Start Here</div>
+          <div class="tier-name">Individual</div>
+          <div class="tier-tagline">The STRIVE account for one user.</div>
+          <div class="tier-price">$14.99</div>
+          <div class="tier-price-note">/ month · one user</div>
+          <div class="tier-sep"></div>
+          <ul class="tier-features">
+            <li><span class="chk">✓</span>One user account</li>
+            <li><span class="chk">✓</span>Full STRIVE account access</li>
+            <li><span class="chk">✓</span>Money management practice</li>
+            <li><span class="chk">✓</span>Ride share practice</li>
+            <li><span class="chk">✓</span>Independent living skill practice</li>
+            <li><span class="chk">✓</span>Email support</li>
+          </ul>
+          <a class="tier-cta solid" href="choose-plan.html">Activate Individual</a>
+        </article>
+
+        <article class="tier-card">
+          <div class="tier-name">Clinic</div>
+          <div class="tier-tagline">The same STRIVE account for small teams.</div>
+          <div class="tier-price">$99.99</div>
+          <div class="tier-price-note">/ month · up to 10 users</div>
+          <div class="tier-sep"></div>
+          <ul class="tier-features">
+            <li><span class="chk">✓</span>Up to 10 user accounts</li>
+            <li><span class="chk">✓</span>Shared clinic or team access</li>
+            <li><span class="chk">✓</span>Full STRIVE Talk access</li>
+            <li><span class="chk">✓</span>Full Money Rehab and Community Mobility access</li>
+            <li><span class="chk">✓</span>Team use across treatment sessions</li>
+            <li><span class="chk">✓</span>Email support</li>
+          </ul>
+          <a class="tier-cta outline" href="choose-plan.html">Activate Clinic</a>
+        </article>
+
+        <article class="tier-card">
+          <div class="tier-name">Enterprise</div>
+          <div class="tier-tagline">The same STRIVE account for larger organizations.</div>
+          <div class="tier-price">$299</div>
+          <div class="tier-price-note">/ month · up to 50 users</div>
+          <div class="tier-sep"></div>
+          <ul class="tier-features">
+            <li><span class="chk">✓</span>Everything in Clinic</li>
+            <li><span class="chk">✓</span>Up to 50 user accounts</li>
+            <li><span class="chk">✓</span>Multiple clinics or locations</li>
+            <li><span class="chk">✓</span>Organization-level account access</li>
+            <li><span class="chk">✓</span>Custom onboarding and setup</li>
+            <li><span class="chk">✓</span>Priority support for custom needs</li>
+          </ul>
+          <a class="tier-cta outline" href="choose-plan.html">Choose Enterprise</a>
+        </article>
+      </div>
+    </section>
+
+    <aside class="status-card" aria-label="Subscription status">
+      <h2>Keep Your Access</h2>
+      <p>Your trial access is paused until a subscription is activated.</p>
+      <ul class="mini-list">
+        <li><span class="chk">✓</span>Reactivate your STRIVE account with the plan that matches your user count.</li>
+        <li><span class="chk">✓</span>Continue using STRIVE Talk, Money Rehab, Community Mobility, and independence practice modules.</li>
+        <li><span class="chk">✓</span>Need help choosing? Reach out and STRIVE can point you to the right option.</li>
+      </ul>
+    </aside>
+
+    <div class="footer-links">
+      <a href="https://www.striveptlv.com/independence.html">STRIVE Independence</a>
+      <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
+      <a href="https://www.striveptlv.com/">STRIVE Physical Therapy</a>
+      <a href="mailto:dpt@striveptlv.com">Contact Support</a>
+    </div>
+  </main>
+</body>
+</html>
