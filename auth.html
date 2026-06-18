@@ -396,13 +396,15 @@ async function setupTrialAccess(userId) {
 
   const { error: trialError } = await supabaseClient
     .from("profile")
-    .update({
+    .upsert({
+      user_id: userId,
       has_access: true,
       access_type: "trial",
       trial_started_at: trialStart.toISOString(),
       trial_ends_at: trialEnd.toISOString()
+    }, {
+      onConflict: "user_id"
     })
-    .eq("user_id", userId)
     .select("user_id")
     .single();
 
