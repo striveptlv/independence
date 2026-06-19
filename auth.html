@@ -389,33 +389,66 @@ function passwordsMatch(data) {
   return data.password === data.password_confirm;
 }
 
+function wait(ms) {
+  return new Promise(resolve => window.setTimeout(resolve, ms));
+}
+
 async function setupTrialAccess(userId) {
   const trialStart = new Date();
   const trialEnd = new Date();
   trialEnd.setDate(trialEnd.getDate() + 14);
 
-  const { error: trialError } = await supabaseClient
-    .from("profile")
-    .upsert({
-      user_id: userId,
+  const trialFields = {
       has_access: true,
       access_type: "trial",
       trial_started_at: trialStart.toISOString(),
       trial_ends_at: trialEnd.toISOString()
-    }, {
-      onConflict: "user_id"
-    })
-    .select("user_id")
-    .single();
+  };
 
-  if (trialError) {
-    console.error("Trial setup failed:", trialError.message);
-    alert("Account created, but trial setup failed. Please contact support.");
-    showStatus("no", "Account created, but trial setup failed. Please contact support.");
+  let lastError = null;
+
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const { data: updatedProfile, error: updateError } = await supabaseClient
+      .from("profile")
+      .update(trialFields)
+      .eq("user_id", userId)
+      .select("user_id")
+      .maybeSingle();
+
+    if (updateError) {
+      lastError = updateError;
+      break;
+    }
+
+    if (updatedProfile) {
+      return true;
+    }
+
+    await wait(500);
+  }
+
+  const { error: insertError } = await supabaseClient
+    .from("profile")
+    .insert({
+      user_id: userId,
+      ...trialFields
+    });
+
+  if (insertError) {
+    lastError = insertError;
+  } else {
+    return true;
+  }
+
+  if (lastError) {
+    console.error("Trial setup failed:", lastError);
+    alert("Account created, but trial setup failed: " + lastError.message);
+    showStatus("no", "Account created, but trial setup failed: " + lastError.message);
     return false;
   }
 
-  return true;
+  showStatus("no", "Account created, but trial setup failed because no profile row was found.");
+  return false;
 }
 
 async function handleAuthSubmit(event, type) {
