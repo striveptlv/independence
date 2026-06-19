@@ -505,14 +505,17 @@ async function handleAuthSubmit(event, type) {
       // Solo practitioners still get a team with one member.
       const teamId = crypto.randomUUID();
 
-      const { error: teamError } = await supabaseClient
+      const { data: team, error: teamError } = await supabaseClient
         .from("teams")
         .insert({
           id: teamId,
           name: clinicName
-        });
+        })
+        .select("id")
+        .single();
 
       if (teamError) {
+        console.error("Team setup failed:", teamError);
         showStatus("no", "Account created, but practice setup failed: " + teamError.message);
         return;
       }
@@ -521,12 +524,13 @@ async function handleAuthSubmit(event, type) {
       const { error: memberError } = await supabaseClient
         .from("members")
         .insert({
-          team_id: teamId,
+          team_id: team.id,
           user_id: user.id,
           role: selectedRole
         });
 
       if (memberError) {
+        console.error("Membership setup failed:", memberError);
         showStatus("no", "Practice created, but membership setup failed: " + memberError.message);
         return;
       }
