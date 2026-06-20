@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome to STRIVE INDEPENDENCE | Dashboard</title>
-<meta name="description" content="Launch STRIVE INDEPENDENCE apps after checkout, including STRIDE ride share, online banking, credit card, bill pay, and STRIVE Talk AAC.">
+<meta name="description" content="Launch STRIVE INDEPENDENCE apps after checkout, including STRIDE ride share, online banking, credit card, bill pay, left/right discrimination, and STRIVE Talk AAC.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -144,15 +144,20 @@ main{position:relative;z-index:1}
 }
 .trial-banner strong{font-weight:900}
 .trial-banner a{display:inline-flex;margin-left:12px;color:var(--blue);font-weight:900;text-decoration:underline;text-underline-offset:3px}
-.link-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.link-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .app-card{
   min-height:210px;display:flex;flex-direction:column;justify-content:space-between;padding:19px;
   background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:8px;
   box-shadow:0 18px 50px rgba(19,35,56,.08);transition:transform .18s,border-color .18s,box-shadow .18s;
 }
 .app-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 24px 64px rgba(19,35,56,.13)}
-.app-top{display:flex;justify-content:flex-end;gap:12px;align-items:flex-start}
+.app-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .app-num{font-family:"DM Mono",monospace;font-size:10px;color:rgba(26,46,68,.38)}
+.app-badge{
+  display:inline-flex;align-items:center;min-height:22px;padding:4px 8px;border-radius:999px;
+  background:var(--tint);border:1px solid var(--border);color:var(--accent);
+  font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;line-height:1;
+}
 .app-card h2{margin-top:18px;color:var(--navy);font-size:1.18rem;font-weight:900;line-height:1.05;text-transform:uppercase}
 .app-card p{margin-top:10px;color:var(--muted-s);font-size:.93rem;line-height:1.45}
 .app-launch{margin-top:22px;display:flex;align-items:center;justify-content:space-between;color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
@@ -161,6 +166,7 @@ main{position:relative;z-index:1}
 .bank{--accent:var(--green);--tint:rgba(16,185,129,.12);--border:rgba(16,185,129,.25)}
 .talk{--accent:var(--pink);--tint:rgba(219,39,119,.1);--border:rgba(219,39,119,.22)}
 .stride{--accent:var(--purple);--tint:rgba(124,58,237,.11);--border:rgba(124,58,237,.22)}
+.left-right{--accent:#0f766e;--tint:rgba(15,118,110,.11);--border:rgba(15,118,110,.24)}
 .support-strip{
   margin-top:18px;display:flex;justify-content:space-between;gap:16px;align-items:center;
   background:rgba(19,35,56,.95);color:#fff;border-radius:8px;padding:18px 20px;
@@ -233,7 +239,7 @@ main{position:relative;z-index:1}
       <div class="link-grid">
         <a class="app-card stride" href="https://www.striveptlv.com/ride" target="_blank" rel="noopener">
           <div>
-            <div class="app-top"><div class="app-num">01</div></div>
+            <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">01</div></div>
             <h2>STRIDE Ride Share</h2>
             <p>Practice pickup, destination, ride selection, confirmation, and cancellation steps in a transportation simulator.</p>
           </div>
@@ -267,9 +273,18 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
+        <a class="app-card left-right" href="https://www.striveptlv.com/left-right" target="_blank" rel="noopener">
+          <div>
+            <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">05</div></div>
+            <h2>Left/Right Discrimination</h2>
+            <p>Practice identifying left and right directions through focused visual discrimination and response tasks.</p>
+          </div>
+          <div class="app-launch">Open app <span>→</span></div>
+        </a>
+
         <a class="app-card talk" href="https://talk.striveptlv.com" target="_blank" rel="noopener">
           <div>
-            <div class="app-top"><div class="app-num">05</div></div>
+            <div class="app-top"><div class="app-num">06</div></div>
             <h2>STRIVE Talk</h2>
             <p>Open the AAC mobile app for tap-to-speak functional phrases and daily communication routines.</p>
           </div>
@@ -277,7 +292,7 @@ main{position:relative;z-index:1}
         </a>
       </div>
 
-      <p class="launch-copy">Build everyday independence with guided practice for the digital tasks of daily life: transportation, banking, bill pay, card management, and AAC communication. Use fictional information only; these tools are built for safe practice, repetition, and carryover between sessions.</p>
+      <p class="launch-copy">Build everyday independence with guided practice for the digital tasks of daily life: transportation, banking, bill pay, card management, left/right discrimination, and AAC communication. Use fictional information only; these tools are built for safe practice, repetition, and carryover between sessions.</p>
 
       <div class="support-strip">
         <div>
