@@ -57,6 +57,10 @@ h1{
 }
 h1 span{display:block}
 h1 em{font-style:normal;color:var(--orange)}
+.hero-subhead{
+  max-width:540px;margin-top:22px;color:var(--soft);font-size:clamp(1.05rem,1.45vw,1.28rem);
+  line-height:1.55;font-weight:600;
+}
 .auth-card{
   width:min(100%,620px);
   justify-self:end;
@@ -139,6 +143,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
   .hero{min-height:calc(100vh - 58px);grid-template-columns:1fr;gap:18px;align-content:start;align-items:start;padding:24px 0 34px}
   .hero-heading{text-align:left}
   h1{font-size:2.65rem;line-height:.94}
+  .hero-subhead{display:none}
   .auth-card{justify-self:stretch;padding:1.2rem}
   .field-grid{grid-template-columns:1fr}
   .button-row{flex-direction:column}
@@ -163,6 +168,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
   <section class="hero shell">
     <div class="hero-heading">
       <h1><span>STRIVE</span> <em>Independence</em></h1>
+      <p class="hero-subhead">Real-world practice for banking, communication, transportation, and independent living. STRIVE gives clinicians practical digital environments where patients can practice safely, repeatedly, and without real-world risk.</p>
     </div>
 
     <div class="auth-card" id="account">
@@ -180,7 +186,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
         </div>
         <div class="button-row">
           <button class="primary" type="submit">Access Your Account</button>
-          <button class="secondary" type="button" data-panel="createPractice">Create New Account</button>
+          <button class="secondary" type="button" data-panel="createPractice">Start Free Trial</button>
         </div>
         <div class="link-row">
           <button class="form-link" type="button" data-panel="joinPractice">Join Existing Practice</button>
@@ -247,7 +253,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
           </div>
         </div>
         <div class="button-row">
-          <button class="primary" type="submit">Create New Account</button>
+          <button class="primary" type="submit">Start Free Trial</button>
           <button class="secondary" type="button" data-panel="joinPractice">Join Existing Practice</button>
           <button class="form-link" type="button" data-panel="login">Back To Access</button>
         </div>
