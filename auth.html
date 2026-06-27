@@ -186,7 +186,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
         </div>
         <div class="button-row">
           <button class="primary" type="submit">Access Your Account</button>
-          <button class="secondary" type="button" data-panel="createPractice">Start Free Trial</button>
+          <button class="secondary" type="button" data-panel="createPractice">Create New Account</button>
         </div>
         <div class="link-row">
           <button class="form-link" type="button" data-panel="joinPractice">Join Existing Practice</button>
@@ -347,9 +347,11 @@ const supabaseClient=SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase
 
 function showPanel(panelName){
   Object.entries(forms).forEach(([name,form])=>{
+    if (!form) return;
     form.classList.toggle('active',name===panelName);
   });
   const activeForm=forms[panelName];
+  if (!activeForm) return;
   formTitle.textContent=activeForm.dataset.title;
   formCopy.textContent=activeForm.dataset.copy;
   statusBox.className='status';
@@ -464,6 +466,11 @@ async function handleAuthSubmit(event, type) {
   const data = getFormData(form);
 
   try {
+    if (!supabaseClient) {
+      showStatus("no", "Account access is temporarily unavailable. Please refresh the page and try again.");
+      return;
+    }
+
     // -----------------------------
     // LOGIN
     // -----------------------------

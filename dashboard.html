@@ -167,6 +167,7 @@ main{position:relative;z-index:1}
 .talk{--accent:var(--pink);--tint:rgba(219,39,119,.1);--border:rgba(219,39,119,.22)}
 .stride{--accent:var(--purple);--tint:rgba(124,58,237,.11);--border:rgba(124,58,237,.22)}
 .left-right{--accent:#0f766e;--tint:rgba(15,118,110,.11);--border:rgba(15,118,110,.24)}
+.basic{--accent:#b45309;--tint:rgba(180,83,9,.1);--border:rgba(180,83,9,.24)}
 .support-strip{
   margin-top:18px;display:flex;justify-content:space-between;gap:16px;align-items:center;
   background:rgba(19,35,56,.95);color:#fff;border-radius:8px;padding:18px 20px;
@@ -211,6 +212,7 @@ main{position:relative;z-index:1}
   <div class="nav-links">
     <button class="nav-link-button" id="manageBillingBtn" type="button">Manage Billing</button>
     <button class="nav-link-button" id="signOutBtn" type="button">Sign Out</button>
+    <a href="feedback.html">Feedback</a>
     <a class="nav-cta" href="contact.html">Contact Us</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">
@@ -221,6 +223,7 @@ main{position:relative;z-index:1}
 <div class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
   <button id="mobileManageBillingBtn" type="button">Manage Billing</button>
   <button id="mobileSignOutBtn" type="button">Sign Out</button>
+  <a href="feedback.html" onclick="toggleMenu(false)">Feedback</a>
   <a href="contact.html" onclick="toggleMenu(false)">Contact Us</a>
 </div>
 
@@ -246,7 +249,7 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card bank" href="https://www.striveptlv.com/moneymanagement/Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html" target="_blank" rel="noopener">
+        <a class="app-card bank" href="https://www.striveptlv.com/moneyrehab/Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html" target="_blank" rel="noopener">
           <div>
             <div class="app-top"><div class="app-num">02</div></div>
             <h2>Online Banking</h2>
@@ -255,7 +258,7 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card credit" href="https://www.striveptlv.com/moneymanagement/Visa/Visa%20Credit%20Homepage.html" target="_blank" rel="noopener">
+        <a class="app-card credit" href="https://www.striveptlv.com/moneyrehab/Visa/Visa%20Credit%20Homepage.html" target="_blank" rel="noopener">
           <div>
             <div class="app-top"><div class="app-num">03</div></div>
             <h2>Credit Card</h2>
@@ -264,7 +267,7 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card bill" href="https://www.striveptlv.com/moneymanagement/Bill%20Pay/Bill%20Pay%20Homepage.html" target="_blank" rel="noopener">
+        <a class="app-card bill" href="free/Bill%20Pay/Bill%20Pay%20Homepage.html">
           <div>
             <div class="app-top"><div class="app-num">04</div></div>
             <h2>Bill Pay</h2>
@@ -273,7 +276,7 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card left-right" href="https://www.striveptlv.com/left-right" target="_blank" rel="noopener">
+        <a class="app-card left-right" href="free/left-right-basic/index.html">
           <div>
             <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">05</div></div>
             <h2>Left/Right Discrimination</h2>
@@ -282,9 +285,18 @@ main{position:relative;z-index:1}
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
+        <a class="app-card basic" href="moneymanagement.html">
+          <div>
+            <div class="app-top"><span class="app-badge">FREE</span><div class="app-num">06</div></div>
+            <h2>Basic Practice Launchpad</h2>
+            <p>Open the free/basic STRIVE INDEPENDENCE levels for basic bill pay and left/right discrimination practice.</p>
+          </div>
+          <div class="app-launch">Open launchpad <span>→</span></div>
+        </a>
+
         <a class="app-card talk" href="https://talk.striveptlv.com" target="_blank" rel="noopener">
           <div>
-            <div class="app-top"><div class="app-num">06</div></div>
+            <div class="app-top"><div class="app-num">07</div></div>
             <h2>STRIVE Talk</h2>
             <p>Open the AAC mobile app for tap-to-speak functional phrases and daily communication routines.</p>
           </div>
