@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>STRIVE Independence | Medication Management</title>
+<meta name="description" content="Medication management activity launcher with a focused task view and separate instructions page." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#132338;
+  --blue:#1B4FA8;
+  --blue-bright:#2563eb;
+  --teal:#0f766e;
+  --orange:#F5820A;
+  --paper:#f3f6fa;
+  --white:#ffffff;
+  --text:#1a2e44;
+  --muted:rgba(26,46,68,.52);
+  --muted-s:rgba(26,46,68,.74);
+  --gb:rgba(27,79,168,.13);
+  --surface:rgba(255,255,255,.94);
+  --line:rgba(19,35,56,.10);
+  --line-strong:rgba(19,35,56,.18);
+  --soft-blue:#e8f1f8;
+  --soft-teal:#e5f4f1;
+  --soft-orange:#fdebd8;
+  --danger:#b42318;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Outfit',Arial,sans-serif;background:var(--paper);color:var(--navy);line-height:1.58;font-size:17px;overflow-x:hidden;padding-top:72px}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(90deg,rgba(27,79,168,.055) 0 1px,transparent 1px 100%),radial-gradient(ellipse 78% 38% at 50% -8%,rgba(27,79,168,.11) 0%,transparent 62%),radial-gradient(ellipse 45% 34% at 96% 18%,rgba(245,130,10,.08) 0%,transparent 58%);background-size:32px 32px,auto,auto;pointer-events:none;z-index:0}
+section,nav,main,header,footer{position:relative;z-index:1}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:72px;background:rgba(255,255,255,.9);backdrop-filter:blur(22px) saturate(1.6);-webkit-backdrop-filter:blur(22px) saturate(1.6);border-bottom:1px solid rgba(19,35,56,.11);display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
+.nav-logo{display:flex;align-items:center;gap:11px}
+.logo-img{width:44px;height:44px;object-fit:contain;flex-shrink:0}
+.logo-wrap{display:flex;flex-direction:column;line-height:1}
+.logo-text{font-size:21px;font-weight:900;letter-spacing:.09em;color:var(--navy);text-transform:uppercase}
+.logo-sub{font-size:7.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-links button,.mobile-menu button,.nav-links a,.mobile-menu a{border:0;background:transparent;color:rgba(19,35,56,.72);font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;padding:0}
+.nav-links button:hover,.nav-links a:hover{color:var(--blue)}
+.nav-links .contact-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:11px 18px;border-radius:7px;color:#fff!important;background:var(--blue)!important;box-shadow:0 12px 24px rgba(27,79,168,.18);line-height:1}
+.nav-links .contact-button:hover{color:#fff!important;background:var(--blue-bright)!important}
+.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.nav-toggle span{width:24px;height:2px;background:var(--navy);border-radius:1px;transition:transform .25s,opacity .25s}
+.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;flex-direction:column;position:fixed;top:72px;left:0;right:0;bottom:0;background:#fff;z-index:299;padding:24px 6vw;overflow-y:auto}
+.mobile-menu.open{display:flex}
+.mobile-menu button,.mobile-menu a{color:var(--navy);font-size:20px;font-weight:700;letter-spacing:.06em;text-align:left;padding:15px 0;border-bottom:1px solid var(--line)}
+.hero{display:grid;grid-template-columns:1fr;gap:24px;margin-bottom:18px;padding:clamp(1.35rem,2.6vw,2rem);background:var(--surface);border:1px solid var(--gb);border-radius:12px;backdrop-filter:blur(12px);box-shadow:0 18px 42px rgba(19,35,56,.09);position:relative;overflow:hidden}
+body.focus-mode .hero{display:none!important}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 0% 0%,rgba(27,79,168,.07),transparent 70%),linear-gradient(90deg,rgba(19,35,56,.04) 0 1px,transparent 1px 100%);background-size:auto,28px 28px;pointer-events:none}
+.hero>*{position:relative}
+.section-tag{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.section-tag::before{content:'';width:18px;height:1px;background:var(--orange)}
+h1{font-size:clamp(2.25rem,4.9vw,4.55rem);line-height:.94;letter-spacing:-.04em;text-transform:uppercase;color:var(--navy);max-width:980px;font-weight:900;margin-bottom:1rem}
+h1 span{color:var(--blue)}
+.sub{max-width:68ch;color:var(--muted-s);font-size:clamp(1rem,1.6vw,1.12rem);line-height:1.72;margin-bottom:1.35rem}
+.hero-credit{margin-top:1.4rem;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.top-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.top-actions button{min-height:42px;padding:10px 13px;font-size:.9rem}
+.wrap{max-width:1260px;margin:0 auto;padding:34px 5vw 68px}
+.view{display:none}
+.view.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:24px 0}
+.card{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h3{font-size:.92rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:6px}
+.card strong{color:var(--navy)}
+.activity-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
+.level-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:18px}
+.level-section{margin-top:24px}
+.level-heading{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.level-heading h2{font-size:clamp(1.35rem,2.4vw,2rem);font-weight:900;color:var(--navy)}
+.level-heading p{max-width:560px;color:var(--muted-s);line-height:1.5}
+.level-section.level-easy .level-heading h2{color:#15845f}
+.level-section.level-medium .level-heading h2{color:#9f7a10}
+.level-section.level-hard .level-heading h2{color:#b75c16}
+.level-section.level-real .level-heading h2{color:#a83232}
+.activity-card{--level-color:var(--blue);--level-soft:rgba(27,79,168,.12);--level-shadow:rgba(27,79,168,.16);display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.84)),linear-gradient(135deg,var(--level-soft),rgba(255,255,255,.76));border:1px solid var(--level-color);border-radius:20px;padding:24px;color:var(--navy);cursor:pointer;min-height:190px;box-shadow:0 18px 40px var(--level-shadow);transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+.activity-card::before{content:'';display:block;height:6px;margin:-24px -24px 16px;background:var(--level-color);align-self:stretch;flex:0 0 auto}
+.activity-card:hover,.activity-card:focus-visible{border-color:var(--level-color);box-shadow:0 24px 52px var(--level-shadow);transform:translateY(-4px);outline:0}
+.activity-card h3{font-size:1.35rem;font-weight:900;letter-spacing:0;line-height:1.18;text-transform:none;color:var(--navy)}
+.activity-card p{color:var(--muted-s);font-size:1rem;line-height:1.55;font-weight:400;letter-spacing:0;text-transform:none}
+.activity-meta{font-size:.95rem;color:var(--muted-s);font-weight:500;line-height:1.45;letter-spacing:0;text-transform:none}
+.activity-number{font-family:'DM Mono',monospace;font-size:.82rem;letter-spacing:.08em;color:var(--level-color);opacity:.72}
+.level-button{min-height:210px;justify-content:flex-start;background:var(--white)}
+.level-button h3{font-size:clamp(1.45rem,2.4vw,2rem)}
+.level-button p{max-width:240px}
+.level-easy{--level-color:#21a67a;--level-soft:rgba(33,166,122,.14);--level-shadow:rgba(33,166,122,.18)}
+.level-medium{--level-color:#d7ad2f;--level-soft:rgba(215,173,47,.16);--level-shadow:rgba(215,173,47,.18)}
+.level-hard{--level-color:#e87622;--level-soft:rgba(232,118,34,.15);--level-shadow:rgba(232,118,34,.18)}
+.level-real{--level-color:#c83d3d;--level-soft:rgba(200,61,61,.14);--level-shadow:rgba(200,61,61,.18)}
+.section-title{font-size:clamp(1.45rem,2.5vw,2.1rem);letter-spacing:0;text-transform:uppercase;color:var(--navy);margin:36px 0 12px;font-weight:900}
+.rule{border-left:5px solid var(--orange);background:var(--soft-orange);padding:16px 18px;margin:18px 0;border-radius:8px;color:var(--navy);font-weight:700}
+.chooser{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;background:var(--white);border:1px solid var(--line);padding:16px;border-radius:8px;margin:22px 0}
+.field label{display:block;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+select,button{font-family:'Outfit',Arial,sans-serif;font-size:1rem;border-radius:7px;border:1px solid var(--line-strong);padding:12px 14px;background:white;color:var(--navy)}
+select{width:100%}
+button{min-height:48px;background:var(--orange);border-color:var(--orange);font-weight:900;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+button.secondary{background:var(--blue);border-color:var(--blue);color:white}
+button.ghost{background:var(--white);border-color:var(--line-strong);color:var(--navy)}
+.button-link{display:inline-flex;align-items:center;justify-content:center;min-height:48px;border-radius:7px;border:1px solid var(--blue);padding:12px 14px;background:var(--blue);color:white;font-size:1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.button-link.ghost{background:var(--white);border-color:var(--line-strong);color:var(--navy)}
+button.activity-card{font-weight:400!important;letter-spacing:0!important;text-transform:none!important}
+button.activity-card p,button.activity-card .activity-meta{font-weight:400!important;letter-spacing:0!important;text-transform:none!important}
+button.activity-card .activity-meta{font-weight:500!important}
+button:focus-visible,select:focus-visible{outline:3px solid rgba(245,130,10,.35);outline-offset:2px}
+.small{font-size:.94rem;color:var(--muted)}
+.pill-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{display:inline-flex;align-items:center;background:var(--soft-blue);border:1px solid rgba(27,79,168,.22);border-radius:999px;padding:7px 11px;font-weight:700;color:var(--navy)}
+.pill::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--orange);margin-right:8px;flex:0 0 auto}
+table{width:100%;border-collapse:collapse;background:white;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:18px 0 30px}
+th{background:var(--navy);color:white;text-align:left;padding:12px 14px;font-size:.86rem;text-transform:uppercase;letter-spacing:.06em}
+td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:var(--soft-blue)}
+.cards{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tag{display:inline;color:var(--text)}
+.tag+.tag::before{content:', ';color:var(--muted)}
+.activity-panel{background:var(--surface);border:1px solid var(--gb);border-radius:12px;overflow:hidden;box-shadow:0 18px 42px rgba(19,35,56,.09);backdrop-filter:blur(12px)}
+.activity-head{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:24px;background:linear-gradient(135deg,var(--navy),#183a68);color:white}
+.activity-head h2{font-size:clamp(1.35rem,2.6vw,2rem);line-height:1.15;letter-spacing:0;text-transform:none}
+.activity-head p{color:rgba(255,255,255,.82);margin-top:8px;max-width:760px;font-size:1rem;line-height:1.5}
+.activity-head .activity-meta{color:rgba(255,255,255,.78);margin-bottom:6px}
+.activity-body{padding:22px}
+.task-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.task-box{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px}
+.task-box h3{font-size:.84rem;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:8px}
+.instruction-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.instruction-section{border:1px solid var(--line);border-radius:8px;padding:16px;background:#fff}
+.instruction-section.full{grid-column:1/-1}
+.instruction-section h3{font-size:.92rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:10px}
+.instruction-section ul,.instruction-section ol{padding-left:22px}
+.instruction-section li+li{margin-top:8px}
+.session-card{display:grid;gap:18px}
+.session-block{border-bottom:1px solid var(--line);padding-bottom:16px}
+.session-block:last-child{border-bottom:0;padding-bottom:0}
+.guide-steps{display:grid;gap:12px}
+.guide-step{border:1px solid var(--line);border-radius:10px;padding:14px;background:rgba(27,79,168,.035)}
+.guide-step h4{font-size:1rem;color:var(--navy);margin-bottom:10px}
+.guide-row{margin-top:8px}
+.guide-row strong{display:inline-block;min-width:42px;color:var(--blue);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em}
+.guide-do strong{color:var(--blue)}
+.guide-say strong{color:var(--orange)}
+.guide-tip strong{color:var(--teal)}
+.guide-do{border-left:3px solid rgba(27,79,168,.28);padding-left:9px}
+.guide-say{border-left:3px solid rgba(245,130,10,.32);padding-left:9px}
+.guide-tip{border-left:3px solid rgba(15,118,110,.28);padding-left:9px}
+.callout{background:var(--soft-orange);border-left:5px solid var(--orange);padding:14px 16px;border-radius:8px;margin:12px 0;color:var(--navy)}
+.answers{display:grid;gap:8px}
+.answer-row{display:grid;grid-template-columns:minmax(150px,.7fr) 1fr;gap:10px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.answer-row strong{color:var(--navy)}
+.screen-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.top-link{display:inline-flex;margin-top:16px;color:var(--blue);font-weight:800;text-decoration:none}
+footer{padding:26px 6vw;color:var(--muted);border-top:1px solid var(--line);background:white}
+@media(max-width:920px){
+  .nav-links{display:none}
+  .nav-toggle{display:flex}
+  .grid,.activity-list,.level-list{grid-template-columns:1fr 1fr}
+  .level-heading{display:block}
+  .level-heading p{margin-top:6px}
+  .chooser,.instruction-grid,.task-strip{grid-template-columns:1fr}
+  .activity-head{grid-template-columns:1fr}
+  .instruction-section.full{grid-column:auto}
+}
+@media(max-width:560px){
+  body{font-size:16px}
+  nav{height:64px;padding:0 5vw}
+  body{padding-top:64px}
+  .mobile-menu{top:64px}
+  .logo-img{width:38px;height:38px}
+  .logo-text{font-size:18px}
+  .logo-sub{font-size:6.8px}
+  .hero{padding:1.2rem}
+  .grid{grid-template-columns:1fr}
+  .activity-list,.level-list{grid-template-columns:1fr}
+  .wrap{width:92vw}
+  h1{font-size:2.85rem}
+  table{font-size:.9rem}
+  th,td{padding:10px}
+  .answer-row{grid-template-columns:1fr}
+}
+@media print{
+  header,.wrap,footer{width:100%;padding:18px}
+  .chooser,button,.button-link,.top-link,.top-actions,.screen-actions{display:none}
+  .card,table,.output,.activity-panel{break-inside:avoid}
+  .instruction-grid,.task-strip{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<nav aria-label="Primary navigation">
+  <a class="nav-logo" href="https://www.striveptlv.com/independence/dashboard.html" aria-label="STRIVE Independence dashboard">
+    <img class="logo-img" src="../Bill Pay/logo.png" alt="" role="presentation" width="44" height="44" />
+    <div class="logo-wrap">
+      <div class="logo-text">STRIVE</div>
+      <div class="logo-sub">Independence</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a class="contact-button" href="https://www.striveptlv.com/independence/contact.html">Contact</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+  <a href="https://www.striveptlv.com/independence/contact.html" onclick="toggleMenu(false)">Contact</a>
+</div>
+
+<main class="wrap">
+  <header class="hero" id="top">
+    <div>
+      <p class="section-tag">Clinical Medication Management Module</p>
+      <h1>Medication<br><span>Management</span></h1>
+      <p class="sub">A STRIVE Independence training platform for practicing label reading, pillbox setup, refill planning, discharge reconciliation, and safe medication decision-making. Choose the support level that fits the session goal.</p>
+      <div class="top-actions">
+        <button type="button" class="ghost" data-view-button="instructions">Instructions</button>
+        <a class="button-link" href="Medication_Management_Handbook_STRIVE_Visual.pdf" target="_blank" rel="noopener noreferrer">Print Handout</a>
+      </div>
+      <p class="hero-credit">STRIVE Independence · STRIVE Physical Therapy - Las Vegas, NV</p>
+    </div>
+  </header>
+
+  <section class="view active" id="homeView">
+    <h2 class="section-title">Choose Activity</h2>
+    <div id="activityRows"></div>
+  </section>
+
+  <section class="view" id="activityView">
+    <div class="screen-actions">
+      <button type="button" class="ghost" data-view-button="home">Change Activity</button>
+      <button type="button" class="ghost" data-view-button="instructions">Instructions</button>
+      <a class="button-link" href="Medication_Management_Handbook_STRIVE_Visual.pdf" target="_blank" rel="noopener noreferrer">Print Handout</a>
+    </div>
+    <section class="activity-panel" id="activityPanel" aria-live="polite"></section>
+  </section>
+
+  <section class="view" id="instructionsView">
+    <div class="screen-actions">
+      <button type="button" class="ghost" data-view-button="home">Back to Start</button>
+      <button type="button" class="ghost" data-view-button="activity">Current Activity</button>
+      <a class="button-link" href="Medication_Management_Handbook_STRIVE_Visual.pdf" target="_blank" rel="noopener noreferrer">Print Handout</a>
+    </div>
+
+    <h2 class="section-title">Session Flow</h2>
+    <section class="grid" aria-label="Session flow">
+      <div class="card"><h3>1. Choose</h3><p><strong>Pick one activity.</strong><br>Start at the level that fits today.</p></div>
+      <div class="card"><h3>2. Pull</h3><p><strong>Use listed bottles only.</strong><br>Keep extra bottles out of view.</p></div>
+      <div class="card"><h3>3. Run</h3><p><strong>Follow the task screen.</strong><br>Read the prompt, then complete the activity.</p></div>
+      <div class="card"><h3>4. Review</h3><p><strong>Check answers after.</strong><br>Coach with labels before correcting.</p></div>
+    </section>
+
+    <div class="rule">Core rule: no duplicate medication bottle names inside a single activity. Use scenario cards for old, new, stopped, changed, or low-supply tasks.</div>
+
+    <h2 class="section-title">8 Medication Bottles</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Medication Bottle</th><th>Printed Label Instruction</th><th>Default Time</th></tr></thead>
+      <tbody id="medTable"></tbody>
+    </table>
+
+    <h2 class="section-title">Activity Pull Index</h2>
+    <table>
+      <thead><tr><th>Activity</th><th>Unique Bottles to Pull</th><th>Cards / Setup</th></tr></thead>
+      <tbody id="activityTable"></tbody>
+    </table>
+
+    <h2 class="section-title">Reusable Scenario Cards</h2>
+    <div class="cards" id="scenarioCards"></div>
+  </section>
+</main>
+
+<footer>© 2026 STRIVE Independence. Clinical simulation resource only. Not for real medication decision-making.</footer>
+
+<script>
+const meds = {
+  metformin: {id:'M1', name:'Metformin 500 mg', label:'Take 1 tablet twice daily with meals.', time:'Breakfast + dinner / with meals'},
+  lisinopril: {id:'M2', name:'Lisinopril 10 mg', label:'Take 1 tablet every morning.', time:'Morning'},
+  atorvastatin: {id:'M3', name:'Atorvastatin 20 mg', label:'Take 1 tablet at bedtime.', time:'Bedtime'},
+  aspirin: {id:'M4', name:'Aspirin 81 mg', label:'Take 1 tablet every morning.', time:'Morning'},
+  amoxicillin: {id:'M5', name:'Amoxicillin 500 mg', label:'Take 1 capsule every 12 hours until finished.', time:'Morning + evening, 12 hours apart'},
+  gabapentin: {id:'M6', name:'Gabapentin 300 mg', label:'Take 1 capsule three times daily.', time:'Morning + afternoon + bedtime'},
+  clopidogrel: {id:'M7', name:'Clopidogrel 75 mg', label:'Take 1 tablet once daily.', time:'Once daily, usually morning'},
+  melatonin: {id:'M8', name:'Melatonin 5 mg', label:'Take 1 tablet at bedtime as needed.', time:'Bedtime / PRN'}
+};
+
+const activities = [
+  {
+    id:1, level:'Easy', title:'Match Medication to Time of Day',
+    bottles:['metformin','atorvastatin','aspirin','melatonin'], cards:'None', setup:'4 time boxes: Morning, Lunch, Dinner, Bedtime',
+    overview:'The patient reads four medication labels and matches each medication to the correct time slot.',
+    patientPrompt:'We are going to match each medication to the time of day it should be taken. Read the label, then place it in the right box.',
+    materials:['App open to Activity 1 or this printed page','Four bottles from the 8-bottle medication bank','A quiet room with no distractions','5 to 10 minutes'],
+    steps:['Orient the patient to Morning, Lunch, Dinner, and Bedtime boxes.','Work through medications one at a time and ask the patient to read each label aloud.','Let the patient self-check by reading each slot back before you review.','Confirm correct answers and double-check errors by returning to the label.'],
+    answers:[['Morning','Metformin 500 mg + Aspirin 81 mg'],['Lunch','Empty - no medication scheduled'],['Dinner','Metformin 500 mg'],['Bedtime','Atorvastatin 20 mg + Melatonin 5 mg as needed']],
+    watch:['Atorvastatin placed in morning instead of bedtime','Only one morning medication placed','Selection by pill color instead of label reading','Metformin missed as a twice-daily medication'],
+    struggle:['Read the last line on this bottle. What time does it say?','Count how many labels say morning. Let us count together.','Ignore the colors. Just read the words on the label.'],
+    success:'Great work. You read every label before placing anything. That is exactly the habit that keeps you safe at home.'
+  },
+  {
+    id:2, level:'Easy', title:'Fill a One-Day Pill Organizer',
+    bottles:['lisinopril','gabapentin','melatonin'], cards:'PRN card optional', setup:'One-day organizer with Morning, Afternoon, Evening, Bedtime',
+    overview:'The patient fills a four-compartment pill organizer using three unique medication bottles.',
+    patientPrompt:'Each section is for a different time of day. Put the right medications in the right sections.',
+    materials:['App open to Activity 2 or a real 4-slot pill organizer','Three unique bottles from the medication bank','Pen and paper if completing on paper','About 10 minutes'],
+    steps:['Show the pill organizer and read the four compartments aloud.','Introduce medications one at a time and ask the patient to read the name and directions.','Pause after each placement and ask the patient to re-check the label.','Ask why the empty slot is okay.','Use teach-back: have the patient explain the completed organizer.'],
+    answers:[['Morning','Lisinopril 10 mg + Gabapentin 300 mg'],['Afternoon','Gabapentin 300 mg'],['Evening','Gabapentin 300 mg'],['Bedtime','Melatonin 5 mg as needed']],
+    watch:['Melatonin placed in Evening instead of Bedtime','Gabapentin not placed three times across the day','Patient chooses by color before reading','Patient rushes without reading each label'],
+    struggle:['Does the label say evening or bedtime? Point to the exact word.','Does any label say afternoon?','Pretend all pills are the same color. Now where does the label say it goes?'],
+    success:'You filled a real pill organizer correctly by reading every label. This is exactly what you will do at home each week.'
+  },
+  {
+    id:3, level:'Easy', title:'Identify Medication Safety Mistakes',
+    bottles:['lisinopril','amoxicillin','gabapentin','clopidogrel'], cards:'Safety statements', setup:'Safe / unsafe response sheet',
+    overview:'The patient hears short medication behavior statements and decides whether each one is safe or unsafe.',
+    patientPrompt:'I am going to read things people do with medications. After each one, tell me safe or unsafe.',
+    materials:['App open to Activity 3 or this printed page','Read each statement aloud','Patient responds verbally or by pointing','About 10 to 15 minutes'],
+    steps:['Explain that the patient only needs to answer safe or unsafe.','Read each statement slowly and pause before prompting.','Ask the patient to explain each answer before correcting.','Return to missed items at the end for discussion.'],
+    answers:[['Safe','Take Lisinopril exactly as prescribed; call pharmacy if Amoxicillin directions are unclear; store medications safely; keep a written medication list.'],['Unsafe','Skip Lisinopril if you feel fine; use someone else\'s Gabapentin; double-dose Gabapentin; stop Amoxicillin early.']],
+    watch:['Skipping blood pressure medication viewed as safe','Stopping antibiotics early when feeling better','Fast answers without reasoning','Double-dosing treated as not serious'],
+    struggle:['What if blood pressure is high but there is no headache?','What does your body experience when it suddenly gets twice the medication?','What happens to bacteria that are still there when you stop early?'],
+    success:'You reviewed medication safety rules that protect you every day at home. Well done.'
+  },
+  {
+    id:4, level:'Moderate', title:'Build a Morning and Evening Medication Routine',
+    bottles:['metformin','atorvastatin','amoxicillin','clopidogrel','melatonin'], cards:'PRN card', setup:'Morning / evening schedule',
+    overview:'The patient organizes five bottles into a daily routine and interprets twice daily, every 12 hours, bedtime, and as needed.',
+    patientPrompt:'We are building your daily medication schedule. Some medications go in the morning, some in the evening, and some may go in both.',
+    materials:['App open to Activity 4 or a blank two-column schedule','Five listed medication labels','Pencil if completing on paper','About 15 minutes'],
+    steps:['Set up Morning and Evening/Bedtime columns.','Hand one medication at a time and ask the patient to read the label.','Pause on every 12 hours and ask what it means.','Read the completed schedule back together.','Ask the patient to teach the routine back in their own words.'],
+    answers:[['Morning','Metformin 500 mg + Amoxicillin 500 mg dose 1 + Clopidogrel 75 mg'],['Evening / Bedtime','Metformin 500 mg + Amoxicillin 500 mg dose 2 + Atorvastatin 20 mg'],['PRN / As Needed','Melatonin 5 mg at bedtime only if needed']],
+    watch:['Antibiotic placed in only one column','Atorvastatin placed in morning','Metformin missing from one time slot','PRN medication treated as scheduled'],
+    struggle:['Every 12 hours means twice a day. If morning is dose 1, when is dose 2?','Read the label again. Does it say morning or bedtime?','Only if needed means it is not automatically scheduled every night.'],
+    success:'You built a complete daily routine and figured out the 12-hour medication.'
+  },
+  {
+    id:5, level:'Moderate', title:'Refill Reminder Task',
+    bottles:['gabapentin'], cards:'LOW SUPPLY, CALL PHARMACY', setup:'Pill count / refill worksheet',
+    overview:'The patient calculates how many days of medication are left and chooses the safest refill action.',
+    patientPrompt:'This bottle has 12 pills left and you take 1 pill, 3 times per day. What should you do before it runs out?',
+    materials:['App open to Activity 5 or this printed page','Pencil and paper for calculation','Gabapentin bottle with low supply card','About 10 to 15 minutes'],
+    steps:['Read the bottle facts together: 12 pills left, 3 pills per day, today is June 10.','Ask how many days the medication will last.','Confirm 12 divided by 3 equals 4 days.','Read the response options and let the patient choose.','Ask why waiting until empty would be a problem.'],
+    answers:[['Pills per day','1 pill x 3 times = 3 pills per day'],['Days remaining','12 pills / 3 per day = 4 days'],['Run-out date','June 14'],['Best action','Call the pharmacy today or tomorrow']],
+    watch:['Waiting until the bottle is empty','Reducing the dose to make supply last','Calculation error blocking the safety concept'],
+    struggle:['What if the pharmacy needs 3 days to fill it and you have 2 days left?','Changing a dose without the doctor can be dangerous. What should you do instead?','Stopping suddenly can be unsafe. Who should you call?'],
+    success:'You figured out when to call for a refill before running out. That habit prevents missed doses.'
+  },
+  {
+    id:6, level:'Moderate', title:'Medication List Update',
+    bottles:['metformin','lisinopril','aspirin','clopidogrel'], cards:'STOPPED, NEW, CHANGED DOSE', setup:'Old list plus new update cards',
+    overview:'The patient updates a medication list using scenario cards for stopped, new, and changed-dose instructions.',
+    patientPrompt:'This is your old medication list. This is what your doctor changed. Update the list using the note.',
+    materials:['App open to Activity 6 or printed old list and doctor note','STOPPED, NEW, and CHANGED DOSE cards','Pen to mark changes','About 15 minutes'],
+    steps:['Read the old list and doctor note together.','Identify the medication that continues unchanged.','Cross off the stopped medication.','Update Metformin from once daily to twice daily with meals.','Add the new medication to the list.','Read the final medication list back aloud.'],
+    answers:[['Metformin 500 mg','Take twice daily with meals; frequency increased'],['Lisinopril 10 mg','Continue once daily; no change'],['Clopidogrel 75 mg','Add; take once daily'],['Aspirin 81 mg','Remove from active list; discontinued']],
+    watch:['Aspirin remains on the list','Clopidogrel not added','Metformin dose amount changed instead of frequency','Lisinopril changed even though note says no change'],
+    struggle:['Read the doctor note again. Which medication did it say to STOP?','Is there anything the doctor said to ADD that is not on the list?','The tablet is still 500 mg. What exactly changed?'],
+    success:'You did exactly what is needed when a doctor changes medications. An accurate medication list can prevent serious errors.'
+  },
+  {
+    id:7, level:'Hard', title:'Resolve Conflicting Medication Instructions',
+    bottles:['lisinopril','atorvastatin','amoxicillin'], cards:'CONFLICT, CALL DOCTOR / PHARMACY', setup:'Bottle plus discharge-paperwork comparison',
+    overview:'The patient compares conflicting instructions and identifies the only safe response: call before taking the next dose.',
+    patientPrompt:'The bottle says one thing and the discharge paper says another. What is the safest thing to do?',
+    materials:['App open to Activity 7 or two printed documents','Prescription bottle and discharge paperwork','About 15 to 20 minutes','Follow with discussion, not just scoring'],
+    steps:['Read both documents aloud with emphasis on once and twice.','Ask whether anything seems off before naming the conflict.','Confirm that once daily and twice daily cannot both be right.','Read the four options and ask the patient to choose.','Reinforce: when instructions do not match, stop and call.'],
+    answers:[['Bottle says once daily','Still a guess if paperwork conflicts'],['Discharge paper says twice daily','Still a guess if the paper is wrong'],['Combine both','Dangerously wrong'],['Call first','Only safe option']],
+    watch:['Patient picks one source without recognizing guessing is unsafe','Patient combines instructions','Patient wants to ask only a family member instead of a clinical source','Patient is unconcerned by the conflict'],
+    struggle:['Even if you picked the right one by luck, what if you are wrong?','If one paper says once and another says twice, should you take three?','This is blood pressure medication. What could happen if the dose is too high or too low?'],
+    success:'When instructions do not match, stop and call. That one rule can prevent serious harm.'
+  },
+  {
+    id:8, level:'Hard', title:'Create a Weekly Pillbox Schedule',
+    bottles:['metformin','atorvastatin','amoxicillin','gabapentin'], cards:'Optional weekly schedule card', setup:'Weekly pill organizer',
+    overview:'The patient fills a weekly organizer using four bottles with different frequencies.',
+    patientPrompt:'Fill the week by reading each label. Some medications go in more than one slot because the label says so.',
+    materials:['App open to Activity 8 or a real 7-day organizer','Morning and evening organizer slots','The four medication directions','About 20 to 30 minutes'],
+    steps:['Read every medication and frequency before filling.','Start with one day and name each required medication.','Prompt for every-12-hour and bedtime distinctions.','Continue day by day through the week.','Ask the patient to self-check every compartment before review.'],
+    answers:[['Every morning','Metformin, Amoxicillin, Gabapentin'],['Every evening / bedtime','Metformin, Amoxicillin, Atorvastatin, Gabapentin'],['Special reasoning','Gabapentin is three times daily; Atorvastatin is bedtime; Amoxicillin is every 12 hours']],
+    watch:['Amoxicillin placed more often or less often than every 12 hours','Gabapentin placed only once or twice daily','Atorvastatin placed in morning','Metformin missing from breakfast or dinner'],
+    struggle:['Every 12 hours means morning and evening. Show me both places.','The label says three times daily. Count the three times.','Does bedtime mean the same as morning?'],
+    success:'You planned medications for an entire week with different schedules. That is genuinely hard, and you did it.'
+  },
+  {
+    id:9, level:'Hard', title:'Missed Dose Decision-Making',
+    bottles:['lisinopril','gabapentin','melatonin'], cards:'MISSED DOSE', setup:'Missed-dose scenario cards',
+    overview:'The patient works through missed-dose scenarios and practices avoiding double-dosing or guessing.',
+    patientPrompt:'You realized a dose may have been missed. What is the safest next step?',
+    materials:['App open to Activity 9 or this printed page','Missed-dose scenario cards','No additional materials needed','About 15 to 20 minutes'],
+    steps:['Read Scenario 1 aloud and ask what comes to mind.','Present options and let the patient decide.','Discuss why before confirming.','Repeat with Scenario 2.','Reinforce: when unsure about a missed dose, call first.'],
+    answers:[['Scenario 1: 2 hours late','Check instructions or call pharmacist before deciding'],['Scenario 2: next morning after missed evening dose','Call pharmacist or prescriber before deciding'],['Unsafe action','Do not double-dose to catch up']],
+    watch:['Double-dosing in either scenario','Skipping without checking','Guessing instead of calling','Reluctance to contact pharmacist'],
+    struggle:['What happens when your body suddenly gets twice the medication?','The pharmacist is there exactly for this question.','For some medications skipping is fine; for others it is not. How do you know which one this is?'],
+    success:'When in doubt, call. One phone call protects you from under-dosing and over-dosing.'
+  },
+  {
+    id:10, level:'Complex', title:'Medication Management with Distractions',
+    bottles:['metformin','aspirin','atorvastatin','amoxicillin','gabapentin','clopidogrel'], cards:'LOW SUPPLY, TAKE WITH FOOD, DISTRACTION', setup:'Weekly setup plus distractors',
+    overview:'The patient fills a weekly organizer while interruptions occur, so the therapist can observe attention, recovery, and error monitoring.',
+    patientPrompt:'Fill the complete week using the medications on the table. Take your time and read every label.',
+    materials:['App open to Activity 10 or physical setup','Timer or phone for appointment alarm','Similar-looking labels or caps','One bottle marked with only 3 pills remaining','About 25 to 35 minutes'],
+    steps:['Give the task without warning the patient about distractors.','Observe quietly while they work.','Introduce a pharmacy notification around 5 minutes.','Let an appointment alarm sound around 8 minutes.','Ask whether they noticed anything about the bottles.','Review each compartment and score accuracy, self-correction, label use, refill awareness, and interruption recovery.'],
+    answers:[['Correct compartments','Overall accuracy under cognitive load'],['Self-corrections','Error monitoring and awareness'],['Label reading','Attention to detail versus guessing'],['Refill identification','Prospective memory and safety awareness'],['Interruption recovery','Task persistence and working memory']],
+    watch:['Patient loses place after interruption','Errors cluster after the alarm','Patient guesses by color','Low-supply bottle is never identified'],
+    struggle:['Before handling an interruption, mark where you stopped.','A missed pill is more important than being a few minutes late.','What would happen if you ran out mid-week?'],
+    success:'Managing medications while life is happening around you is hard. This shows strengths and what to practice next.'
+  },
+  {
+    id:11, level:'Complex', title:'Hospital Discharge Medication Reconciliation',
+    bottles:['metformin','lisinopril','atorvastatin','aspirin','gabapentin','clopidogrel','melatonin'], cards:'STOP, START, HOLD, CONTINUE', setup:'Discharge medication reconciliation sheet',
+    overview:'The patient compares old home medications, discharge instructions, and pharmacy bag contents to decide what to continue, stop, start, and clarify.',
+    patientPrompt:'Compare the old list, discharge instructions, and pharmacy bag. Which medicines continue, stop, start, or need a call?',
+    materials:['App open to Activity 11 or printed copies of all three documents','Pen to mark up documents','Medication bottles and scenario cards','About 25 to 35 minutes'],
+    steps:['Read all three documents together and lay them side by side.','Identify medications to continue.','Identify medications to stop and compare against the pharmacy bag.','Identify the new medication to start.','Check each pharmacy bag item against discharge instructions.','Discuss items that require calling the doctor before restarting.'],
+    answers:[['Lisinopril 10 mg','Continue'],['Metformin 500 mg','Continue'],['Clopidogrel 75 mg','Start immediately'],['Aspirin 81 mg','Do not take; explicitly stopped'],['Melatonin 5 mg','Hold and call doctor if unclear']],
+    watch:['Patient takes Aspirin because it is in the bag','Patient forgets to start Clopidogrel','Patient restarts held medications without checking','Patient becomes overwhelmed by multiple documents'],
+    struggle:['Check the bag against the discharge paper. What does the paper say about Aspirin?','Is there anything on discharge paper that was not on the original list?','If it is not clearly continued, who should you ask before restarting it?'],
+    success:'You caught the kind of pharmacy-bag error that can cause real harm at home. That is an important skill.'
+  },
+  {
+    id:12, level:'Complex', title:'Full Medication Management Simulation',
+    bottles:Object.keys(meds), cards:'All scenario cards as needed', setup:'Full simulation with organizer, medication list, refill, missed-dose, and distraction cards',
+    overview:'The capstone activity uses all eight bottles plus scenario cards to manage list updates, pillbox setup, refill planning, missed dose decisions, family communication, and doctor appointment preparation.',
+    patientPrompt:'Work through the full scenario in order. Update the list, fill the pillbox, handle refill and missed-dose decisions, and prepare your messages.',
+    materials:['App open to Activity 12 or this printed page','All eight printed bottles','Blank weekly pill organizer','Paper and pen for notes','About 30 to 45 minutes'],
+    steps:['Read the scenario and ask the patient to name the five things happening.','Update the medication list from once daily to twice daily with meals.','Fill the complete weekly pillbox using the updated list.','Identify the low-supply medication and create a refill reminder.','Choose a safe missed-dose plan.','Write a message back to family and one question for the doctor.'],
+    answers:[['List update','Correct medication changed to twice daily with meals'],['Pillbox','All compartments reflect the updated schedule'],['Refill','Low-supply bottle named and reminder created'],['Missed dose','Call pharmacist or provider before deciding'],['Communication','Specific family reply and clear doctor question']],
+    watch:['Twice-daily change missed','Refill noted but no reminder created','Double-dose plan for missed dose','Family message vague or inaccurate','No doctor question written'],
+    struggle:['Look at the new direction. How many times a day?','Three pills left means how many days? What reminder will you set?','What is the rule when you are unsure about a missed dose?'],
+    success:'You completed the most advanced activity in this handbook. The skills from the whole sequence came together here.'
+  }
+];
+
+const scenarioCards = ['STOPPED / DISCONTINUED','NEW MEDICATION','CHANGED DOSE','OLD INSTRUCTION','NEW INSTRUCTION','LOW SUPPLY','CALL PHARMACY / DOCTOR','TAKE WITH FOOD','MISSED DOSE','DISTRACTION','STOP / START / HOLD / CONTINUE'];
+
+const therapistGuides = {
+  1: [
+    {title:'Orient the patient', do:'Point to the four time boxes: Morning, Lunch, Dinner, Bedtime. Explain that each medication belongs in one box.', say:'We are going to match each medication to the time of day it should be taken. Read the label, then drag it into the right box.', tip:'Sit beside the patient so you can both see the screen at the same time.'},
+    {title:'Work through medications one at a time', do:'Ask the patient to read each label and place each medication before moving to the next.', say:'Start with the first bottle. Read me the label. Now, where does it go?', tip:'One bottle at a time. Do not hand over all four at once.'},
+    {title:'Let them self-check', do:'Once all four are placed, ask the patient to read each one back before you check.', say:'Before we look at the answers, read each slot back to me and tell me why you placed it there.', tip:'Self-checking is a clinical skill in itself. Do not skip this step.'},
+    {title:'Review and discuss', do:'Confirm correct answers. For wrong answers, point to the label instead of just giving the correct time.', say:'Let us look at the Atorvastatin. Read the very last line of the label. Where does that put it?', tip:'Never say wrong. Say let us double-check that one together.'}
+  ],
+  2: [
+    {title:'Show the pill organizer', do:'Point to Morning, Afternoon, Evening, and Bedtime. Read each compartment label aloud.', say:'This is a pill organizer. Each section is for a different time of day. We are going to put the right medications in the right sections.', tip:'If using a real pill organizer, place it between you on the table.'},
+    {title:'Introduce medications one at a time', do:'Show the first bottle and ask the patient to read the label out loud.', say:'Pick up the first bottle. Read me the name and what it says to do.', tip:'If reading is difficult, read the label yourself and ask the patient to point to the right compartment.'},
+    {title:'Place, then continue', do:'After each placement, confirm and move to the next bottle.', say:'Good. Now the next one. Read the label first, then decide where it goes.', tip:'Pause after each placement. Ask: Are you sure? Read the label one more time.'},
+    {title:'Address the empty slot', do:'After all medications are placed, ask about the empty compartment.', say:'Is there anything in the Afternoon slot? Why is that okay?', tip:'Confirm that an empty slot is not an error when no medication is scheduled.'},
+    {title:'Teach-back', do:'Ask the patient to explain the completed organizer in their own words.', say:'Pretend I have never seen this before. Walk me through your whole pill organizer and why each one is where it is.', tip:'Teach-back confirms genuine understanding rather than surface compliance.'}
+  ],
+  3: [
+    {title:'Explain the task simply', do:'Tell the patient they will hear a statement and answer safe or unsafe.', say:'I am going to read you some things people do with their medications. After each one, safe or unsafe? Go with your gut.', tip:'Demonstrate first with a simple example.'},
+    {title:'Read each statement slowly', do:'Read one statement at a time and pause before prompting.', say:'Ready? First one: [read statement]. Safe or unsafe?', tip:'Do not rush. Give the patient time to think before repeating or prompting.'},
+    {title:'Respond to each answer', do:'Confirm correct answers or redirect by asking about consequences.', say:'That is right. If incorrect: Let us think about that. What might happen if someone did that?', tip:'Do not just say wrong. Ask them to reason through the risk first.'},
+    {title:'Return to misses at the end', do:'After all statements, revisit any incorrect answers.', say:'Let us look at the ones we want to go over again. Why could skipping a blood pressure pill be unsafe even if you feel fine?', tip:'The goal is reasoning, not lecturing.'}
+  ],
+  4: [
+    {title:'Set up the two columns', do:'Draw or show Morning and Evening/Bedtime columns. Explain that some medications go in one column and some in both.', say:'We are building your daily medication schedule. Some medications go in the morning, some in the evening, and one might go in both. Read each label carefully.', tip:'Write the column headers large if using paper.'},
+    {title:'One medication at a time', do:'Point to or hand one medication and ask the patient to read the label and choose a column.', say:'Start with this medication. Read the label. Which column?', tip:'Do not give all five at once. One at a time keeps attention focused.'},
+    {title:'Pause on every 12 hours', do:'When you reach Amoxicillin, ask what every 12 hours means before placing it.', say:'This one says every 12 hours. How many times a day is that? So, which columns does it go in?', tip:'If stuck: If you take it at 8 AM, when is 12 hours later?'},
+    {title:'Review the completed schedule', do:'Once all medications are placed, read the full schedule aloud together.', say:'Let us read your schedule. Morning: you have... Evening: you have... Does anything look missing or off?', tip:'Ask the patient to self-check before pointing out errors.'},
+    {title:'Teach-back', do:'Ask the patient to explain the schedule in their own words.', say:'Explain your daily routine to me like I have never heard it before.', tip:'If they cannot explain it clearly, revisit the specific label that is unclear.'}
+  ],
+  5: [
+    {title:'Read the bottle together', do:'Read each line aloud and point to each number as you say it.', say:'Let us read this bottle together. It says 12 pills are left. Take 1 pill, 3 times a day. Today is June 10.', tip:'If reading is difficult, read it yourself and ask the patient to repeat each fact back.'},
+    {title:'Ask about days remaining', do:'Ask the patient to calculate how many days of medication are left. Paper and pencil are fine.', say:'If you take 3 pills every day and you have 12 left, how many days will they last?', tip:'If stuck: Day 1 uses 3 pills. Day 2 uses 3 more. Now how many days total?'},
+    {title:'Confirm the math together', do:'Walk through 12 divided by 3 equals 4 days and name the run-out date.', say:'12 pills divided by 3 per day equals 4 days. So the pills run out on June 14.', tip:'Use a calendar or count on fingers if needed. The goal is understanding, not speed.'},
+    {title:'Present the four options', do:'Read the options one at a time and let the patient decide without hinting.', say:'Now that you know you only have 4 days left, what is the smartest thing to do?', tip:'Cover other options while reading each one if attention is limited.'},
+    {title:'Ask them to explain', do:'After they choose, ask why it is the safest choice.', say:'Good choice. Tell me why waiting until the bottle is empty would be a problem.', tip:'If wrong, ask what happens if the pharmacy needs several days and the patient has fewer days left.'}
+  ],
+  6: [
+    {title:'Read both documents together', do:'Read the old list and doctor note aloud slowly.', say:'This is your old medication list. This is what your doctor told you to change. We are going to update the list using the note.', tip:'Point to each item in the doctor note as you read it.'},
+    {title:'Start with what stays the same', do:'Ask which medication continues unchanged.', say:'Look at the doctor note. Which medication stays exactly the same? Find it and circle it.', tip:'Starting with no-change builds confidence before harder changes.'},
+    {title:'Find the medication to stop', do:'Ask the patient to find and cross off the discontinued medication.', say:'The doctor said to STOP one medication. Which one? Cross it off the list.', tip:'Watch carefully. They should cross off Aspirin, not Lisinopril.'},
+    {title:'Apply the frequency change', do:'Ask the patient to update Metformin frequency.', say:'The doctor changed how often you take Metformin. How often was it? How often is it now? Update the list.', tip:'Common error: changing dose amount instead of frequency.'},
+    {title:'Add the new medication', do:'Ask the patient to add the new medication at the bottom of the updated list.', say:'The doctor added a brand new medication. Which one? Write it on the list with its directions.', tip:'Ask whether anything was added that is not on the list yet.'},
+    {title:'Read the final list back', do:'Have the patient read the completed updated list aloud.', say:'Read me the final list. Every medication, the dose, and how often.', tip:'Compare to the answer key and confirm all changes were made correctly.'}
+  ],
+  7: [
+    {title:'Read both documents aloud', do:'Read the prescription bottle label, then the discharge document, slowly.', say:'I am going to read you two documents about the same medication. Listen carefully.', tip:'Emphasize ONCE and TWICE when reading. Let the contrast land.'},
+    {title:'Ask if anything seems off', do:'Before presenting options, ask whether they noticed anything unusual.', say:'You just heard both documents. Does anything seem off to you? Do they say the same thing?', tip:'Do not point out the conflict yet. Let the patient find it.'},
+    {title:'Confirm the conflict is clear', do:'Once identified, name the conflict explicitly.', say:'Right. The bottle says once and the discharge paper says twice. They cannot both be right. So what should you do?', tip:'Do not accept I will just pick one. Push for a safe action.'},
+    {title:'Present the four options', do:'Read each option aloud and let the patient decide.', say:'Here are your choices. Think carefully about each one.', tip:'After they answer, ask why. Reasoning is the goal.'},
+    {title:'Reinforce the principle', do:'After confirming the correct answer, name the universal rule.', say:'The only safe answer when two instructions disagree is to stop and call. Not guess, call.', tip:'Ask who they would call: pharmacist, doctor, or discharge nurse.'}
+  ],
+  8: [
+    {title:'Review all medications first', do:'Read each medication and frequency aloud before filling anything.', say:'Before we fill anything, tell me when you take each medication and what is special about it.', tip:'Spend extra time on three-times-daily, every-12-hours, and bedtime instructions.'},
+    {title:'Start with one day', do:'Fill the first day together and name each medication that should be placed.', say:'Let us start with the first day. What goes in the morning? What goes in the evening or bedtime?', tip:'Errors early in the week can cascade across the whole organizer.'},
+    {title:'Prompt for frequency rules', do:'Before each new medication, ask whether it belongs once, twice, or three times daily.', say:'Does this label say once daily, twice daily, every 12 hours, or three times daily?', tip:'Have the patient point to the exact words on the label.'},
+    {title:'Continue through the week', do:'Work day by day across the organizer.', say:'Now continue to the next day. Use the same label-reading rule before each placement.', tip:'Slow, consistent sequencing matters more than speed.'},
+    {title:'Self-check before reviewing', do:'Ask the patient to inspect every compartment before you check answers.', say:'Before we check, look at every single slot. Does anything seem off?', tip:'Self-monitoring is a core executive function skill. Do not skip it.'}
+  ],
+  9: [
+    {title:'Read Scenario 1 aloud', do:'Read the scenario slowly and pause.', say:'Listen to this situation. Imagine it is happening to you right now.', tip:'Ask: What is the first thing that comes to mind?'},
+    {title:'Present options for Scenario 1', do:'Read each option one at a time and let the patient decide.', say:'Here are your choices. Take your time.', tip:'Cover other options while reading each one if attention is limited.'},
+    {title:'Discuss the answer', do:'Ask why before confirming correct or incorrect.', say:'Why did you pick that one? What could go wrong with the other choices?', tip:'Discussion matters as much as the right answer.'},
+    {title:'Read Scenario 2 aloud', do:'Read the second scenario and repeat the same process.', say:'Here is a second situation. Same idea: what is the safest thing to do?', tip:'Scenario 2 tests the double-dose temptation directly.'},
+    {title:'Reinforce the universal rule', do:'After both scenarios, state the rule clearly.', say:'When you miss a dose and you are not sure what to do, call first. Never double up and never just guess.', tip:'Ask who they would call and make sure they can name a specific contact.'}
+  ],
+  10: [
+    {title:'Set up and give the task', do:'Tell the patient to fill a full weekly pillbox. Do not mention distractors in advance.', say:'Fill the complete week using the medications on the table. Take your time and read every label.', tip:'Observe from a slight distance. Do not intervene unless safety is at risk.'},
+    {title:'Let them work and observe quietly', do:'Allow interruptions to occur naturally while you take notes.', say:'Stay quiet and observe.', tip:'Watch label checking, self-correction, and how they recover after interruptions.'},
+    {title:'Trigger the pharmacy notification', do:'At about 5 minutes, introduce a fake pharmacy notification.', say:'Deliver the note or activate the notification quietly.', tip:'Watch whether they stop carefully and return to the correct place.'},
+    {title:'Trigger the appointment alarm', do:'At about 8 minutes, let the alarm sound without comment.', say:'Let the alarm sound. Say nothing.', tip:'Count errors in the two minutes after the alarm. Rushing errors are common.'},
+    {title:'Check for refill awareness', do:'After completion, ask whether they noticed anything about the bottles.', say:'Before we check results, did you notice anything about any of the bottles?', tip:'If they missed the nearly empty bottle, discuss what would happen if it ran out mid-week.'},
+    {title:'Review compartment by compartment', do:'Go through each compartment using the answer key or session medication list.', say:'Let us check your work together. Tell me what you placed and why for each one.', tip:'Score accuracy, self-corrections, label use, refill awareness, and interruption recovery.'}
+  ],
+  11: [
+    {title:'Read all three documents together', do:'Read each document aloud and lay them side by side if using paper.', say:'Before the hospital, you were taking these medications. When you left, the hospital gave you these instructions. And this is what came in your pharmacy bag.', tip:'Read discharge instructions slowly. They have multiple separate decisions.'},
+    {title:'Identify what to continue', do:'Ask which medications from the old list should continue.', say:'Look at the discharge instructions. Which medications from your old list does it say to keep taking?', tip:'Watch for Aspirin being included by mistake.'},
+    {title:'Identify what to stop', do:'Ask which medication must not be taken anymore.', say:'Which medication did the hospital say to STOP? Find it on the discharge paper.', tip:'Then ask whether that medication appears in the pharmacy bag.'},
+    {title:'Identify the new medication', do:'Ask which medication is brand new.', say:'Is there a medication in the discharge instructions that was not on your old list?', tip:'Confirm the patient understands it must be started if ordered.'},
+    {title:'Handle the pharmacy bag safety issue', do:'Check each bag item against the discharge instructions.', say:'Let us check each item in the bag against the discharge instructions. Is each one okay to take?', tip:'When they reach Aspirin, ask what the discharge paper says.'},
+    {title:'Discuss medications to clarify', do:'Ask what to do with anything not clearly continued or stopped.', say:'This item is not clearly on the continue list. What should you do before restarting it?', tip:'Correct answer is hold and call the doctor or pharmacist if unsure.'}
+  ],
+  12: [
+    {title:'Read the scenario and ask what needs to happen', do:'Read the full scenario aloud and ask the patient to name the main things they need to manage.', say:'Before we start, tell me the things happening in this scenario.', tip:'If they cannot recall them all, re-read and let them take written notes.'},
+    {title:'Task 1: Update the medication list', do:'Ask the patient to find the medication changed by the doctor and update it.', say:'Which medication did the doctor change? Update it on your list. What exactly changed: the amount or how often?', tip:'Watch for changing dose amount instead of frequency.'},
+    {title:'Tasks 2-4: Pillbox and refill', do:'Have the patient fill the week, identify low supply, and create a reminder.', say:'Fill the pillbox for the whole week. Then, which medication has only 3 pills? How many days is that? What reminder will you set?', tip:'Have them physically write the reminder or set an alarm.'},
+    {title:'Task 5: Missed dose decision', do:'Ask what they will do about a possible missed evening dose.', say:'You may have missed your evening dose last night. Walk me through what you would do.', tip:'Correct plan is to call pharmacist or prescriber before deciding.'},
+    {title:'Tasks 6-7: Communication and appointment prep', do:'Ask the patient to write a family message and one question for the doctor.', say:'Write a message back to your daughter. Then write one question you want to ask the doctor on Friday.', tip:'A good question is specific to the new schedule or missed-dose concern.'}
+  ]
+};
+
+let currentActivityId = 1;
+let currentLevelKey = 'easy';
+
+const levels = [
+  {key:'easy', label:'Easy', range:'Activities 1-3', ids:[1,2,3], summary:'Label reading, time matching, and basic safety.', theme:'level-easy'},
+  {key:'medium', label:'Medium', range:'Activities 4-6', ids:[4,5,6], summary:'Routine building, refill planning, and medication list updates.', theme:'level-medium'},
+  {key:'moderate', label:'Moderate', range:'Activities 7-9', ids:[7,8,9], summary:'Conflicting instructions, weekly schedules, and missed-dose decisions.', theme:'level-hard'},
+  {key:'complex', label:'Complex', range:'Activities 10-12', ids:[10,11,12], summary:'Real-world simulations with distractions, discharge paperwork, and multi-step planning.', theme:'level-real'}
+];
+
+function listItems(items){
+  return items.map(item => `<li>${item}</li>`).join('');
+}
+
+function answerRows(rows){
+  return rows.map(([label,value]) => `<div class="answer-row"><strong>${label}</strong><span>${value}</span></div>`).join('');
+}
+
+function guideRows(rows){
+  return rows.map((step, index) => `
+    <article class="guide-step">
+      <h4>${index + 1}. ${step.title}</h4>
+      <p class="guide-row guide-do"><strong>Do:</strong> ${step.do}</p>
+      <p class="guide-row guide-say"><strong>Say:</strong> "${step.say}"</p>
+      <p class="guide-row guide-tip"><strong>Tip:</strong> ${step.tip}</p>
+    </article>
+  `).join('');
+}
+
+function showView(name){
+  document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+  const target = document.getElementById(`${name}View`);
+  const hero = document.querySelector('.hero');
+  document.body.classList.toggle('focus-mode', name !== 'home');
+  if(hero){
+    hero.hidden = name !== 'home';
+  }
+  if(target){
+    target.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+}
+
+function renderActivity(id = currentActivityId){
+  currentActivityId = id;
+  const act = activities.find(activity => activity.id === id);
+  const guide = therapistGuides[act.id] || act.steps.map(step => ({title:step, do:step, say:'', tip:''}));
+  document.getElementById('activityPanel').innerHTML = `
+    <div class="activity-head">
+      <div>
+        <p class="activity-meta">Activity ${act.id} · ${act.level}</p>
+        <h2>${act.title}</h2>
+        <p>${act.overview}</p>
+      </div>
+      <button class="ghost" type="button" data-view-button="home">Change Activity</button>
+    </div>
+    <div class="activity-body">
+      <div class="callout"><strong>Say:</strong> "${act.patientPrompt}"</div>
+      <div class="task-strip">
+        <section class="task-box">
+          <h3>Pull</h3>
+          <div class="pill-list">${act.bottles.map(key => `<span class="pill">${meds[key].id} ${meds[key].name}</span>`).join('')}</div>
+        </section>
+        <section class="task-box">
+          <h3>Setup</h3>
+          <p><strong>Cards:</strong> ${act.cards}</p>
+          <p class="small"><strong>Layout:</strong> ${act.setup}</p>
+        </section>
+      </div>
+      <section class="instruction-section full session-card">
+        <div class="session-block">
+          <h3>What You Need</h3>
+          <ul>${listItems(act.materials)}</ul>
+        </div>
+        <div class="session-block">
+          <h3>Step-by-Step Therapist Guide</h3>
+          <p class="small">Use the handbook-style Do, Say, and Tip prompts to run the selected activity with the patient.</p>
+          <div class="guide-steps">${guideRows(guide)}</div>
+        </div>
+        <div class="session-block">
+          <h3>Check Work</h3>
+          <div class="answers">${answerRows(act.answers)}</div>
+        </div>
+        <div class="session-block">
+          <h3>What to Watch For</h3>
+          <ul>${listItems(act.watch)}</ul>
+        </div>
+        <div class="session-block">
+          <h3>If They Struggle</h3>
+          <ul>${listItems(act.struggle)}</ul>
+        </div>
+        <div class="session-block">
+          <h3>If They Succeed</h3>
+          <p>${act.success}</p>
+        </div>
+      </section>
+    </div>
+  `;
+  document.querySelectorAll('#activityPanel [data-view-button]').forEach(button => {
+    button.addEventListener('click', () => showView(button.dataset.viewButton));
+  });
+  showView('activity');
+}
+
+function renderActivityRows(){
+  document.getElementById('activityRows').innerHTML = levels.map(level => `
+    <section class="level-section ${level.theme}" aria-label="${level.label} activities">
+      <div class="level-heading">
+        <div>
+          <h2>${level.label}</h2>
+          <p class="activity-meta">${level.range}</p>
+        </div>
+        <p>${level.summary}</p>
+      </div>
+      <div class="activity-list">
+        ${level.ids.map(id => {
+          const activity = activities.find(item => item.id === id);
+          return `
+            <button class="activity-card ${level.theme}" type="button" data-activity-id="${activity.id}">
+              <span class="activity-number">${String(activity.id).padStart(2, '0')}</span>
+              <h3>${activity.title}</h3>
+              <p>${activity.overview}</p>
+            </button>
+          `;
+        }).join('')}
+      </div>
+    </section>
+  `).join('');
+  document.querySelectorAll('[data-activity-id]').forEach(card => {
+    card.addEventListener('click', () => renderActivity(Number(card.dataset.activityId)));
+  });
+}
+
+function init(){
+  document.querySelectorAll('[data-view-button]').forEach(button => {
+    button.addEventListener('click', () => {
+      if(button.dataset.viewButton === 'activity'){
+        renderActivity(currentActivityId);
+      } else {
+        showView(button.dataset.viewButton);
+      }
+    });
+  });
+  renderActivityRows();
+  document.getElementById('medTable').innerHTML = Object.values(meds).map(med => `
+    <tr><td><strong>${med.id}</strong></td><td><strong>${med.name}</strong></td><td>${med.label}</td><td>${med.time}</td></tr>
+  `).join('');
+  document.getElementById('activityTable').innerHTML = activities.map(activity => `
+    <tr>
+      <td><strong>${activity.id}. ${activity.title}</strong><br><span class="small">${activity.level}</span></td>
+      <td>${activity.bottles.map(key => `${meds[key].id} ${meds[key].name}`).join(', ')}</td>
+      <td><strong>Cards:</strong> ${activity.cards}<br><span class="small">${activity.setup}</span></td>
+    </tr>
+  `).join('');
+  document.getElementById('scenarioCards').innerHTML = scenarioCards.map(card => `<span class="tag">${card}</span>`).join('');
+}
+
+init();
+
+function toggleMenu(force){
+  const menu = document.getElementById('mobileMenu');
+  const toggle = document.getElementById('navToggle');
+  const next = typeof force === 'boolean' ? force : !menu.classList.contains('open');
+  menu.classList.toggle('open', next);
+  toggle.classList.toggle('open', next);
+  toggle.setAttribute('aria-expanded', String(next));
+  document.body.classList.toggle('locked', next);
+}
+</script>
+</body>
+</html>
