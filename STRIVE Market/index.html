@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grocery Shopping Task | Online Grocery Shopping Practice</title>
+    <meta name="description" content="Grocery Shopping Task is an online grocery shopping practice activity for functional digital IADL training." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar grocery-topbar">
+      <div class="brand grocery-brand">
+        <div class="market-leaf" aria-hidden="true">✓</div>
+        <div>
+          <strong id="brandTitle">STRIVE</strong>
+          <span id="brandSubtitle">Independence</span>
+        </div>
+      </div>
+      <label class="header-search">
+        <span>Search</span>
+        <input type="text" placeholder="Search products, stores, and aisles" aria-label="Search products, stores, and aisles" />
+      </label>
+      <div class="top-actions">
+        <button class="btn-secondary icon-button" type="button" id="homeButton" aria-label="Home" title="Home">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+        </button>
+        <button class="btn-secondary icon-button" type="button" id="settingsButton" aria-label="Therapist controls" title="Therapist controls">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04a2.1 2.1 0 0 1-2.97 2.97l-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.09 1.65V21.3a2.1 2.1 0 0 1-4.2 0v-.06a1.8 1.8 0 0 0-1.09-1.65 1.8 1.8 0 0 0-1.98.36l-.04.04a2.1 2.1 0 0 1-2.97-2.97l.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.65-1.09H2.9a2.1 2.1 0 0 1 0-4.2h.06A1.8 1.8 0 0 0 4.6 8.62a1.8 1.8 0 0 0-.36-1.98l-.04-.04a2.1 2.1 0 0 1 2.97-2.97l.04.04a1.8 1.8 0 0 0 1.98.36A1.8 1.8 0 0 0 10.28 2.4V2.3a2.1 2.1 0 0 1 4.2 0v.1a1.8 1.8 0 0 0 1.09 1.63 1.8 1.8 0 0 0 1.98-.36l.04-.04a2.1 2.1 0 0 1 2.97 2.97l-.04.04a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.65 1.09h.06a2.1 2.1 0 0 1 0 4.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg>
+        </button>
+        <button class="btn-secondary icon-button" type="button" id="hintButton" aria-label="Hint" title="Hint">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M8.6 15.4a6 6 0 1 1 6.8 0c-.9.6-1.4 1.5-1.4 2.6h-4c0-1.1-.5-2-1.4-2.6Z"/></svg>
+        </button>
+        <button class="btn-secondary icon-button" type="button" id="taskButtonHeader" aria-label="Task" title="Task">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l3 3v15H5V3h3Z"/><path d="M15 3v4h4"/><path d="M8 12h8"/><path d="M8 16h6"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <div class="stepper" aria-label="Practice steps">
+        <div class="step active" data-step-pill="home">Goal</div>
+        <div class="step" data-step-pill="store">Store</div>
+        <div class="step" data-step-pill="shop">Shop</div>
+        <div class="step" data-step-pill="delivery">Pickup/Delivery</div>
+        <div class="step" data-step-pill="checkout">Checkout</div>
+        <div class="step" data-step-pill="summary">Summary</div>
+      </div>
+
+      <section id="homeView">
+        <div class="hero">
+          <div class="hero-main">
+            <p class="section-tag">Clinical Online Grocery Shopping Module</p>
+            <h1>Grocery<br><span>Shopping Task</span></h1>
+            <p class="sub support-text">A functional digital IADL activity for practicing real-world online grocery skills: finding items, comparing prices, following a list, managing a budget, reviewing a cart, handling substitutions, and completing a structured checkout sequence with clinical support.</p>
+            <div class="home-actions">
+              <button class="btn-primary" type="button" id="settingsButtonHero">Therapist Controls</button>
+              <button class="btn-secondary" type="button" id="taskButtonHome">Preview Task Card</button>
+            </div>
+          </div>
+          <aside class="quick-panel panel">
+            <h2>Session Setup</h2>
+            <div class="stats">
+              <div class="stat"><strong>20</strong><span>Main goals</span></div>
+              <div class="stat"><strong>0</strong><span>Live orders</span></div>
+              <div class="stat"><strong>4</strong><span>Store choices</span></div>
+              <div class="stat"><strong>SOAP</strong><span>Note output</span></div>
+            </div>
+          </aside>
+        </div>
+        <div class="task-library-head">
+          <h2 class="section-title">Choose a Practice Shopping List</h2>
+          <div class="toolbar" id="goalFilters"></div>
+        </div>
+        <div class="grid" id="goalGrid"></div>
+
+        <section class="teaching-guide" aria-label="How to use Grocery Shopping Task with a patient">
+          <p class="section-tag">Clinician Teaching Guide</p>
+          <h2>Using This With A Patient</h2>
+          <p class="sub">
+            Grocery Shopping Task gives patients a structured online shopping space to practice technology use, organization, attention, budgeting, and safety judgment before returning to real-world grocery routines.
+          </p>
+          <div class="teaching-grid">
+            <div class="teaching-card">
+              <strong>1. Choose The Goal</strong>
+              <p>Select the shopping list that matches the patient’s current attention, language, visual scanning, memory, and executive function needs.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>2. Set Support Level</strong>
+              <p>Use Therapist Controls to simplify store choice, turn budgets or fees on/off, and adjust substitutions, coupons, hints, aphasia mode, or low-vision mode.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>3. Preview The Task</strong>
+              <p>Review the task card together so the patient knows the required items, budget, checkout method, and special rules before shopping.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>4. Shop The List</strong>
+              <p>Have the patient search, browse aisles, compare options, add items, monitor the cart total, and check whether the cart matches the goal.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>5. Review Checkout</strong>
+              <p>Coach the patient to verify pickup or delivery, fees, tip, discounts, substitutions, extra items, and final total before confirming the order.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>6. Debrief And Document</strong>
+              <p>Review missed items, extra items, cueing, corrections, budget accuracy, and safety decisions, then generate a therapist summary and SOAP note.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="storeView" class="hidden">
+        <div class="panel">
+          <h2>Choose a Store</h2>
+          <p>Select the store option that best fits the shopping list and checkout goal.</p>
+          <div class="grid" id="storeGrid"></div>
+        </div>
+      </section>
+
+      <section id="shopView" class="hidden">
+        <div class="storefront-header-wrap">
+          <div class="market-header" id="marketHeader"></div>
+          <aside class="cart-panel" id="cartPanel"></aside>
+        </div>
+        <div class="task-strip panel" id="taskStrip"></div>
+        <div class="layout">
+          <div class="marketplace">
+            <div class="market-app">
+              <div class="shopping-tools">
+                <input class="search-box" id="searchInput" placeholder="Search products, aisles, and sizes" autocomplete="off" />
+                <button class="btn-secondary" type="button" id="clearSearchButton">Clear</button>
+              </div>
+              <div class="category-row" id="categoryRow"></div>
+              <div class="market-promo" id="marketPromo"></div>
+              <div class="section-head">
+                <div>
+                  <h2>Your items for this task</h2>
+                  <span id="productCountLabel"></span>
+                </div>
+                <button class="btn-secondary" type="button" id="taskButtonInline">Task</button>
+              </div>
+              <div id="productGrid" class="product-grid"></div>
+              <div id="noResults" class="empty-state hidden">No item found. Try a different word.</div>
+              <div class="mobile-cart-cta" id="mobileCartCta"></div>
+              <nav class="mobile-market-nav" aria-label="Grocery app navigation">
+                <button type="button" data-category="All">Home</button>
+                <button type="button" data-category="Produce">Aisles</button>
+                <button type="button" id="cartContinueButtonMobile">Cart</button>
+                <button type="button" id="taskButtonMobile">Task</button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="deliveryView" class="hidden">
+        <div class="activity-nav">
+          <button class="btn-secondary" type="button" data-go="shop">Back to cart</button>
+        </div>
+        <div class="panel">
+          <h2>Choose Pickup or Delivery</h2>
+          <p>Select a pickup or delivery option from the chosen store.</p>
+          <div id="fulfillmentReview"></div>
+          <div class="checkout-grid" id="fulfillmentGrid"></div>
+          <div class="toolbar">
+            <button class="btn-secondary" type="button" data-go="shop">Back to Cart</button>
+            <button class="btn-primary" type="button" id="toCheckoutButton">Review Checkout</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="checkoutView" class="hidden">
+        <div class="activity-nav">
+          <button class="btn-secondary" type="button" data-go="delivery">Back to pickup/delivery</button>
+        </div>
+        <div class="panel">
+          <h2>Checkout Review</h2>
+          <div id="checkoutSummary"></div>
+          <label class="switch" style="margin-top: 14px;">
+            <input type="checkbox" id="reviewedCheckbox" />
+            <span>I reviewed my order.</span>
+          </label>
+          <div class="toolbar">
+            <button class="btn-secondary" type="button" data-go="delivery">Back</button>
+            <button class="btn-primary" type="button" id="confirmButton" disabled>Confirm Order</button>
+          </div>
+          <p class="fine-print">Practice activity only. Payment, accounts, and grocery orders are not submitted.</p>
+        </div>
+      </section>
+
+      <section id="summaryView" class="hidden">
+        <div class="activity-nav">
+          <button class="btn-secondary" type="button" data-go="shop">Start another cart review</button>
+        </div>
+        <div class="panel">
+          <h2>Task Performance Summary</h2>
+          <div class="summary-list" id="performanceSummary"></div>
+        </div>
+        <div class="panel" style="margin-top: 16px;">
+          <h2>Clinical Summary Paragraph</h2>
+          <div class="toolbar">
+            <button class="btn-primary" type="button" id="generateSoapButton">Generate Paragraph</button>
+            <button class="btn-secondary" type="button" id="copySoapButton">Copy Paragraph</button>
+          </div>
+          <textarea id="soapOutput" class="search-box textarea-output" aria-label="Clinical summary paragraph output"></textarea>
+        </div>
+      </section>
+
+      <p class="footer-note">STRIVE Independence by STRIVE Physical Therapy - Las Vegas. Practice activity only; orders are not submitted.</p>
+    </main>
+
+    <div class="modal-backdrop" id="taskModal">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+        <h2 id="taskModalTitle">Task Card</h2>
+        <div id="taskModalBody"></div>
+        <div class="toolbar"><button class="btn-primary" type="button" data-close-modal>Close</button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="settingsModal">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <h2 id="settingsTitle">Therapist Controls</h2>
+        <div class="form-grid">
+          <label class="field">Difficulty <select id="difficultySelect"></select></label>
+          <label class="field">Specific goal <select id="goalSelect"></select></label>
+          <label class="field">Store choices
+            <select id="storeChoiceCountSelect">
+              <option value="1">1 store - simple default</option>
+              <option value="2">2 stores</option>
+              <option value="3">3 stores</option>
+              <option value="4">4 stores</option>
+            </select>
+          </label>
+          <label class="switch"><input type="checkbox" id="budgetToggle" checked /> <span>Budget on</span></label>
+          <label class="switch"><input type="checkbox" id="substitutionToggle" checked /> <span>Substitutions on</span></label>
+          <label class="switch"><input type="checkbox" id="feesToggle" checked /> <span>Delivery fees on</span></label>
+          <label class="switch"><input type="checkbox" id="couponsToggle" checked /> <span>Coupons on</span></label>
+          <label class="switch"><input type="checkbox" id="hintsToggle" checked /> <span>Hints on</span></label>
+          <label class="switch"><input type="checkbox" id="leftScanToggle" /> <span>Left-side visual scanning mode</span></label>
+          <label class="switch"><input type="checkbox" id="aphasiaToggle" /> <span>Aphasia-friendly mode</span></label>
+          <label class="switch"><input type="checkbox" id="lowVisionToggle" /> <span>Low-vision mode</span></label>
+        </div>
+        <div class="toolbar">
+          <button class="btn-primary" type="button" id="applySettingsButton">Apply</button>
+          <button class="btn-secondary" type="button" data-close-modal>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="filterModal">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="filterTitle">
+        <h2 id="filterTitle">Filter Tasks</h2>
+        <div class="form-grid">
+          <label class="field">Show tasks by
+            <select id="taskFilterSelect">
+              <option>All</option>
+              <option>Easy</option>
+              <option>Moderate</option>
+              <option>Hard</option>
+              <option>Complex</option>
+              <option>Visual Scanning</option>
+              <option>Memory</option>
+              <option>Executive Function</option>
+              <option>Budgeting</option>
+              <option>Safety & Judgment</option>
+            </select>
+          </label>
+        </div>
+        <div class="toolbar">
+          <button class="btn-primary" type="button" id="applyFilterButton">Apply Filter</button>
+          <button class="btn-secondary" type="button" id="clearFilterButton">Clear</button>
+          <button class="btn-secondary" type="button" data-close-modal>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
