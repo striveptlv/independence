@@ -396,13 +396,18 @@
       .pill {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         min-height: 30px;
+        max-width: 100%;
         padding: 5px 9px;
         border-radius: 999px;
         background: #edf3f8;
         color: var(--navy);
         font-size: 0.84rem;
         font-weight: 850;
+        line-height: 1.15;
+        text-align: center;
+        white-space: normal;
       }
 
       .pill.warn { background: #fff4d8; color: #7a4a00; }
@@ -417,6 +422,7 @@
       .btn-secondary,
       .btn-danger {
         letter-spacing: 0.08em;
+        line-height: 1.15;
         text-transform: uppercase;
       }
 
@@ -2196,10 +2202,17 @@
 
       .store-card .btn-primary {
         min-width: 150px;
+        padding-inline: 18px;
         border-radius: 999px;
-        background: var(--market);
+        background: var(--store-primary);
+        box-shadow: 0 10px 22px color-mix(in srgb, var(--store-primary) 24%, transparent);
         letter-spacing: 0;
         text-transform: none;
+      }
+
+      .store-card .btn-primary:hover,
+      .store-card .btn-primary:focus-visible {
+        background: color-mix(in srgb, var(--store-primary) 84%, #000);
       }
 
       #storeGrid {
@@ -3057,5 +3070,47 @@
 
         body.home-mode .task-card {
           min-height: 0;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .btn-primary,
+        .btn-secondary,
+        .btn-danger {
+          min-height: 44px;
+          padding: 11px 13px;
+          font-size: 0.9rem;
+          letter-spacing: 0;
+          overflow-wrap: anywhere;
+        }
+
+        .meta-row {
+          gap: 6px;
+        }
+
+        .pill {
+          min-height: 28px;
+          padding: 5px 8px;
+          border-radius: 12px;
+          font-size: 0.76rem;
+          line-height: 1.1;
+        }
+
+        .store-card > .meta-row,
+        .product-card .meta-row {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          width: 100%;
+        }
+
+        .store-card .pill,
+        .product-card .pill {
+          width: 100%;
+        }
+
+        .store-card .btn-primary {
+          min-height: 48px;
+          padding: 13px 16px;
+          font-weight: 950;
         }
       }
