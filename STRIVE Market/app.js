@@ -388,24 +388,23 @@
         document.querySelector("#productGrid").innerHTML = visible.map((product) => {
           const out = product.stock === false && goal.outOfStock && goal.outOfStock.some((name) => product.name.toLowerCase().includes(name.replace("large ", "").toLowerCase()) || name.toLowerCase().includes(product.name.toLowerCase()));
           const storeUnavailable = !storeProductAvailable(product, store);
-          const unavailable = out || storeUnavailable;
           const restricted = goal.avoid && product.tags && product.tags.includes(goal.avoid);
           const adjustedPrice = storePrice(product, store);
           const justAdded = state.justAdded === product.id;
           return `
-            <article class="product-card ${justAdded ? "added-feedback" : ""}">
+            <article class="product-card ${justAdded ? "added-feedback" : ""} ${storeUnavailable ? "store-unavailable" : ""}">
               <div class="product-art"><img src="${productImage(product)}" alt="" aria-hidden="true" /></div>
               <div class="meta-row">
                 <span class="pill">${product.category}</span>
                 ${product.coupon ? `<span class="pill good">Coupon ${money(product.coupon)} off</span>` : ""}
                 ${product.allergen ? `<span class="pill danger">${product.allergen}</span>` : ""}
                 ${out ? `<span class="pill warn">Out of stock</span>` : ""}
-                ${storeUnavailable ? `<span class="pill warn">Not at this store</span>` : ""}
+                ${storeUnavailable ? `<span class="pill muted">Not available in this store</span>` : ""}
                 ${restricted ? `<span class="pill danger">Restricted for this goal</span>` : ""}
               </div>
               <p class="product-title">${product.name}</p>
               <p>${product.size}</p>
-              <div class="product-footer"><span class="price">${money(adjustedPrice)}</span><button class="market-add ${unavailable ? "replacement" : ""} ${justAdded ? "added-feedback" : ""}" type="button" data-add="${product.id}" aria-label="${unavailable ? "Choose replacement for " : "Add "}${product.name}">${justAdded ? "Added" : unavailable ? "Replace" : "+"}</button></div>
+              <div class="product-footer"><span class="price">${storeUnavailable ? "Unavailable" : money(adjustedPrice)}</span><button class="market-add ${out ? "replacement" : ""} ${storeUnavailable ? "unavailable" : ""} ${justAdded ? "added-feedback" : ""}" type="button" data-add="${product.id}" aria-label="${storeUnavailable ? product.name + " is not available in this store" : out ? "Choose replacement for " + product.name : "Add " + product.name}" ${storeUnavailable ? "disabled" : ""}>${justAdded ? "Added" : storeUnavailable ? "Not available" : out ? "Replace" : "+"}</button></div>
             </article>
           `;
         }).join("");
@@ -523,8 +522,9 @@
         const goal = activeGoal();
         const out = product.stock === false && goal.outOfStock && state.settings.substitutions;
         const storeUnavailable = !storeProductAvailable(product);
-        if (out || storeUnavailable) {
-          const reason = storeUnavailable ? "is not carried by this store" : "is out of stock";
+        if (storeUnavailable) return;
+        if (out) {
+          const reason = "is out of stock";
           const replacements = products.filter((item) => item.category === product.category && item.id !== product.id && storeProductAvailable(item) && item.tags.some((tag) => product.tags.includes(tag))).slice(0, 3);
           const selected = window.prompt(`"${product.name}" ${reason}. Type replacement number: ` + replacements.map((item, index) => `${index + 1}. ${item.name} ${money(storePrice(item))}`).join(" "));
           const replacement = replacements[Number(selected) - 1];
