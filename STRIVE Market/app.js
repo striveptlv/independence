@@ -122,37 +122,39 @@
         { id: 8, title: "Avoid Peanut Products", difficulty: "Moderate", skills: ["Label reading", "Safety awareness"], instructions: "Add cereal, bread, fruit, and yogurt.", required: ["cereal", "bread", "fruit", "yogurt"], avoid: "peanut", checkout: "delivery", time: "8-12 minutes" },
         { id: 9, title: "Budget Meal Prep", difficulty: "Moderate", skills: ["Planning", "Budgeting", "Sequencing"], instructions: "Add chicken, rice, frozen vegetables, and apples.", required: ["chicken", "rice", "frozen vegetables", "apples"], budget: 35, checkout: "pickup", time: "8-12 minutes" },
         { id: 10, title: "Coupon Practice", difficulty: "Moderate", skills: ["Attention to detail", "Discounts", "Checkout review"], instructions: "Add 4 grocery items and use 1 coupon item.", requiredCount: 4, couponRequired: true, budget: 30, checkout: "review discount", time: "8-12 minutes" },
-        { id: 11, title: "Out-of-Stock Replacement", difficulty: "Hard", skills: ["Problem solving", "Substitution choice", "Budgeting"], instructions: "Add bread, milk, eggs, cereal, and apples.", required: ["bread", "milk", "eggs", "cereal", "apples"], outOfStock: ["whole wheat bread"], budget: 45, checkout: "replacement", time: "10-15 minutes" },
+        { id: 11, title: "Out-of-Stock Replacement", difficulty: "Hard", skills: ["Problem solving", "Substitution choice", "Budgeting"], instructions: "Add bread, milk, eggs, cereal, and apples.", required: ["bread", "milk", "eggs", "cereal", "apples"], outOfStock: ["apples"], budget: 45, checkout: "replacement", time: "10-15 minutes" },
         { id: 12, title: "Remove an Unnecessary Item", difficulty: "Hard", skills: ["Error detection", "Cart review", "Self-monitoring"], instructions: "Add chicken, rice, frozen vegetables, yogurt, and bananas.", required: ["chicken", "rice", "frozen vegetables", "yogurt", "bananas"], extraCartItem: "peanut butter", budget: 45, checkout: "remove extra item", time: "10-15 minutes" },
         { id: 13, title: "Compare Size and Price", difficulty: "Hard", skills: ["Price comparison", "Reasoning", "Attention"], instructions: "Choose the best-value rice, cereal, and yogurt.", required: ["family rice", "value oat cereal", "plain yogurt tub"], budget: 40, checkout: "delivery", time: "10-15 minutes" },
-        { id: 14, title: "Allergy and Budget Challenge", difficulty: "Hard", skills: ["Safety judgment", "Substitution", "Budgeting"], instructions: "Add 6 items for a simple breakfast and lunch.", requiredCount: 6, avoid: "peanut", outOfStock: ["whole wheat bread"], budget: 50, checkout: "either", time: "12-15 minutes" },
-        { id: 15, title: "Delivery Fee Awareness", difficulty: "Hard", skills: ["Final-cost awareness", "Planning", "Financial reasoning"], instructions: "Add 6 groceries from the list.", requiredCount: 6, budget: 45, checkout: "delivery", lowestDelivery: true, time: "12-15 minutes" },
-        { id: 16, title: "Three-Day Grocery Plan", difficulty: "Complex", skills: ["Planning", "Organization", "Executive function"], instructions: "Shop for 3 days of simple meals.", requiredCategories: { "Meat & Protein": 1, Pantry: 1, Produce: 2, Dairy: 1 }, budget: 65, checkout: "delivery", time: "15-20 minutes" },
-        { id: 17, title: "Budget With Substitutions", difficulty: "Complex", skills: ["Flexible thinking", "Budgeting", "Problem solving"], instructions: "Add 8 grocery items from a meal plan.", requiredCount: 8, outOfStock: ["whole wheat bread", "large eggs"], budget: 60, checkout: "replacements", time: "15-20 minutes" },
-        { id: 18, title: "Healthy Grocery Trip", difficulty: "Complex", skills: ["Planning", "Category reasoning", "Health literacy"], instructions: "Build a grocery cart with at least 2 fruits, 2 vegetables, 1 protein, 1 grain, and 1 dairy item.", requiredCategories: { Produce: 4, "Meat & Protein": 1, Pantry: 1, Dairy: 1 }, budget: 55, checkout: "either", time: "15-20 minutes" },
-        { id: 19, title: "Family Grocery Order", difficulty: "Complex", skills: ["Multi-step planning", "Divided attention", "Flexible problem solving"], instructions: "Shop for breakfast, lunch, and dinner items.", requiredCount: 10, couponRequired: true, outOfStock: ["whole wheat bread"], budget: 75, checkout: "either", time: "18-22 minutes" },
-        { id: 20, title: "Full Grocery Checkout Challenge", difficulty: "Complex", skills: ["Full IADL simulation", "Executive function", "Safety", "Budget management"], instructions: "Complete a full grocery order from start to finish.", requiredCount: 8, outOfStock: ["whole wheat bread"], extraCartItem: "dish soap", budget: 70, checkout: "delivery", time: "20-25 minutes" },
+        { id: 14, title: "Allergy and Budget Challenge", difficulty: "Hard", skills: ["Safety judgment", "Substitution", "Budgeting"], instructions: "Add 6 items for a simple breakfast and lunch.", requiredCount: 6, avoid: "peanut", outOfStock: ["apples"], budget: 50, checkout: "either", time: "12-15 minutes" },
+        { id: 15, title: "Delivery Fee Awareness", difficulty: "Hard", skills: ["Final-cost awareness", "Planning", "Financial reasoning"], instructions: "Add 8 groceries from the list.", requiredCount: 8, budget: 45, checkout: "delivery", lowestDelivery: true, time: "12-15 minutes" },
+        { id: 16, title: "Three-Day Grocery Plan", difficulty: "Complex", skills: ["Planning", "Organization", "Executive function"], instructions: "Plan groceries for 3 days of meals for a household of 2. Include 2 proteins, 3 produce items, 1 dairy, and 1 pantry staple - minimum 7 items, no named examples given. Stay under $65.00. One of your planned items will be out of stock; you must substitute without exceeding budget. Complete checkout via delivery, choosing the cheapest available delivery window.", requiredCategories: { "Meat & Protein": 2, Produce: 3, Dairy: 1, Pantry: 1 }, requiredCount: 7, outOfStock: ["apples"], budget: 65, checkout: "delivery", lowestDelivery: true, time: "15-20 minutes" },
+        { id: 17, title: "Budget With Substitutions", difficulty: "Complex", skills: ["Flexible thinking", "Budgeting", "Problem solving"], instructions: "Add 9 items for a week of meals, staying under $60.00. At least 2 items you select will be out of stock - substitute appropriately and justify each substitution choice as the closest match in price and category. Also include 1 item using an active coupon, and identify which item and discount you used before checkout.", requiredCount: 9, outOfStock: ["apples", "steak"], budget: 60, checkout: "replacements", couponRequired: true, couponRequiredCount: 1, minSubstitutions: 2, time: "15-20 minutes" },
+        { id: 18, title: "Healthy Grocery Trip", difficulty: "Complex", skills: ["Planning", "Category reasoning", "Health literacy"], instructions: "Build a nutritionally balanced cart for 1 person for 4 days. Meet these minimums without further guidance: 3 fruits, 3 vegetables, 2 proteins, 1 dairy, 1 grain/pantry item - 10 items minimum. Stay under $55.00. Avoid any items containing peanuts. If your preferred protein or grain is unavailable, substitute and explain your reasoning.", requiredCategories: { Produce: 6, "Meat & Protein": 2, Dairy: 1, Pantry: 1 }, requiredCount: 10, avoid: "peanut", outOfStock: ["steak", "rice"], budget: 55, checkout: "either", minSubstitutions: 1, time: "15-20 minutes" },
+        { id: 19, title: "Family Grocery Order", difficulty: "Complex", skills: ["Multi-step planning", "Divided attention", "Flexible problem solving"], instructions: "Shop for a family of 4 for breakfast, lunch, and dinner across 2 days - minimum 12 items, no category list provided. Stay under $90.00. Identify and apply at least 2 active coupons. One item will be out of stock - substitute it. Review your cart before checkout and remove any item that doesn't support a complete meal plan.", requiredCount: 12, couponRequired: true, couponRequiredCount: 2, outOfStock: ["apples"], budget: 90, checkout: "either", minSubstitutions: 1, time: "18-22 minutes" },
+        { id: 20, title: "Full Grocery Checkout Challenge", difficulty: "Complex", skills: ["Full IADL simulation", "Executive function", "Safety", "Budget management"], instructions: "Complete a full weekly grocery order for a household with 1 dietary restriction (no peanuts) and 1 budget cap ($70.00). Add at least 10 items covering breakfast, lunch, and dinner. Two extra items not on any meal plan will be seeded in your cart - find and remove both before checkout. Choose between pickup and delivery based on which has the lower total cost including fees.", requiredCount: 10, avoid: "peanut", budget: 70, checkout: "either", extraCartItems: ["dish soap", "soda"], lowestTotalCheckout: true, time: "20-25 minutes" },
         { id: 21, title: "Find a Drink", difficulty: "Easy", skills: ["Search", "Simple scanning", "Cart use"], instructions: "Add bottled water and bananas.", required: ["bottled water", "bananas"], budget: 12, checkout: "pickup", time: "4-6 minutes" },
         { id: 22, title: "Lower-Cost Fruit Choice", difficulty: "Moderate", skills: ["Price comparison", "Budgeting", "Attention"], instructions: "Choose a lower-cost fruit, then add yogurt and rice.", required: ["bananas", "yogurt", "rice"], budget: 24, checkout: "pickup", time: "8-10 minutes" },
         { id: 23, title: "Cart Review With Coupon", difficulty: "Hard", skills: ["Cart review", "Discounts", "Error awareness"], instructions: "Add cereal, milk, apples, rice, and paper towels, then include 1 coupon item.", required: ["cereal", "milk", "apples", "rice", "paper towels"], couponRequired: true, budget: 42, checkout: "review discount", time: "12-15 minutes" },
-        { id: 24, title: "Weekly Essentials Budget", difficulty: "Complex", skills: ["Planning", "Divided attention", "Budgeting"], instructions: "Build a weekly essentials cart with food and household items.", requiredCount: 9, couponRequired: true, budget: 80, checkout: "either", time: "18-22 minutes" }
+        { id: 24, title: "Weekly Essentials Budget", difficulty: "Complex", skills: ["Planning", "Divided attention", "Budgeting"], instructions: "Build a weekly cart covering food and household essentials for a 2-person household - minimum 11 items, no item list provided. Stay under $80.00 after applying any available coupons; you must find and apply at least 1. At least 1 of your chosen items will be out of stock; substitute without breaking budget. Complete checkout, comparing pickup vs. delivery cost before choosing.", requiredCount: 11, couponRequired: true, couponRequiredCount: 1, outOfStock: ["apples"], budget: 80, checkout: "either", minSubstitutions: 1, lowestTotalCheckout: true, time: "18-22 minutes" }
       ];
       const products = [
         { id: "milk", name: "Milk", size: "1 gallon", price: 4.29, category: "Dairy", token: "MILK", tags: ["milk", "dairy"] },
         { id: "almond-milk", name: "Almond Milk", size: "64 oz", price: 3.99, category: "Dairy", token: "ALT", tags: ["milk", "dairy"] },
-        { id: "eggs", name: "Large Eggs", size: "12 count", price: 3.49, category: "Dairy", token: "EGG", tags: ["eggs"], stock: false },
+        { id: "eggs", name: "Large Eggs", size: "12 count", price: 3.49, category: "Dairy", token: "EGG", tags: ["eggs"] },
         { id: "eggs-6", name: "Eggs", size: "6 count", price: 2.19, category: "Dairy", token: "EGG", tags: ["eggs"] },
-        { id: "bread", name: "Whole Wheat Bread", size: "20 oz", price: 3.29, category: "Bakery", token: "BRD", tags: ["bread"], stock: false },
+        { id: "bread", name: "Whole Wheat Bread", size: "20 oz", price: 3.29, category: "Bakery", token: "BRD", tags: ["bread"] },
         { id: "white-bread", name: "White Bread", size: "20 oz", price: 2.49, category: "Bakery", token: "BRD", tags: ["bread"] },
         { id: "multi-bread", name: "Multigrain Bread", size: "20 oz", price: 3.29, category: "Bakery", token: "BRD", tags: ["bread"] },
         { id: "gluten-free-bread", name: "Gluten-Free Bread", size: "16 oz", price: 5.99, category: "Bakery", token: "BRD", tags: ["bread"] },
         { id: "bananas", name: "Bananas", size: "bunch", price: 1.89, category: "Produce", token: "BAN", tags: ["bananas", "fruit"] },
-        { id: "apples", name: "Apples", size: "3 lb bag", price: 4.99, category: "Produce", token: "APP", tags: ["apples", "fruit"] },
+        { id: "apples", name: "Apples", size: "3 lb bag", price: 4.99, category: "Produce", token: "APP", tags: ["apples", "fruit"], stock: false },
         { id: "carrots", name: "Carrots", size: "2 lb bag", price: 2.49, category: "Produce", token: "CAR", tags: ["vegetable"] },
         { id: "spinach", name: "Baby Spinach", size: "5 oz", price: 3.59, category: "Produce", token: "SPN", tags: ["vegetable"] },
         { id: "chicken", name: "Chicken Breast", size: "1.5 lb", price: 9.99, category: "Meat & Protein", token: "CHK", tags: ["chicken", "protein"] },
+        { id: "steak", name: "Steak", size: "0.85 lb", price: 12.99, category: "Meat & Protein", token: "STK", tags: ["steak", "beef", "protein"], stock: false },
+        { id: "ground-beef", name: "Ground Beef", size: "1 lb", price: 6.99, category: "Meat & Protein", token: "BEEF", tags: ["beef", "protein"] },
         { id: "turkey", name: "Ground Turkey", size: "1 lb", price: 5.99, category: "Meat & Protein", token: "TRY", tags: ["protein"] },
-        { id: "rice", name: "White Rice", size: "1 lb", price: 2.49, category: "Pantry", token: "RIC", tags: ["rice", "grain"] },
+        { id: "rice", name: "White Rice", size: "1 lb", price: 2.49, category: "Pantry", token: "RIC", tags: ["rice", "grain"], stock: false },
         { id: "family-rice", name: "Family Rice", size: "5 lb", price: 6.49, category: "Pantry", token: "RIC", tags: ["rice", "grain"] },
         { id: "pasta", name: "Pasta", size: "16 oz", price: 1.79, category: "Pantry", token: "PAS", tags: ["grain"] },
         { id: "cereal", name: "Honey Crunch Cereal", size: "12 oz", price: 4.99, category: "Pantry", token: "CER", tags: ["cereal"] },
@@ -163,9 +165,10 @@
         { id: "frozen-veg", name: "Frozen Vegetables", size: "12 oz", price: 2.29, category: "Frozen", token: "FRZ", tags: ["frozen vegetables", "vegetable"] },
         { id: "peanut-butter", name: "Peanut Butter", size: "16 oz", price: 3.79, category: "Pantry", token: "NUT", tags: ["peanut"], allergen: "Contains peanuts" },
         { id: "soup", name: "Canned Soup", size: "15 oz", price: 1.89, category: "Pantry", token: "SUP", tags: ["soup"] },
-        { id: "paper-towels", name: "Paper Towels", size: "2 rolls", price: 6.99, category: "Household", token: "TWL", tags: ["paper towels"] },
+        { id: "paper-towels", name: "Paper Towels", size: "2 rolls", price: 6.99, category: "Household", token: "TWL", tags: ["paper towels"], coupon: 1.00 },
         { id: "dish-soap", name: "Dish Soap", size: "24 oz", price: 3.29, category: "Household", token: "SOAP", tags: ["dish soap"] },
         { id: "water", name: "Bottled Water", size: "12-count", price: 4.99, category: "Beverages", token: "H2O", tags: ["bottled water", "water"] },
+        { id: "soda", name: "Soda", size: "12-pack", price: 6.49, category: "Beverages", token: "SODA", tags: ["soda", "cola", "beverage"], coupon: 0.50 },
         { id: "toothpaste", name: "Toothpaste", size: "6 oz", price: 3.49, category: "Personal Care", token: "TOO", tags: ["personal care"] }
       ];
       const state = {
@@ -210,6 +213,10 @@
         const req = requirement.toLowerCase();
         const searchable = [product.name, product.category, ...(product.tags || [])].join(" ").toLowerCase();
         return searchable.includes(req) || req.split(/\s+/).every((word) => searchable.includes(word));
+      }
+      function isGoalOutOfStock(product, goal = activeGoal()) {
+        if (!product || product.stock !== false || !goal.outOfStock || !state.settings.substitutions) return false;
+        return goal.outOfStock.some((name) => productMatchesRequirement(product, name));
       }
       function linePrice(line) { const product = productById(line.id); return product ? storePrice(product) * line.qty : 0; }
       function couponTotal() {
@@ -280,6 +287,18 @@
           const skillText = goal.skills.join(" ").toLowerCase();
           return skillText.includes(state.filter.toLowerCase().replace(" & ", " "));
         });
+        const cardSummary = (goal) => {
+          const categoryText = goal.requiredCategories ? Object.entries(goal.requiredCategories).map(([cat, count]) => `${count} ${cat === "Meat & Protein" ? "protein" : cat.toLowerCase()}`).join(", ") : "";
+          if (goal.id === 16) return "Plan a 3-day cart for 2 with category minimums, substitution, budget, and cheapest delivery.";
+          if (goal.id === 17) return "Build a 9-item weekly cart with substitutions, budget control, and an active coupon.";
+          if (goal.id === 18) return "Create a balanced 10-item cart with fruit, vegetables, proteins, dairy, pantry, and no peanuts.";
+          if (goal.id === 19) return "Shop 12+ family meal items, use 2 coupons, handle one substitution, and review the cart.";
+          if (goal.id === 20) return "Complete a 10+ item weekly order, avoid peanuts, remove seeded extras, and choose lowest cost.";
+          if (goal.id === 24) return "Build an 11+ item weekly essentials cart with coupons, substitution, budget, and cost comparison.";
+          if (categoryText) return `Meet category targets: ${categoryText}.`;
+          if (goal.requiredCount) return `Add ${goal.requiredCount}${/\b(at least|minimum)\b/i.test(goal.instructions) ? "+" : ""} item${goal.requiredCount === 1 ? "" : "s"} and complete checkout.`;
+          return goal.instructions.split(".")[0] + ".";
+        };
         const levelClass = {
           Easy: "level-easy",
           Moderate: "level-moderate",
@@ -299,7 +318,7 @@
                   <article class="card goal-card task-card ${levelClass[goal.difficulty]}" role="button" tabindex="0" data-start-goal="${goal.id}" aria-label="Start ${goal.title}">
                     <span class="activity-number">${String(goal.id).padStart(2, "0")}</span>
                     <h3>${goal.title}</h3>
-                    <p>${goal.instructions}</p>
+                    <p>${cardSummary(goal)}</p>
                     <p class="activity-meta">${goal.time} · ${goal.skills.slice(0, 3).join(", ")}</p>
                   </article>
                 `).join("")}
@@ -336,6 +355,10 @@
         if (goal.constraint) rules.push(goal.constraint);
         if (goal.avoid) rules.push("Avoid " + goal.avoid + " products.");
         if (goal.outOfStock && state.settings.substitutions) rules.push("Substitution practice is active.");
+        if (goal.couponRequiredCount || goal.couponRequired) rules.push(`Coupon items required: ${goal.couponRequiredCount || 1}`);
+        if (goal.extraCartItems) rules.push(`Remove seeded extra items: ${goal.extraCartItems.length}`);
+        if (goal.lowestDelivery) rules.push("Choose the cheapest delivery window.");
+        if (goal.lowestTotalCheckout) rules.push("Choose the lower total-cost checkout option.");
         return `
           <h2>Goal: ${goal.title}</h2>
           <p>${goal.instructions}</p>
@@ -373,10 +396,6 @@
           </div>
         `;
         document.querySelector("#categoryRow").innerHTML = categories.map((cat) => `<button class="chip ${state.category === cat ? "active" : ""}" type="button" data-category="${cat}"><span class="cat-icon">${categoryIcon(cat)}</span><span>${cat === "Meat & Protein" ? "Protein" : cat === "Personal Care" ? "Care" : cat}</span></button>`).join("");
-        document.querySelector("#marketPromo").innerHTML = `
-          <strong>${activeGoal().title}</strong>
-          <span>${activeGoal().instructions} ${activeGoal().budget && state.settings.budget ? "Stay under " + money(activeGoal().budget) + "." : ""}</span>
-        `;
         const query = state.search.trim().toLowerCase();
         const goal = activeGoal();
         let visible = products.filter((product) => state.category === "All" || product.category === state.category);
@@ -386,9 +405,8 @@
         document.querySelector("#noResults").classList.toggle("hidden", visible.length > 0);
         document.querySelector("#productCountLabel").textContent = `${visible.length} items shown`;
         document.querySelector("#productGrid").innerHTML = visible.map((product) => {
-          const out = product.stock === false && goal.outOfStock && goal.outOfStock.some((name) => product.name.toLowerCase().includes(name.replace("large ", "").toLowerCase()) || name.toLowerCase().includes(product.name.toLowerCase()));
+          const out = isGoalOutOfStock(product, goal);
           const storeUnavailable = !storeProductAvailable(product, store);
-          const restricted = goal.avoid && product.tags && product.tags.includes(goal.avoid);
           const adjustedPrice = storePrice(product, store);
           const justAdded = state.justAdded === product.id;
           return `
@@ -400,7 +418,6 @@
                 ${product.allergen ? `<span class="pill danger">${product.allergen}</span>` : ""}
                 ${out ? `<span class="pill warn">Out of stock</span>` : ""}
                 ${storeUnavailable ? `<span class="pill muted">Not available in this store</span>` : ""}
-                ${restricted ? `<span class="pill danger">Restricted for this goal</span>` : ""}
               </div>
               <p class="product-title">${product.name}</p>
               <p>${product.size}</p>
@@ -520,7 +537,7 @@
       function addToCart(id) {
         const product = productById(id);
         const goal = activeGoal();
-        const out = product.stock === false && goal.outOfStock && state.settings.substitutions;
+        const out = isGoalOutOfStock(product, goal);
         const storeUnavailable = !storeProductAvailable(product);
         if (storeUnavailable) return;
         if (out) {
@@ -550,15 +567,16 @@
       }
       function seedExtraItem() {
         const goal = activeGoal();
-        if (goal.extraCartItem) {
-          const product = products.find((item) => item.name.toLowerCase() === goal.extraCartItem || item.tags.includes(goal.extraCartItem));
+        const extraItems = goal.extraCartItems || (goal.extraCartItem ? [goal.extraCartItem] : []);
+        extraItems.forEach((extraItem) => {
+          const product = products.find((item) => item.name.toLowerCase() === extraItem || item.tags.includes(extraItem));
           if (product && !cartLine(product.id)) addToCart(product.id);
-        }
+        });
       }
       function evaluate() {
         const goal = activeGoal();
         const cartProducts = cartProductsExpanded();
-        const atLeastGoal = /at least/i.test(goal.instructions || "");
+        const atLeastGoal = /\b(at least|minimum)\b/i.test(goal.instructions || "");
         let correct = [];
         let missed = [];
         let extra = [];
@@ -586,40 +604,50 @@
               .filter((product) => !expectedCategories.includes(product.category))
               .forEach((product) => extra.push(product.name));
           }
+          if (goal.requiredCount && cartProducts.length < goal.requiredCount) missed.push(`${goal.requiredCount - cartProducts.length} more total item${goal.requiredCount - cartProducts.length === 1 ? "" : "s"}`);
         } else if (goal.requiredCount) {
           if (cartProducts.length >= goal.requiredCount) correct.push(`${Math.min(cartProducts.length, goal.requiredCount)} of ${goal.requiredCount} items`);
           if (cartProducts.length < goal.requiredCount) missed.push(`${goal.requiredCount - cartProducts.length} more items`);
-          if (cartProducts.length > goal.requiredCount) extra.push(`${cartProducts.length - goal.requiredCount} extra item${cartProducts.length - goal.requiredCount === 1 ? "" : "s"}`);
+          if (!atLeastGoal && cartProducts.length > goal.requiredCount) extra.push(`${cartProducts.length - goal.requiredCount} extra item${cartProducts.length - goal.requiredCount === 1 ? "" : "s"}`);
         }
         const avoidErrors = goal.avoid ? cartProducts.filter((product) => product.tags.includes(goal.avoid)).map((product) => product.name) : [];
         const unavailableErrors = cartProducts.filter((product) => !storeProductAvailable(product)).map((product) => `${product.name} not available at ${selectedStore().shortName || selectedStore().name}`);
-        const outOfStockErrors = goal.outOfStock ? cartProducts.filter((product) => goal.outOfStock.some((name) => product.name.toLowerCase() === name.toLowerCase())).map((product) => `${product.name} was out of stock`) : [];
-        const seededExtraStillPresent = goal.extraCartItem ? cartProducts.filter((product) => product.name.toLowerCase() === goal.extraCartItem || product.tags.includes(goal.extraCartItem)).map((product) => `${product.name} should be removed`) : [];
+        const outOfStockErrors = goal.outOfStock ? cartProducts.filter((product) => isGoalOutOfStock(product, goal)).map((product) => `${product.name} was out of stock`) : [];
+        const extraTargets = goal.extraCartItems || (goal.extraCartItem ? [goal.extraCartItem] : []);
+        const seededExtraStillPresent = extraTargets.length ? cartProducts.filter((product) => extraTargets.some((extraItem) => product.name.toLowerCase() === extraItem || product.tags.includes(extraItem))).map((product) => `${product.name} should be removed`) : [];
         extra = [...extra, ...avoidErrors.map((name) => `${name} restricted`)];
         extra = [...extra, ...seededExtraStillPresent];
         const hasCheckoutSelection = Boolean(state.fulfillment && state.window);
         const exactCheckoutRequired = goal.checkout === "pickup" || goal.checkout === "delivery";
-        const checkoutOk = exactCheckoutRequired ? state.fulfillment === goal.checkout && Boolean(state.window) : hasCheckoutSelection;
+        const cheapestDeliveryOk = !goal.lowestDelivery || (state.fulfillment === "delivery" && state.window === selectedStore().lowFeeWindow);
+        const lowestTotalOk = !goal.lowestTotalCheckout || state.fulfillment === "pickup";
+        const checkoutOk = (exactCheckoutRequired ? state.fulfillment === goal.checkout && Boolean(state.window) : hasCheckoutSelection) && cheapestDeliveryOk && lowestTotalOk;
         const budgetOk = !goal.budget || !state.settings.budget || finalTotal() <= goal.budget;
-        const couponOk = !goal.couponRequired || couponTotal() > 0;
+        const couponItemsUsed = state.cart.reduce((count, line) => {
+          const product = productById(line.id);
+          return count + (product && product.coupon ? line.qty : 0);
+        }, 0);
+        const neededCoupons = goal.couponRequiredCount || (goal.couponRequired ? 1 : 0);
+        const couponOk = neededCoupons === 0 || couponItemsUsed >= neededCoupons;
         const needsSubstitution = ["replacement", "replacements"].includes(goal.checkout) || /substitution/i.test(goal.title + " " + goal.instructions);
-        const substitutionOk = !needsSubstitution || state.substitutions.length > 0;
+        const neededSubstitutions = goal.minSubstitutions || (needsSubstitution ? 1 : 0);
+        const substitutionOk = neededSubstitutions === 0 || state.substitutions.length >= neededSubstitutions;
         const availabilityOk = unavailableErrors.length === 0 && outOfStockErrors.length === 0;
         const itemOk = missed.length === 0 && extra.length === 0 && avoidErrors.length === 0;
         const ruleChecks = [
           { label: "Required items/categories", ok: missed.length === 0, detail: missed.length ? `Missing: ${missed.join(", ")}` : "All required selections present" },
           { label: "No extra or restricted items", ok: extra.length === 0, detail: extra.length ? extra.join(", ") : "No unnecessary or restricted items" },
-          { label: "Pickup/delivery selection", ok: checkoutOk, detail: checkoutOk ? `${state.fulfillment} ${state.window}` : exactCheckoutRequired ? `Expected ${goal.checkout} with a selected time window` : "Pickup or delivery and a time window must be selected" },
+          { label: "Pickup/delivery selection", ok: checkoutOk, detail: checkoutOk ? `${state.fulfillment} ${state.window}` : goal.lowestDelivery ? `Expected delivery with the cheapest available window: ${selectedStore().lowFeeWindow}` : goal.lowestTotalCheckout ? "Expected the lower total-cost option after comparing pickup and delivery fees" : exactCheckoutRequired ? `Expected ${goal.checkout} with a selected time window` : "Pickup or delivery and a time window must be selected" },
           { label: "Budget accuracy", ok: budgetOk, detail: budgetOk ? budgetStatus() : budgetStatus() },
-          { label: "Coupon rule", ok: couponOk, detail: goal.couponRequired ? (couponOk ? "Required coupon applied" : "Required coupon not applied") : "Not required" },
-          { label: "Substitution rule", ok: substitutionOk, detail: needsSubstitution ? (state.substitutions.join("; ") || "Required substitution was not completed") : "Not required" },
+          { label: "Coupon rule", ok: couponOk, detail: neededCoupons ? (couponOk ? `${couponItemsUsed}/${neededCoupons} required coupon item${neededCoupons === 1 ? "" : "s"} used` : `Need ${neededCoupons} coupon item${neededCoupons === 1 ? "" : "s"}; used ${couponItemsUsed}`) : "Not required" },
+          { label: "Substitution rule", ok: substitutionOk, detail: neededSubstitutions ? (substitutionOk ? `${state.substitutions.length}/${neededSubstitutions} required substitution${neededSubstitutions === 1 ? "" : "s"} completed` : `Need ${neededSubstitutions} substitution${neededSubstitutions === 1 ? "" : "s"}; completed ${state.substitutions.length}`) : "Not required" },
           { label: "Store availability", ok: availabilityOk, detail: [...unavailableErrors, ...outOfStockErrors].join(", ") || "All cart items are available/valid" }
         ];
         const passedRules = ruleChecks.filter((rule) => rule.ok).length;
         const complete = ruleChecks.every((rule) => rule.ok);
         const accuracyScore = Math.round((passedRules / ruleChecks.length) * 100);
         const blockingIssues = ruleChecks.filter((rule) => !rule.ok).map((rule) => `${rule.label}: ${rule.detail}`);
-        return { correct, missed, extra, avoidErrors, checkoutOk, budgetOk, couponOk, substitutionOk, availabilityOk, itemOk, ruleChecks, blockingIssues, accuracyScore, complete };
+        return { correct, missed, extra, avoidErrors, checkoutOk, budgetOk, couponOk, substitutionOk, availabilityOk, itemOk, ruleChecks, blockingIssues, accuracyScore, complete, couponItemsUsed, neededCoupons, neededSubstitutions };
       }
       function completionTime() {
         const seconds = Math.max(1, Math.round((Date.now() - state.startTime) / 1000));
@@ -647,7 +675,7 @@
           ["Final Total", money(finalTotal())],
           ["Pickup/Delivery Accuracy", evalData.checkoutOk ? "accurate" : "not aligned with selected goal or no time window selected"],
           ["Substitution Decision", state.substitutions.join("; ") || "not applicable"],
-          ["Coupon Use", activeGoal().couponRequired ? (evalData.couponOk ? "required coupon used" : "required coupon not used") : "not applicable"],
+          ["Coupon Use", evalData.neededCoupons ? (evalData.couponOk ? `${evalData.couponItemsUsed}/${evalData.neededCoupons} required coupon item${evalData.neededCoupons === 1 ? "" : "s"} used` : `${evalData.couponItemsUsed}/${evalData.neededCoupons} required coupon item${evalData.neededCoupons === 1 ? "" : "s"} used`) : "not applicable"],
           ["Hints Used", String(state.hints)],
           ["Cart Corrections", String(state.corrections)],
           ["Completion Time", completionTime()],
@@ -676,7 +704,7 @@
           finalTotal: money(finalTotal()),
           checkoutAccuracy: evalData.checkoutOk ? "accurate" : "not aligned with selected goal or no time window selected",
           substitutionAccuracy: evalData.substitutionOk ? (state.substitutions.join("; ") || "not required") : "required substitution was not completed",
-          couponAccuracy: evalData.couponOk ? (goal.couponRequired ? "required coupon used" : "not required") : "required coupon not used",
+          couponAccuracy: evalData.neededCoupons ? `${evalData.couponItemsUsed}/${evalData.neededCoupons} required coupon item${evalData.neededCoupons === 1 ? "" : "s"} used` : "not required",
           hintsUsed: String(state.hints),
           completionTime: completionTime(),
           corrections: String(state.corrections),
