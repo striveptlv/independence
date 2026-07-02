@@ -201,8 +201,12 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
       <form class="auth-form" id="createPracticeForm" data-title="Create New Account" data-copy="Start a practice for yourself or your clinical team." onsubmit="handleAuthSubmit(event,'createPractice')">
         <div class="field-grid">
           <div class="field">
-            <label for="practiceFullName">Full Name</label>
-            <input id="practiceFullName" name="full_name" type="text" placeholder="Jane Smith" autocomplete="name" required>
+            <label for="practiceFirstName">First Name</label>
+            <input id="practiceFirstName" name="first_name" type="text" placeholder="Jane" autocomplete="given-name" required>
+          </div>
+          <div class="field">
+            <label for="practiceLastName">Last Name</label>
+            <input id="practiceLastName" name="last_name" type="text" placeholder="Smith" autocomplete="family-name" required>
           </div>
           <div class="field">
             <label for="practiceEmail">Email</label>
@@ -266,8 +270,12 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
       <form class="auth-form" id="joinPracticeForm" data-title="Join Existing Practice" data-copy="Use an invite code from your practice, supervisor, or team administrator. Your role will come from the invite later." onsubmit="handleAuthSubmit(event,'joinPractice')">
         <div class="field-grid">
           <div class="field">
-            <label for="joinFullName">Full Name</label>
-            <input id="joinFullName" name="full_name" type="text" placeholder="Jane Smith" autocomplete="name" required>
+            <label for="joinFirstName">First Name</label>
+            <input id="joinFirstName" name="first_name" type="text" placeholder="Jane" autocomplete="given-name" required>
+          </div>
+          <div class="field">
+            <label for="joinLastName">Last Name</label>
+            <input id="joinLastName" name="last_name" type="text" placeholder="Smith" autocomplete="family-name" required>
           </div>
           <div class="field">
             <label for="joinEmail">Email</label>
@@ -401,6 +409,13 @@ function passwordsMatch(data) {
   return data.password === data.password_confirm;
 }
 
+function getFullName(data) {
+  return [data.first_name, data.last_name]
+    .map(namePart => (namePart || "").trim())
+    .filter(Boolean)
+    .join(" ");
+}
+
 function wait(ms) {
   return new Promise(resolve => window.setTimeout(resolve, ms));
 }
@@ -507,7 +522,6 @@ async function handleAuthSubmit(event, type) {
     // -----------------------------
     if (type === "createPractice") {
       const {
-        full_name,
         email,
         clinic_name,
         role,
@@ -520,7 +534,7 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      const fullName = full_name;
+      const fullName = getFullName(data);
       const clinicName = clinic_name;
       const selectedRole = role;
 
@@ -600,7 +614,6 @@ async function handleAuthSubmit(event, type) {
     // -----------------------------
     if (type === "joinPractice") {
       const {
-        full_name,
         email,
         team_code,
         password,
@@ -613,6 +626,7 @@ async function handleAuthSubmit(event, type) {
       }
 
       const cleanTeamCode = team_code.trim().toUpperCase();
+      const fullName = getFullName(data);
 
       showStatus("warn", "Checking team code...");
 
@@ -659,7 +673,6 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      const fullName = full_name;
       const clinicName = teamData.name;
       const selectedRole = "member";
 
