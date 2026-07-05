@@ -66,6 +66,22 @@ nav{
   appearance:none;background:none;border:0;padding:0;font-family:inherit;line-height:1.2;cursor:pointer;
 }
 .nav-link-button:disabled{cursor:wait;opacity:.62}
+.billing-notice{
+  position:fixed;top:84px;right:5vw;z-index:22;display:none;max-width:min(420px,calc(100vw - 36px));
+  padding:12px 14px;border-radius:8px;background:rgba(255,255,255,.96);border:1px solid var(--line-m);
+  box-shadow:0 18px 48px rgba(19,35,56,.16);color:var(--navy);font-size:.92rem;line-height:1.35;
+}
+.billing-notice.show{display:block}
+.billing-notice-content{display:flex;align-items:flex-start;gap:12px}
+.billing-notice-text{flex:1}
+.billing-notice-close{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
+  border:1px solid rgba(19,35,56,.14);border-radius:6px;background:rgba(255,255,255,.72);
+  color:var(--navy);font-size:18px;line-height:1;cursor:pointer;
+}
+.billing-notice.ok{border-color:rgba(16,185,129,.28);background:rgba(236,253,245,.96);color:#047857}
+.billing-notice.warn{border-color:rgba(245,130,10,.32);background:rgba(255,247,237,.97);color:#9a4d00}
+.billing-notice.no{border-color:rgba(220,38,38,.25);background:rgba(254,242,242,.97);color:#b91c1c}
 .nav-dropdown{position:relative;display:flex;align-items:center}
 .nav-dropdown>a{display:flex;align-items:center;gap:6px;padding:25px 0}
 .nav-dropdown>a::after{
@@ -184,6 +200,7 @@ main{position:relative;z-index:1}
 }
 @media(max-width:620px){
   body{padding-top:64px}nav{height:64px;padding:0 18px}.mobile-menu{top:64px}
+  .billing-notice{top:76px;left:18px;right:18px;max-width:none}
   .mobile-menu{left:0;right:0;bottom:0;width:auto;padding:24px 6vw;border:0;border-radius:0;box-shadow:none}
   .mobile-menu a,.mobile-menu button{font-size:20px;font-weight:800;letter-spacing:.06em;padding:15px 0;border-bottom:1px solid var(--line);border-radius:0;white-space:normal}
   .mobile-menu a:hover,.mobile-menu button:hover{background:none}
@@ -212,10 +229,11 @@ main{position:relative;z-index:1}
     </div>
   </div>
   <div class="nav-links">
-    <button class="nav-link-button" id="manageBillingBtn" type="button">Manage Billing</button>
-    <button class="nav-link-button" id="signOutBtn" type="button">Sign Out</button>
+    <a href="team-admin.html">Manage Team</a>
+    <button class="nav-link-button" id="manageBillingBtn" type="button">Billing</button>
     <a href="feedback.html">Feedback</a>
     <a class="nav-cta" href="contact.html">Contact Us</a>
+    <button class="nav-link-button" id="signOutBtn" type="button">Sign Out</button>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -223,10 +241,17 @@ main{position:relative;z-index:1}
 </nav>
 
 <div class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
-  <button id="mobileManageBillingBtn" type="button">Manage Billing</button>
-  <button id="mobileSignOutBtn" type="button">Sign Out</button>
-  <a href="feedback.html" onclick="toggleMenu(false)">Feedback</a>
+  <a href="team-admin.html" onclick="toggleMenu(false)">Manage Team</a>
+  <button id="mobileManageBillingBtn" type="button">Billing</button>
   <a href="contact.html" onclick="toggleMenu(false)">Contact Us</a>
+  <button id="mobileSignOutBtn" type="button">Sign Out</button>
+</div>
+
+<div class="billing-notice" id="billingNotice" role="status" aria-live="polite">
+  <div class="billing-notice-content">
+    <div class="billing-notice-text" id="billingNoticeText"></div>
+    <button class="billing-notice-close" id="billingNoticeClose" type="button" aria-label="Close billing message">x</button>
+  </div>
 </div>
 
 <main>
@@ -362,6 +387,11 @@ window.addEventListener("DOMContentLoaded", () => {
     mobileSignOutBtn
   ].filter(Boolean);
   const billingMessage = document.getElementById("billingMessage");
+  const billingNotice = document.getElementById("billingNotice");
+  const billingNoticeText = document.getElementById("billingNoticeText");
+  const billingNoticeClose = document.getElementById("billingNoticeClose");
+  let currentProfile = null;
+  let currentTrialEndsAt = null;
 
   async function checkAccess() {
     const {
@@ -386,6 +416,39 @@ window.addEventListener("DOMContentLoaded", () => {
       return null;
     }
 
+    console.log("Profile access type:", profile.access_type);
+
+    if (profile.access_type === "team") {
+      console.log("Checking active team membership for user:", user.id);
+
+      const { data: membership, error: membershipError } = await supabase
+        .from("members")
+        .select("team_id, role")
+        .eq("user_id", user.id)
+        .limit(1)
+        .maybeSingle();
+
+      if (membershipError) {
+        console.error("Team membership check failed:", membershipError.message);
+        window.location.href = "auth.html";
+        return null;
+      }
+
+      if (!membership) {
+        console.warn("Team access removed; signing user out:", user.id);
+        await supabase.auth.signOut();
+        window.location.href = "auth.html?error=team_access_removed";
+        return null;
+      }
+
+      console.log("Team membership active:", membership.team_id, membership.role);
+      return {
+        user,
+        profile,
+        trialEndsAt: null
+      };
+    }
+
     const now = new Date();
 
     const trialEndsAt = profile.trial_ends_at
@@ -401,16 +464,12 @@ window.addEventListener("DOMContentLoaded", () => {
       profile.access_type === "paid" &&
       profile.has_access === true;
 
-    const teamActive =
-      profile.access_type === "team" &&
-      profile.has_access === true;
-
     const adminActive =
       profile.access_type === "admin" &&
       profile.has_access === true;
 
     const canAccess =
-      trialActive || paidActive || teamActive || adminActive;
+      trialActive || paidActive || adminActive;
 
     if (!canAccess) {
       window.location.href = "trial-ended.html";
@@ -433,6 +492,26 @@ window.addEventListener("DOMContentLoaded", () => {
   function setSignOutButtonsDisabled(disabled) {
     signOutButtons.forEach(button => {
       button.disabled = disabled;
+    });
+  }
+
+  function showBillingMessage(type, message) {
+    if (billingMessage) billingMessage.textContent = message;
+    if (!billingNotice || !billingNoticeText) return;
+
+    billingNotice.className = "billing-notice show " + type;
+    billingNoticeText.textContent = message;
+
+    if (type === "ok") {
+      window.setTimeout(() => {
+        billingNotice.classList.remove("show");
+      }, 5000);
+    }
+  }
+
+  if (billingNoticeClose && billingNotice) {
+    billingNoticeClose.addEventListener("click", () => {
+      billingNotice.classList.remove("show");
     });
   }
 
@@ -469,7 +548,16 @@ window.addEventListener("DOMContentLoaded", () => {
   async function openBillingPortal() {
     console.log("Manage Billing clicked");
     toggleMenu(false);
-    billingMessage.textContent = "Opening billing portal...";
+
+    if (currentProfile?.access_type === "trial") {
+      const trialNote = currentTrialEndsAt
+        ? "Your STRIVE trial is active and does not have Stripe billing to cancel yet."
+        : "Your STRIVE trial does not have Stripe billing to cancel yet.";
+      showBillingMessage("warn", trialNote);
+      return;
+    }
+
+    showBillingMessage("warn", "Opening billing portal...");
     setBillingButtonsDisabled(true);
 
     try {
@@ -483,7 +571,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
 
       if (sessionError || !session) {
-        billingMessage.textContent = "Please log in again to manage billing.";
+        showBillingMessage("no", "Please log in again to manage billing.");
         setBillingButtonsDisabled(false);
         return;
       }
@@ -514,17 +602,25 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!response.ok) {
-        billingMessage.textContent =
+        const errorMessage =
           result?.error ||
           result?.message ||
           responseText ||
           `Could not open billing portal. Status ${response.status}.`;
+
+        if (/No Stripe customer found/i.test(errorMessage)) {
+          showBillingMessage("no", "Stripe billing portal is unavailable because this account does not have a Stripe customer on file. Please contact STRIVE support to cancel or update billing.");
+          setBillingButtonsDisabled(false);
+          return;
+        }
+
+        showBillingMessage("no", errorMessage);
         setBillingButtonsDisabled(false);
         return;
       }
 
       if (!result?.url) {
-        billingMessage.textContent = "Billing portal did not return a URL.";
+        showBillingMessage("no", "Billing portal did not return a URL.");
         setBillingButtonsDisabled(false);
         return;
       }
@@ -532,8 +628,7 @@ window.addEventListener("DOMContentLoaded", () => {
       window.location.href = result.url;
     } catch (error) {
       console.error("Could not open billing portal", error);
-      billingMessage.textContent =
-        error?.message || "Could not open billing portal.";
+      showBillingMessage("no", error?.message || "Could not open billing portal.");
       setBillingButtonsDisabled(false);
     }
   }
@@ -545,7 +640,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     startInactivitySignOutTimer();
 
-    const { profile, trialEndsAt } = accessData;
+    const { user, profile, trialEndsAt } = accessData;
+    currentProfile = profile;
+    currentTrialEndsAt = trialEndsAt;
     const trialBanner = document.getElementById("trialBanner");
 
     if (profile.access_type === "trial" && trialEndsAt && trialBanner) {

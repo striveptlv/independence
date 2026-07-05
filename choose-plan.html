@@ -317,15 +317,11 @@ function hasActiveAccess(profile) {
     profile.access_type === "paid" &&
     profile.has_access === true;
 
-  const teamActive =
-    profile.access_type === "team" &&
-    profile.has_access === true;
-
   const adminActive =
     profile.access_type === "admin" &&
     profile.has_access === true;
 
-  return trialActive || paidActive || teamActive || adminActive;
+  return trialActive || paidActive || adminActive;
 }
 
 function hasActiveTrial(profile) {
@@ -352,6 +348,34 @@ async function checkAccessOrRedirect() {
     }
 
     const profile = await getProfileAccess(user.id);
+
+    if (profile?.access_type === "team") {
+      console.log("Checking active team membership for user:", user.id);
+
+      const { data: membership, error: membershipError } = await supabaseClient
+        .from("members")
+        .select("team_id, role")
+        .eq("user_id", user.id)
+        .limit(1)
+        .maybeSingle();
+
+      if (membershipError) {
+        console.error("Team membership check failed:", membershipError.message);
+        showAccountCheckError("Could not check your team access: " + membershipError.message);
+        throw membershipError;
+      }
+
+      if (!membership) {
+        console.warn("Team access removed; signing user out:", user.id);
+        await supabaseClient.auth.signOut();
+        window.location.href = AUTH_PAGE + "?error=team_access_removed";
+        return null;
+      }
+
+      console.log("Team membership active:", membership.team_id, membership.role);
+      window.location.href = DASHBOARD_PAGE;
+      return null;
+    }
 
     if (upgradeIntent && hasActiveTrial(profile)) {
       return { user, profile };

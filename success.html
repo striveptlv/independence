@@ -197,7 +197,7 @@ async function checkAccess() {
 
   const { data: profile, error: profileError } = await supabase
     .from("profile")
-    .select("has_access, user_id")
+    .select("has_access, user_id, access_type")
     .eq("user_id", user.id)
     .single();
 
@@ -207,6 +207,34 @@ async function checkAccess() {
   if (profileError) {
     showQueryError(profileError.message);
     return;
+  }
+
+  console.log("Profile access type:", profile?.access_type);
+
+  if (profile?.access_type === "team") {
+    console.log("Checking active team membership for user:", user.id);
+
+    const { data: membership, error: membershipError } = await supabase
+      .from("members")
+      .select("team_id, role")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (membershipError) {
+      console.error("Team membership check failed:", membershipError.message);
+      showQueryError(membershipError.message);
+      return;
+    }
+
+    if (!membership) {
+      console.warn("Team access removed; signing user out:", user.id);
+      await supabase.auth.signOut();
+      window.location.href = "auth.html?error=team_access_removed";
+      return;
+    }
+
+    console.log("Team membership active:", membership.team_id, membership.role);
   }
 
   if (profile && profile.has_access === true) {

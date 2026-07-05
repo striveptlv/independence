@@ -239,15 +239,23 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
           </div>
           <div class="field">
             <label for="clinicName">Clinic / Practice Name</label>
-            <input id="clinicName" name="clinic_name" type="text" placeholder="Practice, clinic, or program name" autocomplete="organization" required>
+            <input id="clinicName" name="clinic_name" type="text" placeholder="Optional for individual therapists" autocomplete="organization">
           </div>
           <div class="field">
-            <label for="practiceRole">Role</label>
+            <label for="practicePlan">Account Type</label>
+            <select id="practicePlan" name="plan" required>
+              <option value="">Select account type</option>
+              <option value="individual">Individual · one therapist</option>
+              <option value="clinic">Clinic · up to 10 users</option>
+              <option value="enterprise">Enterprise · up to 50 users</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="practiceRole">Account Role</label>
             <select id="practiceRole" name="role" required>
               <option value="">Select role</option>
-              <option value="owner">Owner</option>
-              <option value="supervisor">Supervisor</option>
               <option value="therapist">Therapist</option>
+              <option value="owner">Owner</option>
             </select>
           </div>
           <div class="field">
@@ -350,13 +358,18 @@ const forms={
 const formTitle=document.getElementById('formTitle');
 const formCopy=document.getElementById('formCopy');
 const statusBox=document.getElementById('authStatus');
-const PLAN_PAGE="https://striveptlv.com/independence/choose-plan.html";
+const PLAN_PAGE="choose-plan.html";
 const DASHBOARD_PAGE="dashboard.html";
 const SUPABASE_URL='https://ccfpdgmmwkghjszkbnzs.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui';
 const supabaseClient=SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase
   ? window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)
   : null;
+const TEAM_PLAN_LIMITS = {
+  clinic: 10,
+  enterprise: 50
+};
+const INDIVIDUAL_PLAN = "individual";
 
 function showPanel(panelName){
   Object.entries(forms).forEach(([name,form])=>{
@@ -396,10 +409,19 @@ document.querySelectorAll("[data-toggle-password]").forEach(button => {
 });
 
 const initialPanelParam = new URLSearchParams(window.location.search).get("panel");
+const initialTeamCode = new URLSearchParams(window.location.search).get("team_code");
+const initialError = new URLSearchParams(window.location.search).get("error");
 const initialHashPanel = window.location.hash ? window.location.hash.slice(1) : "";
-const initialPanel = initialPanelParam || initialHashPanel;
+const initialPanel = initialPanelParam || (initialTeamCode ? "joinPractice" : initialHashPanel);
 if (initialPanel && forms[initialPanel]) {
   showPanel(initialPanel);
+}
+if (initialTeamCode) {
+  const teamCodeInput = document.getElementById("teamCode");
+  if (teamCodeInput) teamCodeInput.value = initialTeamCode.trim().toUpperCase();
+}
+if (initialError === "team_access_removed") {
+  showStatus("no", "Your team access has been removed. Please contact your team administrator.");
 }
 
 function getFormData(form){
@@ -419,6 +441,13 @@ function getFullName(data) {
 
 function wait(ms) {
   return new Promise(resolve => window.setTimeout(resolve, ms));
+}
+
+function generateTeamCode() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const values = new Uint32Array(8);
+  crypto.getRandomValues(values);
+  return Array.from(values, value => alphabet[value % alphabet.length]).join("");
 }
 
 async function setupTrialAccess(userId, profileFields = {}) {
@@ -480,6 +509,254 @@ async function setupTrialAccess(userId, profileFields = {}) {
   return false;
 }
 
+function normalizeEmail(email) {
+  return (email || "").trim().toLowerCase();
+}
+
+async function setupTeamProfile(user, extraFields = {}) {
+  const normalizedEmail = normalizeEmail(user?.email || extraFields.email);
+  const metadata = user?.user_metadata || {};
+  const fullName =
+    (extraFields.full_name || "").trim() ||
+    (metadata.full_name || "").trim() ||
+    (metadata.name || "").trim() ||
+    normalizedEmail ||
+    "Team Member";
+
+  const { error: profileError } = await supabaseClient
+    .from("profile")
+    .upsert({
+      ...extraFields,
+      user_id: user.id,
+      email: normalizedEmail,
+      full_name: fullName,
+      has_access: true,
+      access_type: "team"
+    }, {
+      onConflict: "user_id"
+    });
+
+  if (profileError) {
+    console.error("Profile setup failed:", profileError);
+    showStatus("no", "Profile setup failed: " + profileError.message);
+    return false;
+  }
+
+  return true;
+}
+
+async function userHasActiveAccess(user) {
+  if (!user?.id) {
+    console.log("Login routing: no user id available for access check.");
+    return false;
+  }
+
+  const { data: profile, error: profileError } = await supabaseClient
+    .from("profile")
+    .select("user_id, has_access, access_type, trial_ends_at")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    console.error("Login routing profile check failed:", profileError);
+    return false;
+  }
+
+  if (!profile) {
+    console.log("Login routing: no profile found for user:", user.id);
+    return false;
+  }
+
+  console.log("Login routing profile access type:", profile.access_type);
+
+  if (profile.access_type === "team") {
+    const { data: membership, error: membershipError } = await supabaseClient
+      .from("members")
+      .select("team_id, role")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (membershipError) {
+      console.error("Login routing team membership check failed:", membershipError);
+      return false;
+    }
+
+    const hasMembership = Boolean(membership);
+    console.log("Login routing team membership active:", hasMembership, membership);
+    return hasMembership;
+  }
+
+  if (profile.access_type === "paid" && profile.has_access === true) {
+    console.log("Login routing: paid access active.");
+    return true;
+  }
+
+  if (profile.access_type === "trial" && profile.has_access === true && profile.trial_ends_at) {
+    const trialEndsAt = new Date(profile.trial_ends_at);
+    const trialActive = trialEndsAt > new Date();
+    console.log("Login routing: trial access active:", trialActive);
+    return trialActive;
+  }
+
+  console.log("Login routing: no active access found.");
+  return false;
+}
+
+async function getTeamSeatCounts(teamId) {
+  const [memberResult, pendingInviteResult] = await Promise.all([
+    supabaseClient
+      .from("members")
+      .select("*", { count: "exact", head: true })
+      .eq("team_id", teamId),
+    supabaseClient
+      .from("team_invites")
+      .select("id", { count: "exact", head: true })
+      .eq("team_id", teamId)
+      .eq("status", "pending")
+  ]);
+
+  if (memberResult.error) throw memberResult.error;
+  if (pendingInviteResult.error) throw pendingInviteResult.error;
+
+  return {
+    memberCount: memberResult.count || 0,
+    pendingInviteCount: pendingInviteResult.count || 0
+  };
+}
+
+function teamIsActive(team) {
+  return ["trialing", "active"].includes(team?.subscription_status);
+}
+
+async function loadTeamById(teamId) {
+  const { data: team, error: teamError } = await supabaseClient
+    .from("teams")
+    .select("id, name, team_code, plan, max_users, subscription_status")
+    .eq("id", teamId)
+    .maybeSingle();
+
+  if (teamError) throw teamError;
+  return team;
+}
+
+async function findPendingInviteForEmail(email) {
+  const normalizedEmail = normalizeEmail(email);
+
+  if (!normalizedEmail) return null;
+
+  const { data: invite, error: inviteError } = await supabaseClient
+    .from("team_invites")
+    .select("id, team_id, email, role, status, location_label, invited_by, accepted_user_id, created_at, accepted_at")
+    .eq("status", "pending")
+    .ilike("email", normalizedEmail)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (inviteError) throw inviteError;
+  return invite;
+}
+
+async function acceptPendingInviteForUser(user) {
+  if (!user) return false;
+
+  const fullName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.email ||
+    "Team Member";
+
+  showStatus("warn", "Checking for team invite...");
+
+  const { data, error } = await supabaseClient.rpc("accept_team_invite", {
+    p_full_name: fullName
+  });
+
+  if (error) {
+    console.error("Invite acceptance failed:", error);
+    showStatus("no", "Invite acceptance failed: " + error.message);
+    return true;
+  }
+
+  if (!data?.ok) {
+    if (data?.message === "No pending invite found.") {
+      return false;
+    }
+
+    showStatus("no", data?.message || "Invite could not be accepted.");
+    return true;
+  }
+
+  showStatus("ok", "Team invite accepted. Taking you to your dashboard...");
+  window.location.href = DASHBOARD_PAGE;
+  return true;
+}
+
+async function joinTeamByCodeForUser(user, teamCode, profileFields = {}) {
+  const cleanTeamCode = (teamCode || "").trim().toUpperCase();
+
+  if (!cleanTeamCode) {
+    showStatus("no", "Invite not found.");
+    return false;
+  }
+
+  showStatus("warn", "Checking team code...");
+
+  const { data: teamData, error: teamError } = await supabaseClient
+    .from("teams")
+    .select("id, name, team_code, plan, max_users, subscription_status")
+    .eq("team_code", cleanTeamCode)
+    .maybeSingle();
+
+  if (teamError) {
+    showStatus("no", "Invite not found: " + teamError.message);
+    return false;
+  }
+
+  if (!teamData) {
+    showStatus("no", "Invite not found.");
+    return false;
+  }
+
+  if (!teamIsActive(teamData)) {
+    showStatus("no", "Team inactive. Please contact your team owner.");
+    return false;
+  }
+
+  const { memberCount, pendingInviteCount } = await getTeamSeatCounts(teamData.id);
+
+  if (teamData.max_users && memberCount + pendingInviteCount >= teamData.max_users) {
+    showStatus("no", "Team is full.");
+    return false;
+  }
+
+  const { error: memberError } = await supabaseClient
+    .from("members")
+    .insert({
+      team_id: teamData.id,
+      user_id: user.id,
+      role: "therapist"
+    });
+
+  if (memberError) {
+    console.error("Membership setup failed:", memberError);
+    showStatus("no", "Membership setup failed: " + memberError.message);
+    return false;
+  }
+
+  const profileReady = await setupTeamProfile(user, {
+    email: normalizeEmail(user.email),
+    ...profileFields
+  });
+
+  if (!profileReady) return false;
+
+  showStatus("ok", "Joined team successfully. Taking you to your dashboard...");
+  window.location.href = DASHBOARD_PAGE;
+  return true;
+}
+
 async function handleAuthSubmit(event, type) {
   event.preventDefault();
 
@@ -511,6 +788,19 @@ async function handleAuthSubmit(event, type) {
       }
 
       console.log("Supabase login data", loginData);
+      const invitedToTeam = await acceptPendingInviteForUser(loginData.user);
+      if (invitedToTeam) return;
+
+      const hasActiveAccess = await userHasActiveAccess(loginData.user);
+      console.log("Login routing active access result:", hasActiveAccess);
+
+      if (hasActiveAccess) {
+        showStatus("ok", "Logged in successfully. Taking you to your dashboard...");
+        window.location.href = DASHBOARD_PAGE;
+        return;
+      }
+
+      console.log("Login routing: no active access, sending to plan selection.");
       showStatus("ok", "Logged in successfully. Taking you to plan selection...");
       window.location.href = PLAN_PAGE;
 
@@ -527,6 +817,7 @@ async function handleAuthSubmit(event, type) {
         email,
         clinic_name,
         heard_from,
+        plan,
         role,
         password,
         password_confirm
@@ -538,9 +829,30 @@ async function handleAuthSubmit(event, type) {
       }
 
       const fullName = getFullName(data);
-      const clinicName = clinic_name;
+      const clinicName = (clinic_name || "").trim();
       const heardFrom = heard_from;
+      const selectedPlan = plan;
       const selectedRole = role;
+
+      if (selectedPlan !== INDIVIDUAL_PLAN && !TEAM_PLAN_LIMITS[selectedPlan]) {
+        showStatus("no", "Please choose an individual, clinic, or enterprise account type.");
+        return;
+      }
+
+      if (selectedPlan === INDIVIDUAL_PLAN && selectedRole !== "therapist") {
+        showStatus("no", "Individual accounts are for therapists using STRIVE outside a clinic team.");
+        return;
+      }
+
+      if (selectedPlan !== INDIVIDUAL_PLAN && selectedRole !== "owner") {
+        showStatus("no", "The first account for a clinic or enterprise team must be the owner. Invited therapists can join later with the team code.");
+        return;
+      }
+
+      if (selectedPlan !== INDIVIDUAL_PLAN && !clinicName) {
+        showStatus("no", "Please enter the clinic, practice, or organization name for a team account.");
+        return;
+      }
 
       showStatus("warn", "Creating your account...");
 
@@ -553,7 +865,8 @@ async function handleAuthSubmit(event, type) {
             full_name: fullName,
             clinic_name: clinicName,
             heard_from: heardFrom,
-            role: selectedRole
+            role: selectedRole,
+            plan: selectedPlan
           }
         }
       });
@@ -570,18 +883,37 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
+      const invitedToTeam = await acceptPendingInviteForUser(user);
+      if (invitedToTeam) return;
+
+      if (selectedPlan === INDIVIDUAL_PLAN) {
+        const trialReady = await setupTrialAccess(user.id, {
+          heard_from: heardFrom
+        });
+        if (!trialReady) return;
+
+        showStatus("ok", "Individual therapist account created successfully. Taking you to your dashboard...");
+        window.location.href = DASHBOARD_PAGE;
+        return;
+      }
+
       // 2. Create practice/team
       // Solo practitioners still get a team with one member.
       const teamId = crypto.randomUUID();
+      const teamCode = generateTeamCode();
 
       const { data: team, error: teamError } = await supabaseClient
         .from("teams")
         .insert({
           id: teamId,
           name: clinicName,
-          owner_id: user.id
+          owner_id: user.id,
+          plan: selectedPlan,
+          max_users: TEAM_PLAN_LIMITS[selectedPlan],
+          subscription_status: "trialing",
+          team_code: teamCode
         })
-        .select("id")
+        .select("id, team_code")
         .single();
 
       if (teamError) {
@@ -606,7 +938,8 @@ async function handleAuthSubmit(event, type) {
       }
 
       const trialReady = await setupTrialAccess(user.id, {
-        heard_from: heardFrom
+        heard_from: heardFrom,
+        access_type: "team"
       });
       if (!trialReady) return;
 
@@ -635,53 +968,7 @@ async function handleAuthSubmit(event, type) {
       const cleanTeamCode = team_code.trim().toUpperCase();
       const fullName = getFullName(data);
 
-      showStatus("warn", "Checking team code...");
-
-      // 1. Look up team by team code
-      const { data: teamData, error: teamError } = await supabaseClient
-        .from("teams")
-        .select("id, name, team_code, plan, max_users, subscription_status")
-        .eq("team_code", cleanTeamCode)
-        .maybeSingle();
-
-      if (teamError) {
-        showStatus("no", "Team lookup failed: " + teamError.message);
-        return;
-      }
-
-      if (!teamData) {
-        showStatus("no", "Invalid team code. Please check the code and try again.");
-        return;
-      }
-
-      // 2. Optional: block if team is not active/trialing
-      if (
-        teamData.subscription_status &&
-        !["trialing", "active"].includes(teamData.subscription_status)
-      ) {
-        showStatus("no", "This team is not currently active. Please contact your team owner.");
-        return;
-      }
-
-      // 3. Count current team members
-      const { count: memberCount, error: countError } = await supabaseClient
-        .from("members")
-        .select("*", { count: "exact", head: true })
-        .eq("team_id", teamData.id);
-
-      if (countError) {
-        showStatus("no", "Could not check team member limit: " + countError.message);
-        return;
-      }
-
-      // 4. Block if team is full
-      if (teamData.max_users && memberCount >= teamData.max_users) {
-        showStatus("no", "This team has reached its user limit.");
-        return;
-      }
-
-      const clinicName = teamData.name;
-      const selectedRole = "member";
+      const selectedRole = "therapist";
 
       showStatus("warn", "Creating your account...");
 
@@ -692,13 +979,45 @@ async function handleAuthSubmit(event, type) {
         options: {
           data: {
             full_name: fullName,
-            clinic_name: clinicName,
             role: selectedRole
           }
         }
       });
 
       if (signupError) {
+        const message = signupError.message.toLowerCase();
+
+        if (
+          message.includes("already registered") ||
+          message.includes("already exists") ||
+          message.includes("user already")
+        ) {
+          showStatus("warn", "This account already exists. Signing you in and applying your team invite...");
+
+          const { data: loginData, error: loginError } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (loginError) {
+            showStatus(
+              "no",
+              "An account already exists with this email. Please use the Access Your Account form to sign in, then your team invite will be applied automatically."
+            );
+            return;
+          }
+
+          const existingUser = loginData.user;
+
+          const invitedToTeam = await acceptPendingInviteForUser(existingUser);
+          if (invitedToTeam) return;
+
+          await joinTeamByCodeForUser(existingUser, cleanTeamCode, {
+            full_name: fullName
+          });
+          return;
+        }
+
         showStatus("no", signupError.message);
         return;
       }
@@ -710,25 +1029,12 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      // 6. Add user to team
-      const { error: memberError } = await supabaseClient
-        .from("members")
-        .insert({
-          team_id: teamData.id,
-          user_id: user.id,
-          role: selectedRole
-        });
+      const invitedToTeam = await acceptPendingInviteForUser(user);
+      if (invitedToTeam) return;
 
-      if (memberError) {
-        showStatus("no", "Account created, but team membership failed: " + memberError.message);
-        return;
-      }
-
-      const trialReady = await setupTrialAccess(user.id);
-      if (!trialReady) return;
-
-      showStatus("ok", "Account created and joined to team successfully. Taking you to your dashboard...");
-      window.location.href = DASHBOARD_PAGE;
+      await joinTeamByCodeForUser(user, cleanTeamCode, {
+        full_name: fullName
+      });
       return;
     }
 
