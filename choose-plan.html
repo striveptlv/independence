@@ -80,6 +80,11 @@ nav{
   background:rgba(255,255,255,.72);border:1px solid var(--gb);
   color:var(--muted-s);font-size:.95rem;font-weight:700;
 }
+.account-check.notice{
+  background:rgba(255,255,255,.88);
+  border-color:rgba(245,130,10,.32);
+  color:var(--navy);
+}
 .account-check.hide{display:none}
 .tier-grid{display:none;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
 .tier-grid.ready{display:grid}
@@ -254,15 +259,17 @@ const DASHBOARD_PAGE = "dashboard.html";
 const checkoutStatus = document.getElementById("checkoutStatus");
 const pageParams = new URLSearchParams(window.location.search);
 const checkoutParam = pageParams.get("checkout");
+const reasonParam = pageParams.get("reason");
 const upgradeIntent = pageParams.get("upgrade") === "1";
 if (checkoutParam === "cancelled" && checkoutStatus) {
   checkoutStatus.classList.add("show");
 }
 const accountCheck = document.getElementById("accountCheck");
 const planGrid = document.getElementById("planGrid");
+const teamAccessRemovedMessage = "Your team access was removed. You can continue using STRIVE Independence by choosing a new plan.";
 
 function showPlans() {
-  if (accountCheck) accountCheck.classList.add("hide");
+  if (accountCheck && reasonParam !== "team_access_removed") accountCheck.classList.add("hide");
   if (planGrid) planGrid.classList.add("ready");
 }
 
@@ -272,6 +279,12 @@ function showAccountCheckError(message) {
     accountCheck.classList.remove("hide");
   }
   if (planGrid) planGrid.classList.remove("ready");
+}
+
+if (reasonParam === "team_access_removed" && accountCheck) {
+  accountCheck.textContent = teamAccessRemovedMessage;
+  accountCheck.classList.add("notice");
+  accountCheck.classList.remove("hide");
 }
 
 async function getCurrentUser() {
@@ -366,15 +379,19 @@ async function checkAccessOrRedirect() {
       }
 
       if (!membership) {
-        console.warn("Team access removed; signing user out:", user.id);
-        await supabaseClient.auth.signOut();
-        window.location.href = AUTH_PAGE + "?error=team_access_removed";
-        return null;
+        console.warn("Team access removed; keeping user signed in for plan selection:", user.id);
+        showPlans();
+        return { user, profile };
       }
 
       console.log("Team membership active:", membership.team_id, membership.role);
       window.location.href = DASHBOARD_PAGE;
       return null;
+    }
+
+    if (profile?.access_type === "removed_team") {
+      showPlans();
+      return { user, profile };
     }
 
     if (upgradeIntent && hasActiveTrial(profile)) {

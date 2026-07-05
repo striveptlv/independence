@@ -366,6 +366,8 @@ const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const PLAN_PAGE = "choose-plan.html";
+const TEAM_ACCESS_REMOVED_PAGE = PLAN_PAGE + "?reason=team_access_removed";
 
 const state = {
   user: null,
@@ -564,19 +566,33 @@ async function initializePage() {
 
       if (membershipError) {
         console.error("Team membership check failed:", membershipError.message);
-        window.location.href = "auth.html";
+        window.location.href = PLAN_PAGE;
         return;
       }
 
       if (!membership) {
-        console.warn("Team access removed; signing user out:", user.id);
-        await supabase.auth.signOut();
-        window.location.href = "auth.html?error=team_access_removed";
+        console.warn("Team access removed; sending user to plan selection:", user.id);
+        window.location.href = TEAM_ACCESS_REMOVED_PAGE;
         return;
       }
 
       console.log("Team membership active:", membership.team_id, membership.role);
       activeMembership = membership;
+    }
+
+    if (profile.access_type === "removed_team") {
+      console.warn("Removed team profile; sending user to plan selection:", user.id);
+      window.location.href = TEAM_ACCESS_REMOVED_PAGE;
+      return;
+    }
+
+    const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+    const trialActive = profile.access_type === "trial" && trialEndsAt && trialEndsAt > new Date();
+    const paidActive = profile.access_type === "paid" && profile.has_access === true;
+
+    if (profile.access_type !== "team" && !(trialActive || paidActive)) {
+      window.location.href = PLAN_PAGE;
+      return;
     }
 
     const access = await loadTeamForUser(user, activeMembership);

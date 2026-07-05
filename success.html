@@ -139,6 +139,8 @@ const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjZnBkZ21td2tnaGpzemtibnpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NzM4MjYsImV4cCI6MjA5NjQ0OTgyNn0.c2ocYnK9bvQo4uTJtxXbjk6KdizCI_vaNDCt0HFYXuk";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const PLAN_PAGE = "choose-plan.html";
+const TEAM_ACCESS_REMOVED_PAGE = PLAN_PAGE + "?reason=team_access_removed";
 
 const statusTitle = document.getElementById("statusTitle");
 const statusMessage = document.getElementById("statusMessage");
@@ -197,7 +199,7 @@ async function checkAccess() {
 
   const { data: profile, error: profileError } = await supabase
     .from("profile")
-    .select("has_access, user_id, access_type")
+    .select("has_access, user_id, access_type, trial_ends_at")
     .eq("user_id", user.id)
     .single();
 
@@ -228,21 +230,31 @@ async function checkAccess() {
     }
 
     if (!membership) {
-      console.warn("Team access removed; signing user out:", user.id);
-      await supabase.auth.signOut();
-      window.location.href = "auth.html?error=team_access_removed";
+      console.warn("Team access removed; sending user to plan selection:", user.id);
+      window.location.href = TEAM_ACCESS_REMOVED_PAGE;
       return;
     }
 
     console.log("Team membership active:", membership.team_id, membership.role);
-  }
-
-  if (profile && profile.has_access === true) {
     showAccessConfirmed();
     return;
   }
 
-  showStillActivating();
+  if (profile?.access_type === "removed_team") {
+    window.location.href = TEAM_ACCESS_REMOVED_PAGE;
+    return;
+  }
+
+  const trialEndsAt = profile?.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+  const trialActive = profile?.access_type === "trial" && trialEndsAt && trialEndsAt > new Date();
+  const paidActive = profile?.access_type === "paid" && profile.has_access === true;
+
+  if (trialActive || paidActive) {
+    showAccessConfirmed();
+    return;
+  }
+
+  window.location.href = PLAN_PAGE;
 }
 
 checkAccess().catch(() => {
