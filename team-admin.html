@@ -377,6 +377,7 @@ const state = {
   teamInvites: [],
   pendingInvites: [],
   profileMap: new Map(),
+  hiddenInviteIds: new Set(),
   locationFilter: ""
 };
 
@@ -520,6 +521,35 @@ function isEnterpriseTeam() {
   return state.team?.plan === "enterprise";
 }
 
+function currentUserOwnsTeam() {
+  return Boolean(state.user?.id && state.team?.owner_id === state.user.id);
+}
+
+function getHiddenInviteStorageKey() {
+  return state.team?.id ? "strive_hidden_invites_" + state.team.id : "";
+}
+
+function loadHiddenInviteIds() {
+  const storageKey = getHiddenInviteStorageKey();
+  state.hiddenInviteIds = new Set();
+  if (!storageKey) return;
+
+  try {
+    const hiddenIds = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    if (Array.isArray(hiddenIds)) {
+      state.hiddenInviteIds = new Set(hiddenIds.filter(Boolean));
+    }
+  } catch (error) {
+    console.warn("Could not load hidden invite rows:", error);
+  }
+}
+
+function saveHiddenInviteIds() {
+  const storageKey = getHiddenInviteStorageKey();
+  if (!storageKey) return;
+  localStorage.setItem(storageKey, JSON.stringify([...state.hiddenInviteIds]));
+}
+
 function visibleByLocation(itemLocation) {
   return !state.locationFilter || itemLocation === state.locationFilter;
 }
@@ -608,6 +638,7 @@ async function initializePage() {
 
     state.team = access.team;
     state.role = access.role;
+    loadHiddenInviteIds();
     renderTeamIdentity();
 
     if (!access.canManage) {
@@ -760,7 +791,7 @@ async function loadProfilesForMembers() {
 
 function renderPage() {
   renderTeamIdentity();
-  els.rolePill.textContent = state.role === "owner" ? "Owner" : "Admin";
+  els.rolePill.textContent = currentUserOwnsTeam() ? "Owner" : "Admin";
   els.teamPlan.textContent = formatLabel(state.team.plan);
   els.teamStatus.textContent = formatTeamStatus(state.team.subscription_status);
   els.maxUsers.textContent = state.team.max_users ?? "-";
@@ -827,6 +858,7 @@ function renderPendingInvites() {
   const showLocation = isEnterpriseTeam();
   const invites = state.teamInvites
     .filter(invite => invite.status !== "accepted" && !invite.accepted_user_id)
+    .filter(invite => !state.hiddenInviteIds.has(invite.id))
     .filter(invite => visibleByLocation(invite.location_label || ""));
 
   els.pendingInvitesHead.innerHTML = `
@@ -844,12 +876,19 @@ function renderPendingInvites() {
 
   invites.forEach(invite => {
     const canRemove = invite.status === "pending";
+    const canResendEmail = invite.status === "pending" && currentUserOwnsTeam() && invite.email;
     const canReinstate = invite.status === "removed";
     let action = `<span class="mono">-</span>`;
     if (canRemove) {
-      action = `<button class="mini-button danger" type="button" data-remove-invite="${escapeHtml(invite.id)}">Remove</button>`;
+      action = `
+        ${canResendEmail ? `<button class="mini-button" type="button" data-resend-invite-email="${escapeHtml(invite.email)}">Resend Email</button>` : ""}
+        <button class="mini-button danger" type="button" data-remove-invite="${escapeHtml(invite.id)}">Remove</button>
+      `;
     } else if (canReinstate) {
-      action = `<button class="mini-button restore" type="button" data-reinstate-invite="${escapeHtml(invite.id)}">Reinstate</button>`;
+      action = `
+        <button class="mini-button restore" type="button" data-reinstate-invite="${escapeHtml(invite.id)}">Reinstate</button>
+        ${currentUserOwnsTeam() ? `<button class="mini-button danger" type="button" data-delete-invite="${escapeHtml(invite.id)}">Delete Row</button>` : ""}
+      `;
     }
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -868,6 +907,12 @@ function renderPendingInvites() {
   });
   els.pendingInvitesBody.querySelectorAll("[data-reinstate-invite]").forEach(button => {
     button.addEventListener("click", () => reinstateInvite(button.dataset.reinstateInvite, button));
+  });
+  els.pendingInvitesBody.querySelectorAll("[data-resend-invite-email]").forEach(button => {
+    button.addEventListener("click", () => resendInviteEmail(button.dataset.resendInviteEmail, button));
+  });
+  els.pendingInvitesBody.querySelectorAll("[data-delete-invite]").forEach(button => {
+    button.addEventListener("click", () => hideRemovedInviteRow(button.dataset.deleteInvite));
   });
 }
 
@@ -960,15 +1005,161 @@ async function createInvite(event) {
 
     if (error) throw error;
 
+    setStatus("warn", "Invite created. Sending email...");
+    const emailResult = await sendTeamCodeEmail(email);
+
     els.inviteForm.reset();
     els.inviteRole.value = "therapist";
-    await refreshTeamData("Invite added for " + email + ".");
+    await refreshTeamData(emailResult.ok
+      ? "Invite added and email sent to " + email + "."
+      : "Invite added for " + email + ".");
+
+    if (!emailResult.ok) {
+      console.error("Team code email failed after invite creation:", emailResult.error);
+      setStatus("warn", "Therapist was added, but the email could not be sent.");
+    }
   } catch (error) {
     console.error(error);
     setStatus("no", error.message || "Invite could not be created.");
   } finally {
     setBusy(false);
   }
+}
+
+async function sendTeamCodeEmail(email) {
+  if (!state.team?.team_code) {
+    console.warn("Team code email skipped because no team code is available.");
+    return {
+      ok: false,
+      error: "No team code is available."
+    };
+  }
+
+  try {
+    console.log("Calling send-team-code-email", {
+      email,
+      team_code: state.team.team_code,
+      clinic_name: state.team.name || "your clinic"
+    });
+
+    const { data, error } = await supabase.functions.invoke("send-team-code-email", {
+      body: {
+        email,
+        team_code: state.team.team_code,
+        clinic_name: state.team.name || "your clinic"
+      }
+    });
+
+    if (data?.ok) {
+      console.log("Team code email sent:", data);
+      return {
+        ok: true,
+        error: null,
+        message: ""
+      };
+    }
+
+    if (error) {
+      const functionErrorBody = await readFunctionErrorBody(error);
+
+      if (functionErrorBody?.ok) {
+        console.log("Team code email sent:", functionErrorBody);
+        return {
+          ok: true,
+          error: null,
+          message: ""
+        };
+      }
+
+      console.error("Team code email function error:", error, functionErrorBody);
+      return {
+        ok: false,
+        error: functionErrorBody || error,
+        message: formatEmailError(functionErrorBody || error)
+      };
+    }
+
+    if (!data?.ok) {
+      console.error("Team code email function returned failure:", data);
+      return {
+        ok: false,
+        error: data,
+        message: formatEmailError(data)
+      };
+    }
+
+    return {
+      ok: false,
+      error: data,
+      message: formatEmailError(data)
+    };
+  } catch (error) {
+    console.error("Team code email failed:", error);
+    return {
+      ok: false,
+      error,
+      message: formatEmailError(error)
+    };
+  }
+}
+
+async function readFunctionErrorBody(error) {
+  const response = error?.context;
+
+  if (!response || typeof response.clone !== "function") {
+    return null;
+  }
+
+  try {
+    const text = await response.clone().text();
+    if (!text) return null;
+
+    try {
+      return JSON.parse(text);
+    } catch {
+      return text;
+    }
+  } catch (readError) {
+    console.warn("Could not read email function error body:", readError);
+    return null;
+  }
+}
+
+function formatEmailError(error) {
+  if (!error) return "Unknown email error.";
+  if (typeof error === "string") return error;
+  const details = error.details || error.context || error;
+  if (typeof details === "string") return details;
+  if (details?.message) return details.message;
+  if (details?.error) return details.error;
+  if (details?.name && details?.status) return `${details.name}: ${details.status}`;
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return "Unknown email error.";
+  }
+}
+
+async function resendInviteEmail(email, button) {
+  if (!isValidEmail(email)) {
+    setStatus("no", "This invite does not have a valid email address.");
+    return;
+  }
+
+  button.disabled = true;
+  setStatus("warn", "Resending invite email...");
+
+  const emailResult = await sendTeamCodeEmail(email);
+
+  if (!emailResult.ok) {
+    console.error("Invite email resend failed:", emailResult.error);
+    setStatus("no", "Invite email could not be sent: " + emailResult.message);
+    button.disabled = false;
+    return;
+  }
+
+  setStatus("ok", "Invite email resent to " + email + ".");
+  button.disabled = false;
 }
 
 async function removeInvite(inviteId, button) {
@@ -1025,6 +1216,20 @@ async function reinstateInvite(inviteId, button) {
     setStatus("no", error.message || "Invite could not be reinstated.");
     button.disabled = false;
   }
+}
+
+function hideRemovedInviteRow(inviteId) {
+  const invite = state.teamInvites.find(row => row.id === inviteId);
+
+  if (!invite || invite.status !== "removed") {
+    setStatus("warn", "Only removed invite rows can be hidden.");
+    return;
+  }
+
+  state.hiddenInviteIds.add(inviteId);
+  saveHiddenInviteIds();
+  renderTables();
+  setStatus("ok", "Removed invite row hidden from this browser.");
 }
 
 async function revokeMemberAccess(userId, button) {
