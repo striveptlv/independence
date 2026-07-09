@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medium | Red Rock Unlimited VISA</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="./app.js?v=goals-2"></script>
+<script type="module" data-strive-access-guard>
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
+
+const AUTH_URL = "https://independence.striveptlv.com/auth.html";
+const PLAN_URL = "https://independence.striveptlv.com/choose-plan.html";
+const TEAM_ACCESS_REMOVED_URL = PLAN_URL + "?reason=team_access_removed";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function checkStriveAccess() {
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profile")
+    .select("has_access, access_type, trial_ends_at")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    console.error("Profile fetch failed:", profileError?.message);
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  if (profile.access_type === "team") {
+    const { data: membership, error: membershipError } = await supabase
+      .from("members")
+      .select("team_id, role")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (membershipError) {
+      console.error("Team membership check failed:", membershipError.message);
+      window.location.replace(PLAN_URL);
+      return;
+    }
+
+    if (!membership) {
+      window.location.replace(TEAM_ACCESS_REMOVED_URL);
+      return;
+    }
+
+    return;
+  }
+
+  if (profile.access_type === "removed_team") {
+    window.location.replace(TEAM_ACCESS_REMOVED_URL);
+    return;
+  }
+
+  const now = new Date();
+  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+
+  const trialActive =
+    profile.access_type === "trial" &&
+    trialEndsAt &&
+    trialEndsAt > now;
+
+  const paidActive =
+    profile.access_type === "paid" &&
+    profile.has_access === true;
+
+  const adminActive =
+    profile.access_type === "admin" &&
+    profile.has_access === true;
+
+  if (!(trialActive || paidActive || adminActive)) {
+    window.location.replace(PLAN_URL);
+  }
+}
+
+checkStriveAccess().catch((error) => {
+  console.error("Access check failed:", error);
+  window.location.replace(AUTH_URL);
+});
+</script>
+  </head>
+  <body class="medium-mode">
+    <section class="login-screen" data-login-screen>
+      <div class="card login-card">
+        <p class="eyebrow">Sign In Required</p>
+        <h1>Red Rock Unlimited VISA</h1>
+        <p class="muted">Use the separate reference page to find the sign-in password.</p>
+        <form class="login-form" data-login-form>
+          <label>Username <input type="text" name="username" autocomplete="off" /></label>
+          <label>Password <input type="password" name="password" autocomplete="off" /></label>
+          <button class="cta" type="submit">Sign In</button>
+          <p class="status" data-login-status></p>
+        </form>
+        <div class="access-note">
+          <a class="secondary" href="./bank-info.html" target="_blank" rel="noreferrer" data-reference-link>Open practice reference page</a>
+        </div>
+      </div>
+    </section>
+
+    <main class="shell hidden" id="dashboard" data-secure-shell data-dashboard-top>
+      <section class="hero">
+        <div class="page-top">
+          <div>
+            <p class="eyebrow">Medium Difficulty</p>
+            <h1>Red Rock Unlimited VISA Card Center</h1>
+            <p class="muted">
+              Complete the payment using the separate reference page, then check the current credit score.
+            </p>
+          </div>
+          <div class="utility-row">
+            <a class="secondary" href="./bank-info.html" target="_blank" rel="noreferrer" data-reference-link>Open Bank Info</a>
+            <a class="secondary" href="./index.html">Back to Home</a>
+          </div>
+        </div>
+
+        <div class="summary-strip">
+          <div class="summary-box"><span>Statement balance</span><strong>$2,328.44</strong></div>
+          <div class="summary-box"><span>Pending</span><strong>$184.61</strong></div>
+          <div class="summary-box"><span>Minimum due</span><strong>$35.00</strong></div>
+          <div class="summary-box"><span>Due date</span><strong>April 18, 2026</strong></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="panel">
+          <div class="tabs" data-tabs>
+            <button class="tab-button active" type="button" data-target="medium-overview">Overview</button>
+            <button class="tab-button" type="button" data-target="medium-pay">Payments</button>
+            <button class="tab-button" type="button" data-target="medium-tools">Tools</button>
+          </div>
+
+          <section id="medium-overview" data-tab-panel>
+            <h2>Account Snapshot</h2>
+            <ul class="details-list">
+              <li><span>Bank</span><strong>Lake Mead Capital Bank</strong></li>
+              <li><span>Card</span><strong>Red Rock Unlimited VISA</strong></li>
+              <li><span>Card number</span><strong>5293 8471 0293 8475</strong></li>
+              <li><span>Account number</span><strong>5410082763</strong></li>
+              <li><span>APR</span><strong>18.44%</strong></li>
+              <li><span>Credit limit</span><strong>$5,000.00</strong></li>
+              <li><span>Cardholder</span><strong>Jordan Lee</strong></li>
+            </ul>
+          </section>
+
+          <section id="medium-pay" class="hidden" data-tab-panel>
+            <h2>Schedule Payment</h2>
+            <form class="payment-form" data-payment-form>
+              <div class="payment-choice">
+                <label class="choice">
+                  <input type="radio" name="paymentOption" value="full" checked />
+                  <span><strong>Pay full balance</strong><br />Current balance with pending: $2,513.05</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="paymentOption" value="minimum" />
+                  <span><strong>Pay minimum</strong><br />Minimum due: $35.00</span>
+                </label>
+              </div>
+              <div class="field-grid">
+                <label>Account number <input name="bankAccountNumber" type="text" autocomplete="off" /></label>
+                <label>Routing number <input name="routingNumber" type="text" autocomplete="off" /></label>
+              </div>
+              <label>Account name <input name="accountName" type="text" autocomplete="off" /></label>
+              <div class="field-grid">
+                <label>Payment amount <input name="paymentAmount" type="text" value="2513.05" data-amount /></label>
+                <label>Payment date <input name="paymentDate" type="date" data-date /></label>
+              </div>
+              <button class="cta" type="submit">Schedule Payment</button>
+              <p class="status" data-status></p>
+            </form>
+          </section>
+
+          <section id="medium-tools" class="hidden" data-tab-panel>
+            <h2>Extra Task</h2>
+            <p class="muted">Check the current credit score after scheduling the payment.</p>
+            <button class="cta" type="button" data-show-score>Check Credit Score</button>
+          </section>
+        </div>
+
+        <div class="panel">
+          <h2>Goals</h2>
+          <ul class="goal-list">
+            <li class="goal-item" data-goal-item="login"><span class="goal-box"></span><span>Sign in to the website</span></li>
+            <li class="goal-item" data-goal-item="reference"><span class="goal-box"></span><span>Open the separate reference page</span></li>
+            <li class="goal-item" data-goal-item="choice"><span class="goal-box"></span><span>Choose full balance or minimum payment</span></li>
+            <li class="goal-item" data-goal-item="payment"><span class="goal-box"></span><span>Schedule the payment before April 18, 2026</span></li>
+            <li class="goal-item" data-goal-item="score"><span class="goal-box"></span><span>Check the credit score</span></li>
+          </ul>
+          <div class="reference-block" style="margin-top: 18px;">
+            <h3>Cardholder</h3>
+            <p>
+              Jordan Lee<br />
+              1180 Desert Bloom Court<br />
+              Las Vegas, NV 89117
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 22px;">
+        <h2>Recent Activity</h2>
+        <ul class="ledger">
+          <li><span>Pending</span><span>New Vegas Electric<small>Utility</small></span><span class="amount pending">$184.61</span><span></span></li>
+          <li><span>04/01/2026</span><span>Strive Physical Therapy Las Vegas<small>Medical</small></span><span class="amount">$241.42</span><span></span></li>
+          <li><span>03/29/2026</span><span>Grocery Outlet<small>Groceries</small></span><span class="amount">$152.11</span><span></span></li>
+          <li><span>03/27/2026</span><span>Target<small>Retail</small></span><span class="amount">$88.62</span><span></span></li>
+          <li><span>03/25/2026</span><span>Auto Insurance Direct<small>Insurance</small></span><span class="amount">$146.55</span><span></span></li>
+          <li><span>03/23/2026</span><span>HomeGoods Plus<small>Retail</small></span><span class="amount">$221.09</span><span></span></li>
+          <li><span>03/20/2026</span><span>Southwest Air<small>Travel</small></span><span class="amount">$412.88</span><span></span></li>
+          <li><span>03/18/2026</span><span>Desert Trails Hotel<small>Travel</small></span><span class="amount">$318.67</span><span></span></li>
+          <li><span>03/16/2026</span><span>Red Rock Coffee<small>Cafe</small></span><span class="amount">$47.82</span><span></span></li>
+          <li><span>03/16/2026</span><span>Red Rock Coffee<small>Cafe</small></span><span class="amount">$47.82</span><span></span></li>
+          <li><span>03/14/2026</span><span>Mojave Mobile<small>Wireless bill</small></span><span class="amount">$92.10</span><span></span></li>
+          <li><span>03/13/2026</span><span>Lakeview Pharmacy<small>Health</small></span><span class="amount">$18.44</span><span></span></li>
+          <li><span>03/12/2026</span><span>Sunrise Fitness<small>Membership</small></span><span class="amount">$39.00</span><span></span></li>
+          <li><span>03/11/2026</span><span>Canyon Bistro<small>Dining</small></span><span class="amount">$73.22</span><span></span></li>
+          <li><span>03/10/2026</span><span>Silver State Market<small>Groceries</small></span><span class="amount">$124.56</span><span></span></li>
+          <li><span>03/08/2026</span><span>Desert Streaming<small>Subscription</small></span><span class="amount">$16.99</span><span></span></li>
+          <li><span>03/07/2026</span><span>Mojave Fuel<small>Gas station</small></span><span class="amount">$58.73</span><span></span></li>
+          <li><span>03/06/2026</span><span>Westside Pharmacy<small>Health</small></span><span class="amount">$42.18</span><span></span></li>
+          <li><span>03/05/2026</span><span>Silver State Grocer<small>Household</small></span><span class="amount">$186.24</span><span></span></li>
+        </ul>
+      </section>
+    </main>
+
+    <div class="modal hidden" data-score-modal>
+      <div class="modal-card">
+        <p class="eyebrow">Credit Score</p>
+        <h3>Jordan Lee's current score is 742</h3>
+        <ul class="score-list">
+          <li>On-time payments: Strong</li>
+          <li>Credit usage: Moderate</li>
+          <li>Available credit: $2,671.56</li>
+        </ul>
+        <div class="button-row" style="margin-top: 18px;">
+          <button class="cta" type="button" data-close-score>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" data-complete-modal>
+      <div class="modal-card">
+        <h3>ALL TASKS COMPLETED!</h3>
+        <div class="button-row">
+          <button class="cta" type="button" data-dismiss>Close</button>
+        </div>
+      </div>
+    </div>
+    <p class="site-credit">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+  </body>
+</html>

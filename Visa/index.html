@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lake Mead Capital Bank | Credit Card Home Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; overflow-x: hidden; }
+
+      :root {
+        --navy:       #132338;
+        --blue:       #1B4FA8;
+        --orange:     #F5820A;
+        --muted:      rgba(26,46,68,0.52);
+        --muted-s:    rgba(26,46,68,0.74);
+        --gb:         rgba(27,79,168,0.13);
+        --line:       rgba(19,35,56,0.10);
+        --line-m:     rgba(19,35,56,0.18);
+        --surface:    rgba(255,255,255,0.94);
+        --easy:       #1B4FA8;
+        --medium:     #0f766e;
+        --hard:       #d97706;
+        --real:       #b42318;
+      }
+
+      body {
+        font-family: 'Outfit', sans-serif;
+        font-size: 17px;
+        line-height: 1.58;
+        color: var(--navy);
+        background: #f3f6fa;
+        overflow-x: hidden;
+        padding-top: 72px;
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      body::before {
+        content: '';
+        position: fixed; inset: 0;
+        background:
+          linear-gradient(90deg, rgba(27,79,168,0.055) 0 1px, transparent 1px 100%),
+          radial-gradient(ellipse 78% 38% at 50% -8%, rgba(27,79,168,0.11) 0%, transparent 62%),
+          radial-gradient(ellipse 45% 34% at 96% 18%, rgba(245,130,10,0.08) 0%, transparent 58%);
+        background-size: 32px 32px, auto, auto;
+        pointer-events: none; z-index: 0;
+      }
+
+      section, nav, main { position: relative; z-index: 1; }
+
+      nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+        height: 72px;
+        background: rgba(255,255,255,0.9);
+        backdrop-filter: blur(22px) saturate(1.6);
+        -webkit-backdrop-filter: blur(22px) saturate(1.6);
+        border-bottom: 1px solid rgba(19,35,56,0.11);
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 5vw;
+      }
+
+      .nav-logo { display: flex; align-items: center; gap: 11px; }
+      .logo-img  { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+      .logo-wrap { display: flex; flex-direction: column; line-height: 1; }
+      .logo-text { font-size: 21px; font-weight: 900; letter-spacing: 0.09em; color: var(--navy); text-transform: uppercase; }
+      .logo-sub  { font-size: 7.5px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--orange); margin-top: 1px; }
+
+      .nav-links { display: flex; align-items: center; gap: 20px; }
+      .nav-links a {
+        color: rgba(19,35,56,.72); font-size: 12px; font-weight: 700;
+        letter-spacing: 0.09em; text-transform: uppercase; transition: color .2s;
+      }
+      .nav-links a:hover { color: var(--blue); }
+
+      .contact-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 7px;
+        color: #fff !important;
+        background: var(--blue);
+        box-shadow: 0 12px 24px rgba(27,79,168,0.18);
+      }
+
+      .shell {
+        max-width: 1260px;
+        margin: 0 auto;
+        padding: 34px 5vw 68px;
+      }
+
+      .hero {
+        margin-bottom: 18px;
+        padding: clamp(1.35rem, 2.6vw, 2rem);
+        background: var(--surface);
+        border: 1px solid var(--gb);
+        border-radius: 12px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 18px 42px rgba(19,35,56,0.09);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute; inset: 0;
+        background:
+          radial-gradient(ellipse 55% 45% at 0% 0%, rgba(27,79,168,0.07), transparent 70%),
+          linear-gradient(90deg, rgba(19,35,56,0.04) 0 1px, transparent 1px 100%);
+        background-size: auto, 28px 28px;
+        pointer-events: none;
+      }
+
+      .hero > * { position: relative; }
+
+      .section-tag {
+        font-family: 'DM Mono', monospace;
+        font-size: 10px; font-weight: 500;
+        letter-spacing: 0.22em; text-transform: uppercase;
+        color: var(--orange); margin-bottom: 1rem;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .section-tag::before { content: ''; width: 18px; height: 1px; background: var(--orange); }
+
+      h1 {
+        font-size: clamp(2.25rem, 4.9vw, 4.55rem);
+        font-weight: 900;
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        color: var(--navy);
+        margin-bottom: 1rem;
+      }
+
+      h1 em {
+        font-style: normal;
+        color: var(--blue);
+      }
+
+      .hero-desc {
+        font-size: clamp(1rem, 1.6vw, 1.12rem);
+        color: var(--muted-s);
+        line-height: 1.72;
+        max-width: 68ch;
+        margin-bottom: 1.35rem;
+        font-weight: 400;
+      }
+
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center; gap: 8px;
+        background: rgba(255,255,255,0.5);
+        color: var(--navy);
+        font-size: 13px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        padding: 13px 26px;
+        border-radius: 7px;
+        border: 1px solid var(--line-m);
+        transition: border-color .2s, background .2s;
+      }
+      .btn-ghost:hover { border-color: rgba(27,79,168,.28); background: #fff; }
+
+      .hero-credit {
+        margin-top: 1.4rem;
+        font-family: 'DM Mono', monospace;
+        font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: 16px;
+      }
+
+      .card {
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.84)),
+          linear-gradient(135deg, var(--level-soft), rgba(255,255,255,0.76));
+        border: 1px solid var(--level-color);
+        border-radius: 20px;
+        padding: 24px;
+        display: flex; flex-direction: column;
+        position: relative; overflow: hidden;
+        box-shadow: 0 18px 40px var(--level-shadow);
+        transition:
+          opacity .65s cubic-bezier(.22,1,.36,1),
+          transform .65s cubic-bezier(.22,1,.36,1),
+          border-color .3s, box-shadow .3s;
+      }
+
+      .card:hover {
+        border-color: var(--level-color);
+        box-shadow: 0 24px 52px var(--level-shadow);
+        transform: translateY(-4px);
+      }
+
+      .card::after {
+        content: '';
+        position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+        background: transparent;
+        transition: background .35s;
+      }
+      .card:hover::after { background: transparent; }
+
+      .card::before {
+        content: "";
+        display: block;
+        height: 6px;
+        margin: -24px -24px 20px;
+        background: var(--level-color);
+        flex: 0 0 auto;
+      }
+      .card:hover::before { opacity: 1; }
+
+      .level-easy {
+        --level-color: #21a67a;
+        --level-soft: rgba(33,166,122,0.14);
+        --level-shadow: rgba(33,166,122,0.18);
+      }
+      .level-medium {
+        --level-color: #d7ad2f;
+        --level-soft: rgba(215,173,47,0.16);
+        --level-shadow: rgba(215,173,47,0.18);
+      }
+      .level-hard {
+        --level-color: #e87622;
+        --level-soft: rgba(232,118,34,0.15);
+        --level-shadow: rgba(232,118,34,0.18);
+      }
+      .level-real {
+        --level-color: #c83d3d;
+        --level-soft: rgba(200,61,61,0.14);
+        --level-shadow: rgba(200,61,61,0.18);
+      }
+
+      .card h2 {
+        font-size: 1.55rem;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--navy);
+        margin-bottom: 12px;
+        line-height: 1.12;
+      }
+
+      .card .muted {
+        color: var(--muted-s);
+        flex: 1;
+        margin-bottom: 1.6rem;
+      }
+
+      .launch {
+        display: flex;
+        align-items: center; justify-content: space-between;
+        padding: 14px 18px;
+        border: none; border-radius: 7px;
+        text-decoration: none;
+        color: #fff;
+        font-size: 12px; font-weight: 900;
+        letter-spacing: 0.13em; text-transform: uppercase;
+        transition: opacity .2s, transform .2s, box-shadow .2s;
+        position: relative; overflow: hidden;
+      }
+
+      .launch::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 55%);
+        pointer-events: none;
+      }
+
+      .launch:hover { opacity: .9; transform: translateY(-2px); }
+      .launch-arrow { font-size: 14px; opacity: .75; transition: transform .18s; }
+      .launch:hover .launch-arrow { transform: translateX(3px); opacity: 1; }
+
+      .level-easy .launch,
+      .level-medium .launch,
+      .level-hard .launch,
+      .level-real .launch {
+        background: var(--level-color);
+        box-shadow: 0 14px 28px var(--level-shadow);
+      }
+
+      .level-medium .launch { color: var(--navy); }
+
+      .card-actions {
+        display: grid;
+        gap: 10px;
+      }
+
+      .goal-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 7px;
+        border: 1px solid var(--line-m);
+        background: rgba(255,255,255,0.68);
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .goal-link:hover { background: #fff; border-color: rgba(27,79,168,.28); }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 500;
+        display: grid;
+        place-items: center;
+        padding: 22px;
+        background: rgba(6,16,30,0.76);
+        backdrop-filter: blur(8px);
+      }
+
+      .modal.hidden { display: none; }
+
+      .goal-modal {
+        width: min(680px, 100%);
+        max-height: min(760px, calc(100vh - 44px));
+        overflow: auto;
+        padding: 26px;
+        border-radius: 10px;
+        border: 1px solid var(--line-m);
+        background: #fff;
+        box-shadow: 0 28px 70px rgba(0,0,0,0.24);
+      }
+
+      .goal-modal h2 {
+        margin-bottom: 0.5rem;
+        font-size: clamp(1.7rem, 3vw, 2.55rem);
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .goal-modal p {
+        color: var(--muted-s);
+        margin-bottom: 1rem;
+      }
+
+      .goal-checklist {
+        display: grid;
+        gap: 10px;
+        margin: 18px 0;
+      }
+
+      .goal-check {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 13px 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #f8fbff;
+        font-weight: 700;
+      }
+
+      .goal-check:nth-child(2n) { border-radius: 24px 12px 24px 12px; }
+      .goal-check:nth-child(3n) { border-radius: 12px 24px 12px 24px; }
+
+      .goal-check input {
+        margin-top: 4px;
+        accent-color: var(--blue);
+      }
+
+      .modal-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .modal-actions .launch,
+      .modal-actions .goal-link {
+        width: auto;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .footer-note {
+        padding: 1.6rem 2rem;
+        background: var(--surface);
+        border: 1px solid var(--gb);
+        border-radius: 10px;
+        backdrop-filter: blur(12px);
+      }
+
+      .footer-note p {
+        font-size: 0.9rem;
+        color: var(--muted-s);
+        line-height: 1.65;
+        margin-top: 0.5rem;
+      }
+
+      .footer-note a {
+        color: var(--orange);
+        border-bottom: 1px solid rgba(245,130,10,.3);
+        transition: border-color .15s;
+      }
+      .footer-note a:hover { border-color: var(--orange); }
+
+      .teaching-guide {
+        margin-top: 18px;
+        padding: clamp(1.5rem, 2.6vw, 2rem);
+        background: var(--surface);
+        border: 1px solid var(--gb);
+        border-radius: 10px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 18px 42px rgba(19,35,56,0.07);
+      }
+
+      .teaching-guide h2 {
+        margin-bottom: 0.65rem;
+        font-size: clamp(1.7rem, 3vw, 2.55rem);
+        line-height: 1;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+
+      .teaching-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .teaching-card {
+        padding: 18px;
+        background: #fff;
+        border: 1px solid var(--line-m);
+        border-radius: 8px;
+      }
+
+      .teaching-card strong {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--blue);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .teaching-card p {
+        margin: 0;
+        color: var(--muted-s);
+        font-size: 0.92rem;
+        line-height: 1.58;
+      }
+
+      .site-footer {
+        margin-top: 18px;
+        font-family: 'DM Mono', monospace;
+        font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        .footer-grid,
+        .teaching-grid { grid-template-columns: 1fr; }
+        .grid { grid-template-columns: 1fr 1fr; }
+      }
+
+      @media (max-width: 540px) {
+        .grid { grid-template-columns: 1fr; }
+        .shell { padding: 32px 5% 56px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .card { transition: none !important; }
+        .launch, .btn-ghost { transition: none; }
+      }
+    </style>
+<script type="module" data-strive-access-guard>
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
+
+const AUTH_URL = "https://independence.striveptlv.com/auth.html";
+const PLAN_URL = "https://independence.striveptlv.com/choose-plan.html";
+const TEAM_ACCESS_REMOVED_URL = PLAN_URL + "?reason=team_access_removed";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function checkStriveAccess() {
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profile")
+    .select("has_access, access_type, trial_ends_at")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    console.error("Profile fetch failed:", profileError?.message);
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  if (profile.access_type === "team") {
+    const { data: membership, error: membershipError } = await supabase
+      .from("members")
+      .select("team_id, role")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (membershipError) {
+      console.error("Team membership check failed:", membershipError.message);
+      window.location.replace(PLAN_URL);
+      return;
+    }
+
+    if (!membership) {
+      window.location.replace(TEAM_ACCESS_REMOVED_URL);
+      return;
+    }
+
+    return;
+  }
+
+  if (profile.access_type === "removed_team") {
+    window.location.replace(TEAM_ACCESS_REMOVED_URL);
+    return;
+  }
+
+  const now = new Date();
+  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+
+  const trialActive =
+    profile.access_type === "trial" &&
+    trialEndsAt &&
+    trialEndsAt > now;
+
+  const paidActive =
+    profile.access_type === "paid" &&
+    profile.has_access === true;
+
+  const adminActive =
+    profile.access_type === "admin" &&
+    profile.has_access === true;
+
+  if (!(trialActive || paidActive || adminActive)) {
+    window.location.replace(PLAN_URL);
+  }
+}
+
+checkStriveAccess().catch((error) => {
+  console.error("Access check failed:", error);
+  window.location.replace(AUTH_URL);
+});
+</script>
+  </head>
+  <body>
+    <nav aria-label="Primary navigation">
+      <a class="nav-logo" href="https://www.striveptlv.com/independence/dashboard.html" aria-label="STRIVE Independence dashboard">
+        <img class="logo-img" src="../Bill%20Pay/logo.png" alt="" role="presentation" width="44" height="44" />
+        <div class="logo-wrap">
+          <div class="logo-text">STRIVE</div>
+          <div class="logo-sub">Independence</div>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a class="contact-button" href="https://www.striveptlv.com/independence/contact.html">Contact</a>
+      </div>
+
+    </nav>
+
+    <main class="shell" id="main-content">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="section-tag">Clinical Money Management Module</p>
+          <h1 id="page-title">Credit Card<br /><em>Home Page</em></h1>
+          <p class="hero-desc">
+            Practice paying the Lake Mead Capital Bank Red Rock Unlimited VISA account for Jordan Lee. Each difficulty level keeps the same core payment task while changing support, distraction, and extra problem-solving.
+          </p>
+          <a class="btn-ghost" href="https://www.striveptlv.com/independence/dashboard.html" aria-label="Go back to other accounts">
+            ← Other Accounts
+          </a>
+          <p class="hero-credit">STRIVE Independence · STRIVE Physical Therapy — Las Vegas, NV</p>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Difficulty levels">
+        <article class="card level-easy">
+          <h2>Easy</h2>
+          <p class="muted">
+            Black-and-white page with the bank information visible. The focused payment task keeps visual load low.
+          </p>
+          <div class="card-actions">
+            <button class="goal-link" type="button" data-goal-level="easy">Select Goals</button>
+            <a class="launch" href="./easy.html" data-goal-launch-level="easy" aria-label="Open Easy difficulty">
+              Open Easy
+              <span class="launch-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="card level-medium">
+          <h2>Medium</h2>
+          <p class="muted">
+            Bank information is on a separate reference page, and the cardholder also checks the current credit score.
+          </p>
+          <div class="card-actions">
+            <button class="goal-link" type="button" data-goal-level="medium">Select Goals</button>
+            <a class="launch" href="./medium.html" data-goal-launch-level="medium" aria-label="Open Medium difficulty">
+              Open Medium
+              <span class="launch-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="card level-hard">
+          <h2>Hard</h2>
+          <p class="muted">
+            Extra tabs, pop-ups, and competing information appear while the user identifies and disputes a duplicate transaction.
+          </p>
+          <div class="card-actions">
+            <button class="goal-link" type="button" data-goal-level="hard">Select Goals</button>
+            <a class="launch" href="./hard.html" data-goal-launch-level="hard" aria-label="Open Hard difficulty">
+              Open Hard
+              <span class="launch-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="card level-real">
+          <h2>Realistic</h2>
+          <p class="muted">
+            Full online banking workflow with hard-mode distractions plus a suspicious pending charge for safety judgment.
+          </p>
+          <div class="card-actions">
+            <button class="goal-link" type="button" data-goal-level="realistic">Select Goals</button>
+            <a class="launch" href="./realistic.html" data-goal-launch-level="realistic" aria-label="Open Realistic difficulty">
+              Open Realistic
+              <span class="launch-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <section class="teaching-guide" aria-label="How to teach credit card payment with this simulator">
+        <p class="section-tag">Clinician Teaching Guide</p>
+        <h2>Using This With A Patient</h2>
+        <p class="hero-desc">
+          This simulator gives patients a safe, fictional credit-card banking space to practice payment decisions, account review, and online financial safety before returning to a real account. Start with the support level that matches the patient's current needs, then increase difficulty as accuracy, confidence, and independence improve.
+        </p>
+        <div class="teaching-grid">
+          <div class="teaching-card">
+            <strong>1. Set The Task</strong>
+            <p>Ask the patient to sign in, choose full balance or minimum payment, schedule payment before the due date, and review recent activity.</p>
+          </div>
+          <div class="teaching-card">
+            <strong>2. Model The Process</strong>
+            <p>Demonstrate scanning the dashboard, comparing balances, reading labels, and checking numbers before submitting.</p>
+          </div>
+          <div class="teaching-card">
+            <strong>3. Fade Cues</strong>
+            <p>Begin with direct prompts or visible references, then reduce help so the patient practices sequencing and problem-solving.</p>
+          </div>
+          <div class="teaching-card">
+            <strong>4. Grade The Challenge</strong>
+            <p>Use Easy for built-in support, Medium for reference use, Hard for duplicate-charge review, and Realistic for higher distraction.</p>
+          </div>
+          <div class="teaching-card">
+            <strong>5. Practice Safety</strong>
+            <p>Discuss fake versus real banking sites, protecting passwords, checking suspicious charges, and asking for help before paying.</p>
+          </div>
+          <div class="teaching-card">
+            <strong>6. Debrief</strong>
+            <p>Review what went well, where the patient got stuck, and which strategy they can carry into real credit-card management.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="footer-grid" aria-label="Reference materials">
+        <div class="footer-note">
+          <p class="section-tag">Printable Reference</p>
+          <p>
+            Medium, Hard, and Realistic levels use the separate bank-information sheet.
+            <a href="./bank-info.html" target="_blank" rel="noreferrer">Open Printable Bank Info</a>
+          </p>
+        </div>
+      </section>
+
+      <p class="site-footer">
+        STRIVE Independence &nbsp;·&nbsp; STRIVE Physical Therapy — Las Vegas, NV &nbsp;·&nbsp; © 2026
+      </p>
+    </main>
+
+    <div class="modal hidden" data-goal-modal>
+      <div class="goal-modal" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
+        <p class="section-tag">Therapist Setup</p>
+        <h2 id="goalModalTitle">Select Goals</h2>
+        <p data-goal-modal-copy>Suggested goals are already selected for this level. Uncheck any goal you do not want the patient to complete.</p>
+        <div class="goal-checklist" data-goal-options></div>
+        <div class="modal-actions">
+          <button class="goal-link" type="button" data-goal-reset>Reset Suggested</button>
+          <button class="goal-link" type="button" data-goal-close>Cancel</button>
+          <a class="launch" href="./easy.html" data-goal-modal-launch>
+            Open Level
+            <span class="launch-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const GOAL_LABELS = {
+        login: "Sign in to the website",
+        reference: "Open the separate reference page",
+        choice: "Choose full balance or minimum payment",
+        payment: "Schedule the payment before April 18, 2026",
+        score: "Check the credit score",
+        dispute: "Dispute the repeated Red Rock Coffee charge",
+        fraud: "Report the suspicious Zimbabwe pending charge"
+      };
+
+      const GOAL_PRESETS = {
+        easy: ["login", "choice", "payment"],
+        medium: ["login", "reference", "choice", "payment", "score"],
+        hard: ["login", "reference", "choice", "payment", "score", "dispute"],
+        realistic: ["login", "choice", "payment", "score", "dispute", "fraud"]
+      };
+
+      const LEVEL_URLS = {
+        easy: "./easy.html",
+        medium: "./medium.html",
+        hard: "./hard.html",
+        realistic: "./realistic.html"
+      };
+
+      const LEVEL_NAMES = {
+        easy: "Easy",
+        medium: "Medium",
+        hard: "Hard",
+        realistic: "Realistic"
+      };
+
+      function addDays(date, days) {
+        const nextDate = new Date(date);
+        nextDate.setDate(nextDate.getDate() + days);
+        return nextDate;
+      }
+
+      const DISPLAY_DUE_DATE = addDays(new Date(), 30).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+
+      GOAL_LABELS.payment = `Schedule the payment before ${DISPLAY_DUE_DATE}`;
+
+      const goalModal = document.querySelector("[data-goal-modal]");
+      const goalOptions = document.querySelector("[data-goal-options]");
+      const goalTitle = document.querySelector("#goalModalTitle");
+      const goalCopy = document.querySelector("[data-goal-modal-copy]");
+      const modalLaunch = document.querySelector("[data-goal-modal-launch]");
+      let activeGoalLevel = "easy";
+
+      function storedGoals(level) {
+        const saved = window.sessionStorage.getItem(`visaGoals:${level}`);
+        return saved ? saved.split(",").filter(Boolean) : GOAL_PRESETS[level];
+      }
+
+      function urlForLevel(level, goals) {
+        const url = new URL(LEVEL_URLS[level], window.location.href);
+        url.searchParams.set("goals", goals.join(","));
+        return url.pathname.split("/").pop() + url.search;
+      }
+
+      function saveGoals(level, goals) {
+        const cleanGoals = goals.length ? goals : GOAL_PRESETS[level];
+        window.sessionStorage.setItem(`visaGoals:${level}`, cleanGoals.join(","));
+        const launch = document.querySelector(`[data-goal-launch-level="${level}"]`);
+        if (launch) launch.href = urlForLevel(level, cleanGoals);
+        if (activeGoalLevel === level) {
+          modalLaunch.href = urlForLevel(level, cleanGoals);
+        }
+      }
+
+      function selectedModalGoals() {
+        return Array.from(goalOptions.querySelectorAll("input:checked")).map((input) => input.value);
+      }
+
+      function renderGoalOptions(level, selectedGoals = storedGoals(level)) {
+        activeGoalLevel = level;
+        const allowedGoals = GOAL_PRESETS[level];
+        const selected = new Set(selectedGoals);
+        goalTitle.textContent = `${LEVEL_NAMES[level]} Goals`;
+        goalCopy.textContent = "Suggested goals are already selected for this level. If Sign In is unchecked, the patient will skip the simulated login screen.";
+        goalOptions.innerHTML = allowedGoals.map((goal) => `
+          <label class="goal-check">
+            <input type="checkbox" value="${goal}" ${selected.has(goal) ? "checked" : ""} />
+            <span>${GOAL_LABELS[goal]}</span>
+          </label>
+        `).join("");
+        modalLaunch.textContent = `Open ${LEVEL_NAMES[level]} `;
+        const arrow = document.createElement("span");
+        arrow.className = "launch-arrow";
+        arrow.setAttribute("aria-hidden", "true");
+        arrow.textContent = "→";
+        modalLaunch.appendChild(arrow);
+        saveGoals(level, selectedModalGoals());
+      }
+
+      function openGoalModal(level) {
+        renderGoalOptions(level);
+        goalModal.classList.remove("hidden");
+      }
+
+      document.querySelectorAll("[data-goal-level]").forEach((button) => {
+        button.addEventListener("click", () => openGoalModal(button.dataset.goalLevel));
+      });
+
+      goalOptions.addEventListener("change", () => {
+        saveGoals(activeGoalLevel, selectedModalGoals());
+      });
+
+      document.querySelector("[data-goal-reset]").addEventListener("click", () => {
+        renderGoalOptions(activeGoalLevel, GOAL_PRESETS[activeGoalLevel]);
+      });
+
+      document.querySelector("[data-goal-close]").addEventListener("click", () => {
+        goalModal.classList.add("hidden");
+      });
+
+      goalModal.addEventListener("click", (event) => {
+        if (event.target === goalModal) goalModal.classList.add("hidden");
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") goalModal.classList.add("hidden");
+      });
+
+      Object.keys(GOAL_PRESETS).forEach((level) => saveGoals(level, storedGoals(level)));
+    </script>
+  </body>
+</html>

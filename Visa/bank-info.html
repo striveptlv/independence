@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice Bank Information</title>
+    <link rel="stylesheet" href="./styles.css" />
+<script type="module" data-strive-access-guard>
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
+
+const AUTH_URL = "https://independence.striveptlv.com/auth.html";
+const PLAN_URL = "https://independence.striveptlv.com/choose-plan.html";
+const TEAM_ACCESS_REMOVED_URL = PLAN_URL + "?reason=team_access_removed";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function checkStriveAccess() {
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profile")
+    .select("has_access, access_type, trial_ends_at")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    console.error("Profile fetch failed:", profileError?.message);
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  if (profile.access_type === "team") {
+    const { data: membership, error: membershipError } = await supabase
+      .from("members")
+      .select("team_id, role")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (membershipError) {
+      console.error("Team membership check failed:", membershipError.message);
+      window.location.replace(PLAN_URL);
+      return;
+    }
+
+    if (!membership) {
+      window.location.replace(TEAM_ACCESS_REMOVED_URL);
+      return;
+    }
+
+    return;
+  }
+
+  if (profile.access_type === "removed_team") {
+    window.location.replace(TEAM_ACCESS_REMOVED_URL);
+    return;
+  }
+
+  const now = new Date();
+  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+
+  const trialActive =
+    profile.access_type === "trial" &&
+    trialEndsAt &&
+    trialEndsAt > now;
+
+  const paidActive =
+    profile.access_type === "paid" &&
+    profile.has_access === true;
+
+  const adminActive =
+    profile.access_type === "admin" &&
+    profile.has_access === true;
+
+  if (!(trialActive || paidActive || adminActive)) {
+    window.location.replace(PLAN_URL);
+  }
+}
+
+checkStriveAccess().catch((error) => {
+  console.error("Access check failed:", error);
+  window.location.replace(AUTH_URL);
+});
+</script>
+  </head>
+  <body class="medium-mode">
+    <main class="shell">
+      <section class="hero reference-card">
+        <p class="eyebrow">External Payment Account</p>
+        <h1>Practice Reference Information</h1>
+        <p class="muted">
+          Use this page during the Medium, Hard, and Realistic tasks for payment details and login support.
+        </p>
+
+        <div class="reference-block">
+          <h2>Jordan Lee Checking Account</h2>
+          <ul class="details-list">
+            <li><span>Account name</span><strong>Jordan Lee</strong></li>
+            <li><span>Account number</span><strong>334221098</strong></li>
+            <li><span>Routing number</span><strong>58293041</strong></li>
+            <li><span>Use for</span><strong>Credit card payment practice</strong></li>
+          </ul>
+        </div>
+
+        <div class="reference-block">
+          <h3>Login Information</h3>
+          <ul class="details-list">
+            <li><span>Username</span><strong>JordanL</strong></li>
+            <li><span>Occupation / Password</span><strong>Therapy</strong></li>
+          </ul>
+        </div>
+
+        <div class="reference-block">
+          <h3>Cardholder Address</h3>
+          <p>
+            Jordan Lee<br />
+            1180 Desert Bloom Court<br />
+            Las Vegas, NV 89117
+          </p>
+        </div>
+
+        <div class="button-row" style="margin-top: 18px;">
+          <a class="cta" href="./medium.html">Back to Medium</a>
+          <a class="secondary" href="./hard.html">Back to Hard</a>
+          <a class="secondary" href="./realistic.html">Back to Realistic</a>
+        </div>
+      </section>
+    </main>
+    <p class="site-credit">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+  </body>
+</html>

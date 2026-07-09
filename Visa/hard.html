@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hard | Red Rock Unlimited VISA</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="./app.js?v=goals-2"></script>
+<script type="module" data-strive-access-guard>
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
+
+const AUTH_URL = "https://independence.striveptlv.com/auth.html";
+const PLAN_URL = "https://independence.striveptlv.com/choose-plan.html";
+const TEAM_ACCESS_REMOVED_URL = PLAN_URL + "?reason=team_access_removed";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function checkStriveAccess() {
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profile")
+    .select("has_access, access_type, trial_ends_at")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    console.error("Profile fetch failed:", profileError?.message);
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  if (profile.access_type === "team") {
+    const { data: membership, error: membershipError } = await supabase
+      .from("members")
+      .select("team_id, role")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (membershipError) {
+      console.error("Team membership check failed:", membershipError.message);
+      window.location.replace(PLAN_URL);
+      return;
+    }
+
+    if (!membership) {
+      window.location.replace(TEAM_ACCESS_REMOVED_URL);
+      return;
+    }
+
+    return;
+  }
+
+  if (profile.access_type === "removed_team") {
+    window.location.replace(TEAM_ACCESS_REMOVED_URL);
+    return;
+  }
+
+  const now = new Date();
+  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+
+  const trialActive =
+    profile.access_type === "trial" &&
+    trialEndsAt &&
+    trialEndsAt > now;
+
+  const paidActive =
+    profile.access_type === "paid" &&
+    profile.has_access === true;
+
+  const adminActive =
+    profile.access_type === "admin" &&
+    profile.has_access === true;
+
+  if (!(trialActive || paidActive || adminActive)) {
+    window.location.replace(PLAN_URL);
+  }
+}
+
+checkStriveAccess().catch((error) => {
+  console.error("Access check failed:", error);
+  window.location.replace(AUTH_URL);
+});
+</script>
+  </head>
+  <body class="hard-mode">
+    <section class="login-screen" data-login-screen>
+      <div class="card login-card">
+        <p class="eyebrow">Sign In Required</p>
+        <h1>Red Rock Unlimited VISA</h1>
+        <p class="muted">Use the separate reference page to find the password before continuing.</p>
+        <form class="login-form" data-login-form>
+          <label>Username <input type="text" name="username" autocomplete="off" /></label>
+          <label>Password <input type="password" name="password" autocomplete="off" /></label>
+          <button class="cta" type="submit">Sign In</button>
+          <p class="status" data-login-status></p>
+        </form>
+        <div class="access-note">
+          <a class="secondary" href="./bank-info.html" target="_blank" rel="noreferrer" data-reference-link>Open practice reference page</a>
+        </div>
+      </div>
+    </section>
+
+    <main class="shell hidden" id="dashboard" data-secure-shell data-dashboard-top>
+      <section class="hero">
+        <div class="page-top">
+          <div>
+            <p class="eyebrow">Hard Difficulty</p>
+            <h1>Lake Mead Capital Bank Card Hub</h1>
+            <p class="muted">
+              Use the separate reference page, schedule the payment, and dispute the repeated charge.
+            </p>
+          </div>
+          <div class="utility-row">
+            <a class="secondary" href="./bank-info.html" target="_blank" rel="noreferrer" data-reference-link>Open Bank Info</a>
+            <a class="secondary" href="./index.html">Back to Home</a>
+          </div>
+        </div>
+
+        <div class="promo-grid">
+          <div class="promo-box">
+            <strong>Balance Transfer Offer</strong>
+            <p class="muted">Move balances today and save with a promotional APR.</p>
+          </div>
+          <div class="promo-box">
+            <strong>Travel Portal</strong>
+            <p class="muted">Redeem points for hotel stays, flights, and rental cars.</p>
+          </div>
+          <div class="promo-box">
+            <strong>Cash Back Deals</strong>
+            <p class="muted">Activate merchant offers before your next purchase.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="panel">
+          <button class="secondary hamburger-button panel-menu-button" type="button" data-mobile-nav-toggle aria-expanded="false" aria-controls="hard-tabs">
+            <span></span><span></span><span></span>
+            Sections
+          </button>
+          <div class="tabs" id="hard-tabs" data-tabs>
+            <button class="drawer-close" type="button" data-mobile-nav-close aria-label="Close sections menu">Close</button>
+            <button class="tab-button active" type="button" data-target="hard-overview">Overview</button>
+            <button class="tab-button" type="button" data-target="hard-payments">Payments</button>
+            <button class="tab-button" type="button" data-target="hard-activity">Activity Review</button>
+            <button class="tab-button" type="button" data-target="hard-benefits">Rewards</button>
+          </div>
+
+          <section id="hard-overview" data-tab-panel>
+            <div class="summary-strip">
+              <div class="summary-box"><span>Current balance</span><strong>$2,513.05</strong></div>
+              <div class="summary-box"><span>Statement balance</span><strong>$2,328.44</strong></div>
+              <div class="summary-box"><span>Minimum due</span><strong>$35.00</strong></div>
+              <div class="summary-box"><span>Due date</span><strong>April 18, 2026</strong></div>
+            </div>
+            <ul class="details-list">
+              <li><span>Card</span><strong>Red Rock Unlimited VISA</strong></li>
+              <li><span>Card number</span><strong>5293 8471 0293 8475</strong></li>
+              <li><span>Cardholder</span><strong>Jordan Lee</strong></li>
+              <li><span>Credit limit</span><strong>$5,000.00</strong></li>
+              <li><span>APR</span><strong>18.44%</strong></li>
+            </ul>
+          </section>
+
+          <section id="hard-payments" class="hidden" data-tab-panel>
+            <h2>Pay Credit Card</h2>
+            <form class="payment-form" data-payment-form>
+              <div class="payment-choice">
+                <label class="choice">
+                  <input type="radio" name="paymentOption" value="full" checked />
+                  <span><strong>Pay in full</strong><br />Pay the $2,513.05 current balance.</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="paymentOption" value="minimum" />
+                  <span><strong>Pay only minimum</strong><br />Pay $35.00 by April 18, 2026.</span>
+                </label>
+              </div>
+              <div class="field-grid">
+                <label>Account number <input name="bankAccountNumber" type="text" autocomplete="off" /></label>
+                <label>Routing number <input name="routingNumber" type="text" autocomplete="off" /></label>
+              </div>
+              <label>Account name <input name="accountName" type="text" autocomplete="off" /></label>
+              <div class="field-grid">
+                <label>Payment amount <input name="paymentAmount" type="text" value="2513.05" data-amount /></label>
+                <label>Schedule date <input name="paymentDate" type="date" data-date /></label>
+              </div>
+              <button class="cta" type="submit">Schedule Payment</button>
+              <p class="status" data-status></p>
+            </form>
+          </section>
+
+          <section id="hard-activity" class="hidden" data-tab-panel>
+            <h2>Activity Review</h2>
+            <p class="muted">Look for repeated transactions and send a dispute request if needed.</p>
+            <p class="status" data-dispute-status></p>
+            <div class="button-row" style="margin-top: 14px;">
+              <button class="cta" type="button" data-show-score>Check Credit Score</button>
+            </div>
+            <p class="status" data-score-status></p>
+          </section>
+
+          <section id="hard-benefits" class="hidden" data-tab-panel>
+            <h2>Rewards Center</h2>
+            <p class="muted">Extra content is here to add distraction.</p>
+            <ul class="task-list">
+              <li>Redeem 24,822 points for travel.</li>
+              <li>Activate 3 cash-back deals.</li>
+              <li>Review dining bonus categories.</li>
+            </ul>
+          </section>
+        </div>
+
+        <div class="panel">
+          <h2>Goals</h2>
+          <ul class="goal-list">
+            <li class="goal-item" data-goal-item="login"><span class="goal-box"></span><span>Sign in to the website</span></li>
+            <li class="goal-item" data-goal-item="reference"><span class="goal-box"></span><span>Open the separate reference page</span></li>
+            <li class="goal-item" data-goal-item="choice"><span class="goal-box"></span><span>Choose full balance or minimum payment</span></li>
+            <li class="goal-item" data-goal-item="payment"><span class="goal-box"></span><span>Schedule the payment before April 18, 2026</span></li>
+            <li class="goal-item" data-goal-item="score"><span class="goal-box"></span><span>Check the credit score</span></li>
+            <li class="goal-item" data-goal-item="dispute"><span class="goal-box"></span><span>Dispute the repeated Red Rock Coffee charge</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 22px;">
+        <h2>Transaction Activity</h2>
+        <ul class="ledger">
+          <li><span>Pending</span><span>New Vegas Electric<small>Utility</small></span><span class="amount pending">$184.61</span><span></span></li>
+          <li><span>04/01/2026</span><span>Strive Physical Therapy Las Vegas<small>Medical</small></span><span class="amount">$241.42</span><span></span></li>
+          <li><span>03/29/2026</span><span>Grocery Outlet<small>Groceries</small></span><span class="amount">$152.11</span><span></span></li>
+          <li><span>03/27/2026</span><span>Target<small>Retail</small></span><span class="amount">$88.62</span><span></span></li>
+          <li><span>03/25/2026</span><span>Auto Insurance Direct<small>Insurance</small></span><span class="amount">$146.55</span><span></span></li>
+          <li><span>03/23/2026</span><span>HomeGoods Plus<small>Retail</small></span><span class="amount">$221.09</span><span></span></li>
+          <li><span>03/20/2026</span><span>Southwest Air<small>Travel</small></span><span class="amount">$412.88</span><span></span></li>
+          <li><span>03/18/2026</span><span>Desert Trails Hotel<small>Travel</small></span><span class="amount">$318.67</span><span></span></li>
+          <li class="selectable" data-transaction-row data-merchant="Red Rock Coffee" data-date="03/16/2026" data-amount="$47.82"><span>03/16/2026</span><span>Red Rock Coffee<small>Repeated charge</small></span><span class="amount">$47.82</span><span><span class="selected-label">Select</span></span></li>
+          <li class="selectable" data-transaction-row data-merchant="Red Rock Coffee" data-date="03/16/2026" data-amount="$47.82"><span>03/16/2026</span><span>Red Rock Coffee<small>Cafe</small></span><span class="amount">$47.82</span><span><span class="selected-label">Select</span></span></li>
+          <li><span>03/14/2026</span><span>Mojave Mobile<small>Wireless bill</small></span><span class="amount">$92.10</span><span></span></li>
+          <li><span>03/13/2026</span><span>Lakeview Pharmacy<small>Health</small></span><span class="amount">$18.44</span><span></span></li>
+          <li><span>03/12/2026</span><span>Sunrise Fitness<small>Membership</small></span><span class="amount">$39.00</span><span></span></li>
+          <li><span>03/11/2026</span><span>Canyon Bistro<small>Dining</small></span><span class="amount">$73.22</span><span></span></li>
+          <li><span>03/10/2026</span><span>Silver State Market<small>Groceries</small></span><span class="amount">$124.56</span><span></span></li>
+          <li><span>03/08/2026</span><span>Desert Streaming<small>Subscription</small></span><span class="amount">$16.99</span><span></span></li>
+          <li><span>03/07/2026</span><span>Mojave Fuel<small>Gas station</small></span><span class="amount">$58.73</span><span></span></li>
+          <li><span>03/06/2026</span><span>Westside Pharmacy<small>Health</small></span><span class="amount">$42.18</span><span></span></li>
+          <li><span>03/05/2026</span><span>Silver State Grocer<small>Household</small></span><span class="amount">$186.24</span><span></span></li>
+        </ul>
+      </section>
+    </main>
+
+    <div class="modal hidden" data-promo-modal>
+      <div class="modal-card">
+        <p class="eyebrow">Special Offer</p>
+        <h3>You're prequalified for a vacation bundle</h3>
+        <p class="muted">This practice pop-up is only here as a distraction.</p>
+        <div class="button-row">
+          <button class="cta" type="button" data-dismiss>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup hidden" data-chat-popup>
+      <div class="popup-card">
+        <h3>Need help?</h3>
+        <p class="muted">Chat with a rewards specialist now.</p>
+        <button class="secondary" type="button" data-dismiss>Dismiss</button>
+      </div>
+    </div>
+
+    <div class="toast hidden" data-toast>
+      <strong>Reminder</strong>
+      <p class="muted">Your paperless settings are ready to review.</p>
+      <button class="secondary" type="button" data-dismiss>Dismiss</button>
+    </div>
+
+    <div class="modal hidden" data-transaction-modal>
+      <div class="modal-card">
+        <p class="eyebrow">Transaction Actions</p>
+        <h3 data-transaction-title>Selected transaction</h3>
+        <p class="muted" data-transaction-text></p>
+        <div class="button-row">
+          <button class="secondary" type="button" data-transaction-dispute>Dispute Charge</button>
+          <button class="secondary" type="button" data-transaction-fraud>Flag Fraudulent</button>
+          <button class="cta" type="button" data-dismiss>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" data-score-modal>
+      <div class="modal-card">
+        <p class="eyebrow">Credit Score</p>
+        <h3>Jordan Lee's current score is 742</h3>
+        <ul class="score-list">
+          <li>On-time payments: Strong</li>
+          <li>Credit usage: Moderate</li>
+          <li>Available credit: $2,671.56</li>
+        </ul>
+        <div class="button-row" style="margin-top: 18px;">
+          <button class="cta" type="button" data-close-score>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" data-complete-modal>
+      <div class="modal-card">
+        <h3>ALL TASKS COMPLETED!</h3>
+        <div class="button-row">
+          <button class="cta" type="button" data-dismiss>Close</button>
+        </div>
+      </div>
+    </div>
+    <p class="site-credit">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+  </body>
+</html>
