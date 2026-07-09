@@ -999,6 +999,16 @@
         margin: 0;
       }
 
+      .fee-note {
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #f7f8f3;
+        color: #536356;
+        font-size: 0.9rem;
+        font-weight: 800;
+        line-height: 1.35;
+      }
+
       .choice-card.selected {
         border-color: var(--green);
         background: #eefbf8;

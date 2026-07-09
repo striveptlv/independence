@@ -234,6 +234,17 @@
         if (state.fulfillment === "pickup") return 0;
         return 0;
       }
+      function deliveryWindowFee(window, store = selectedStore()) {
+        if (!state.settings.fees || !store.delivery) return 0;
+        return window === store.lowFeeWindow ? store.lowDeliveryFee : store.deliveryFee;
+      }
+      function deliveryWindowLabel(window, store = selectedStore()) {
+        if (!state.settings.fees || !store.delivery) return window;
+        const fee = deliveryWindowFee(window, store);
+        const surcharge = Math.max(0, store.deliveryFee - store.lowDeliveryFee);
+        if (window === store.lowFeeWindow) return `${window} - ${money(fee)} lowest fee`;
+        return `${window} - ${money(fee)}${surcharge ? ` (+${money(surcharge)} early delivery)` : ""}`;
+      }
       function tax() { return Math.max(0, (subtotal() - couponTotal()) * 0.032); }
       function finalTotal() { return Math.max(0, subtotal() - couponTotal() + tax() + serviceFee() + Number(state.tip || 0)); }
       function budgetStatus() {
@@ -499,19 +510,21 @@
         `;
       }
       function renderFulfillment() {
+        const store = selectedStore();
         const methods = [
-          { type: "pickup", title: "Pickup", windows: selectedStore().pickupWindows, fee: 0, available: selectedStore().pickup },
-          { type: "delivery", title: "Delivery", windows: selectedStore().deliveryWindows, fee: state.settings.fees ? selectedStore().deliveryFee : 0, available: selectedStore().delivery }
+          { type: "pickup", title: "Pickup", windows: store.pickupWindows, fee: 0, available: store.pickup },
+          { type: "delivery", title: "Delivery", windows: store.deliveryWindows, fee: state.settings.fees ? store.deliveryFee : 0, available: store.delivery }
         ];
         document.querySelector("#fulfillmentGrid").innerHTML = methods.map((method) => `
           <article class="choice-card ${state.fulfillment === method.type ? "selected" : ""}">
             <h3>${method.title}</h3>
             <p>${method.type === "delivery" ? "Delivery practice from the selected store." : "Pick up at the selected store."}</p>
-            <p><strong>Fee:</strong> ${method.available ? money(method.type === "delivery" ? method.fee : 0) : "Not available at this store"}</p>
+            <p><strong>Fee:</strong> ${method.available ? (method.type === "delivery" ? `${money(store.lowDeliveryFee)}-${money(store.deliveryFee)}` : money(0)) : "Not available at this store"}</p>
+            ${method.type === "delivery" && method.available && state.settings.fees ? `<p class="fee-note">Earliest delivery windows add ${money(Math.max(0, store.deliveryFee - store.lowDeliveryFee))}. Cheapest window: ${store.lowFeeWindow}.</p>` : ""}
             <label class="field fulfillment-field">Time window
               <select data-window-for="${method.type}" ${method.available ? "" : "disabled"}>
                 <option value="">Choose a window</option>
-                ${method.windows.map((window) => `<option ${state.fulfillment === method.type && state.window === window ? "selected" : ""}>${window}</option>`).join("")}
+                ${method.windows.map((window) => `<option value="${window}" ${state.fulfillment === method.type && state.window === window ? "selected" : ""}>${method.type === "delivery" ? deliveryWindowLabel(window, store) : window}</option>`).join("")}
               </select>
             </label>
             ${method.type === "delivery" ? `<label class="field fulfillment-field">Tip <select id="tipSelect"><option value="0">No tip</option><option value="2">2.00</option><option value="4">4.00</option><option value="6">6.00</option></select></label>` : `<div class="fulfillment-note"><strong>Tip</strong><span>No tip needed for pickup.</span></div>`}
@@ -748,6 +761,16 @@
         document.body.classList.toggle("aphasia", state.settings.aphasia);
         document.body.classList.toggle("low-vision", state.settings.lowVision);
       }
+      function installBackToHomeGuard() {
+        if (!window.history || !window.history.pushState) return;
+        const guardState = { instantGroceryBackGuard: true };
+        window.history.replaceState({ instantGroceryHome: true }, "", window.location.href);
+        window.history.pushState(guardState, "", window.location.href);
+        window.addEventListener("popstate", () => {
+          setView("home");
+          window.history.pushState(guardState, "", window.location.href);
+        });
+      }
       function startGoal(goalId) {
         state.goal = goals.find((goal) => goal.id === Number(goalId));
         state.cart = [];
@@ -897,4 +920,5 @@
           }
         });
       });
+      installBackToHomeGuard();
       renderAll();
