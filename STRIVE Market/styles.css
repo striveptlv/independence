@@ -99,6 +99,14 @@
         align-items: center;
         gap: 12px;
         min-width: 0;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .brand:focus-visible {
+        outline: 3px solid rgba(11, 95, 255, 0.28);
+        outline-offset: 4px;
+        border-radius: 10px;
       }
 
       .mark {
@@ -119,7 +127,8 @@
         justify-content: flex-end;
       }
 
-      .top-actions button {
+      .top-actions button,
+      .top-actions a {
         min-height: 42px;
         padding: 10px 13px;
         border-radius: 7px;
@@ -1424,7 +1433,8 @@
         align-items: center;
       }
 
-      .grocery-topbar .top-actions button {
+      .grocery-topbar .top-actions button,
+      .grocery-topbar .top-actions a {
         min-height: 42px;
         padding: 0 12px;
         border-radius: 999px;
@@ -1663,7 +1673,8 @@
         margin-top: 0;
       }
 
-      body.home-mode .top-actions button {
+      body.home-mode .top-actions button,
+      body.home-mode .top-actions a {
         min-height: 42px;
         border-radius: 7px;
         background: transparent;
@@ -2648,7 +2659,8 @@
         }
 
         .grocery-brand span,
-        .grocery-topbar .top-actions button:not(.icon-button) {
+        .grocery-topbar .top-actions button:not(.icon-button),
+        .grocery-topbar .top-actions a {
           display: none;
         }
 

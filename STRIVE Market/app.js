@@ -107,7 +107,7 @@
           pickupWindows: ["Today 5-6 PM", "Tomorrow 9-10 AM", "Tomorrow 12-1 PM"],
           deliveryWindows: ["Today 7-8 PM", "Tomorrow 9-10 AM", "Tomorrow 2-3 PM"],
           deliveryFee: 2.99,
-          lowFeeWindow: "Tomorrow 9-10 AM",
+          lowFeeWindow: "Tomorrow 2-3 PM",
           lowDeliveryFee: 1.99
         }
       ];
@@ -519,8 +519,7 @@
           <article class="choice-card ${state.fulfillment === method.type ? "selected" : ""}">
             <h3>${method.title}</h3>
             <p>${method.type === "delivery" ? "Delivery practice from the selected store." : "Pick up at the selected store."}</p>
-            <p><strong>Fee:</strong> ${method.available ? (method.type === "delivery" ? `${money(store.lowDeliveryFee)}-${money(store.deliveryFee)}` : money(0)) : "Not available at this store"}</p>
-            ${method.type === "delivery" && method.available && state.settings.fees ? `<p class="fee-note">Earliest delivery windows add ${money(Math.max(0, store.deliveryFee - store.lowDeliveryFee))}. Cheapest window: ${store.lowFeeWindow}.</p>` : ""}
+            ${method.available ? "" : `<p><strong>Not available at this store</strong></p>`}
             <label class="field fulfillment-field">Time window
               <select data-window-for="${method.type}" ${method.available ? "" : "disabled"}>
                 <option value="">Choose a window</option>
