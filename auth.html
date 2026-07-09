@@ -147,19 +147,35 @@ button:hover,.button:hover{opacity:.92;transform:translateY(-1px)}
 .status.no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.24);color:#b91c1c}
 footer{padding:28px 6vw;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer a{color:var(--navy);text-decoration:none;font-weight:800}
+@media(max-width:900px){
+  .shell{width:min(100% - 40px,1180px)}
+  .hero{min-height:auto;grid-template-columns:1fr;gap:24px;align-content:start;align-items:start;padding:28px 0 40px}
+  .auth-card{justify-self:stretch;width:100%}
+  .field-grid{grid-template-columns:1fr}
+}
 @media(max-width:640px){
+  body{background:#f5fafc}
   nav{min-height:58px;padding:9px 16px}
   .brand{gap:9px}
   .brand img{width:34px;height:34px}
   .brand-word{font-size:16px}
   .brand-sub{font-size:6.5px;letter-spacing:.2em}
   .shell{width:min(100% - 32px,1180px)}
-  .hero{min-height:100vh;grid-template-columns:1fr;gap:18px;align-content:start;align-items:start;padding:24px 0 34px}
+  .hero{gap:16px;padding:18px 0 30px}
   .hero-heading{text-align:left}
-  h1{font-size:2.65rem;line-height:.94}
+  h1{font-size:2.35rem;line-height:.96}
   .hero-subhead{display:none}
-  .auth-card{justify-self:stretch;padding:1.2rem}
-  .field-grid{grid-template-columns:1fr}
+  .auth-card{padding:1rem;border-radius:14px;background:rgba(255,255,255,.72)}
+  .card-kicker{font-size:9px;margin-bottom:8px}
+  .card-title{font-size:1.55rem;margin-bottom:8px}
+  .card-copy{font-size:.94rem;margin-bottom:14px}
+  .auth-form{gap:13px}
+  .field{gap:6px}
+  label{font-size:10px;letter-spacing:.1em}
+  input,select,textarea{min-height:50px;border-radius:8px;font-size:16px;padding:0 13px;background:rgba(255,255,255,.86)}
+  textarea{padding:12px 13px}
+  .password-wrap input{padding-right:62px}
+  .password-toggle{right:7px;width:36px;min-height:32px}
   .button-row{flex-direction:column}
   button,.button{width:100%}
   .form-link{justify-self:start;width:auto;font-size:.78rem}

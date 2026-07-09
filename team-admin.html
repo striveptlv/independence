@@ -183,6 +183,22 @@ td strong{display:block;color:var(--navy);font-weight:800}
   .stats,.form-grid,.team-code-row{grid-template-columns:1fr}
   .panel-head{display:block}.pill{margin-top:12px}
   .button,.dashboard-link{width:100%}
+  .panel{padding:16px}
+  .admin-grid,.stack{gap:14px}
+  .team-code{font-size:.92rem;letter-spacing:.08em}
+  .filter-row.show{display:grid;grid-template-columns:1fr}
+  .filter-row .field{max-width:none}
+  .table-wrap{overflow:visible;border:0;background:transparent}
+  table,thead,tbody,tr,th,td{display:block;width:100%;min-width:0}
+  thead{display:none}
+  table{border-collapse:separate}
+  tbody{display:grid;gap:12px}
+  tr{padding:12px;border:1px solid var(--line);border-radius:8px;background:#fff;box-shadow:0 10px 28px rgba(19,35,56,.06)}
+  td{display:grid;grid-template-columns:minmax(92px,.42fr) minmax(0,1fr);gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line);font-size:.94rem}
+  td:last-child{border-bottom:0;width:100%;white-space:normal}
+  td::before{content:attr(data-label);font-family:"DM Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+  .row-actions{display:grid;grid-template-columns:1fr;gap:8px;justify-content:stretch;white-space:normal;width:100%}
+  .mini-button{width:100%;min-height:40px}
 }
 </style>
 </head>
@@ -887,17 +903,17 @@ function renderPendingInvites() {
     } else if (canReinstate) {
       action = `
         <button class="mini-button restore" type="button" data-reinstate-invite="${escapeHtml(invite.id)}">Reinstate</button>
-        ${currentUserOwnsTeam() ? `<button class="mini-button danger" type="button" data-delete-invite="${escapeHtml(invite.id)}">Delete Row</button>` : ""}
+        ${currentUserOwnsTeam() ? `<button class="mini-button danger" type="button" data-delete-invite="${escapeHtml(invite.id)}">Delete</button>` : ""}
       `;
     }
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td><strong>${escapeHtml(invite.email || "-")}</strong></td>
-      <td>${escapeHtml(formatLabel(invite.role))}</td>
-      ${showLocation ? `<td>${escapeHtml(invite.location_label || "-")}</td>` : ""}
-      <td>${escapeHtml(formatDate(invite.created_at))}</td>
-      <td>${escapeHtml(formatLabel(invite.status))}</td>
-      <td><div class="row-actions">${action}</div></td>
+      <td data-label="Email"><strong>${escapeHtml(invite.email || "-")}</strong></td>
+      <td data-label="Role">${escapeHtml(formatLabel(invite.role))}</td>
+      ${showLocation ? `<td data-label="Location / Group">${escapeHtml(invite.location_label || "-")}</td>` : ""}
+      <td data-label="Created">${escapeHtml(formatDate(invite.created_at))}</td>
+      <td data-label="Status">${escapeHtml(formatLabel(invite.status))}</td>
+      <td data-label="Action"><div class="row-actions">${action}</div></td>
     `;
     els.pendingInvitesBody.append(row);
   });
@@ -929,10 +945,10 @@ function renderAcceptedMembers() {
     const action = `<button class="mini-button danger" type="button" data-revoke-member="${escapeHtml(member.user_id)}" ${isCurrentUser || isTeamOwner ? "disabled" : ""}>Remove Access</button>`;
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td><strong>${escapeHtml(display.name)}</strong></td>
-      <td>${escapeHtml(display.email)}</td>
-      <td>${escapeHtml(formatLabel(member.role))}</td>
-      <td><div class="row-actions">${action}</div></td>
+      <td data-label="Name"><strong>${escapeHtml(display.name)}</strong></td>
+      <td data-label="Email">${escapeHtml(display.email)}</td>
+      <td data-label="Role">${escapeHtml(formatLabel(member.role))}</td>
+      <td data-label="Action"><div class="row-actions">${action}</div></td>
     `;
     els.acceptedMembersBody.append(row);
   });
