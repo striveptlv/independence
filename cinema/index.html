@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STRIVE Cinema | Movie Ticket Booking Practice</title>
+    <meta name="description" content="A mock movie ticket booking simulator for STRIVE Independence functional digital task practice." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=cinema-home-clean-43" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="https://www.striveptlv.com/independence/dashboard.html" aria-label="STRIVE Independence dashboard">
+        <img class="brand-mark" src="../Bill Pay/logo.png" alt="" />
+        <span>
+          <strong>STRIVE</strong>
+          <em>Independence</em>
+        </span>
+      </a>
+      <div class="top-actions">
+        <button class="icon-button nav-icon-button" type="button" id="infoButton" aria-label="Task information" title="Task information">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v-6"/><path d="M12 7h.01"/><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/></svg>
+        </button>
+        <button class="icon-button nav-icon-button" type="button" id="setupButton" aria-label="Therapist controls" title="Therapist controls">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04a2.1 2.1 0 0 1-2.97 2.97l-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.09 1.65V21.3a2.1 2.1 0 0 1-4.2 0v-.06a1.8 1.8 0 0 0-1.09-1.65 1.8 1.8 0 0 0-1.98.36l-.04.04a2.1 2.1 0 0 1-2.97-2.97l.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.65-1.09H2.9a2.1 2.1 0 0 1 0-4.2h.06A1.8 1.8 0 0 0 4.6 8.62a1.8 1.8 0 0 0-.36-1.98l-.04-.04a2.1 2.1 0 0 1 2.97-2.97l.04.04a1.8 1.8 0 0 0 1.98.36A1.8 1.8 0 0 0 10.28 2.4V2.3a2.1 2.1 0 0 1 4.2 0v.1a1.8 1.8 0 0 0 1.09 1.63 1.8 1.8 0 0 0 1.98-.36l.04-.04a2.1 2.1 0 0 1 2.97 2.97l-.04.04a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.65 1.09h.06a2.1 2.1 0 0 1 0 4.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="view launch-view" id="startView">
+        <div class="launch-copy">
+          <div class="hero-main">
+            <p class="section-tag">Clinical Movie Ticket Booking Module</p>
+            <h1>STRIVE<br><span>Cinema</span></h1>
+            <p class="subtitle">A functional digital IADL activity for practicing real-world movie ticket booking skills: finding a movie, comparing showtimes, following task directions, selecting accessible or standard seats, managing ticket totals, reviewing snacks, and completing a structured mock checkout sequence with clinical support.</p>
+          </div>
+        </div>
+        <aside class="panel setup-panel settings-panel hidden" id="setupPanel" aria-label="Session setup">
+          <div class="settings-head">
+            <h2>Session Setup</h2>
+            <button class="icon-button" type="button" id="closeSetupButton" aria-label="Close session setup" title="Close">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>
+            </button>
+          </div>
+          <div class="toggle-grid">
+            <label class="switch"><input type="checkbox" id="cueToggle" checked /><span>Visual cues</span></label>
+            <label class="switch"><input type="checkbox" id="instructionsToggle" /><span>Instructions visible</span></label>
+            <label class="switch"><input type="checkbox" id="feedbackToggle" checked /><span>Immediate feedback</span></label>
+            <label class="switch"><input type="checkbox" id="lowVisionToggle" /><span>Low-vision mode</span></label>
+            <label class="switch"><input type="checkbox" id="highContrastToggle" /><span>High contrast</span></label>
+            <label class="switch"><input type="checkbox" id="audioToggle" /><span>Read task aloud</span></label>
+          </div>
+        </aside>
+        <section class="home-task-library" aria-labelledby="taskLibraryTitle">
+          <div class="task-library-head">
+            <div>
+              <h2 id="taskLibraryTitle">Choose A Booking Task</h2>
+            </div>
+          </div>
+          <div class="home-task-grid" id="homeTaskGrid"></div>
+        </section>
+        <section class="home-flow teaching-guide" aria-labelledby="homeFlowTitle">
+          <div class="teaching-head">
+            <h2 id="homeFlowTitle">Using This With A Patient</h2>
+            <p>Use the cinema task as a guided community-access simulation. The steps mirror the grocery activity: pick the goal, set the support level, let the patient work through the realistic sequence, then review choices and strategy use.</p>
+          </div>
+          <div class="teaching-grid">
+            <div class="teaching-card">
+              <strong>1. Choose The Booking Task</strong>
+              <p>Select a task card by difficulty. Start with a familiar movie-and-time goal, or choose a harder task when the patient is ready for seat rules, budgets, or memory demands.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>2. Set Support Level</strong>
+              <p>Open Therapist Controls from the top navigation to adjust cues, instructions, feedback, low-vision support, contrast, and audio. Match the setup to the amount of therapist support you want to provide.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>3. Preview The Task</strong>
+              <p>Read the task instructions together before starting. Identify the target movie, day, time, seat needs, snack request, budget, or memory code.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>4. Complete The Booking Flow</strong>
+              <p>Move through movie choice, seat selection, snacks, and fake checkout one page at a time. Encourage scanning, comparison, error checking, and problem solving.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>5. Review Checkout</strong>
+              <p>Check that selected seats determine the ticket count, wheelchair-accessible seating is used when required, and the final mock order matches the task directions.</p>
+            </div>
+            <div class="teaching-card">
+              <strong>6. Debrief And Document</strong>
+              <p>Use the summary to discuss what worked, where cues were needed, and which skills to practice next: attention, sequencing, visual scanning, money management, or memory.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="view hidden" id="bookingView">
+        <div class="booking-layout">
+          <aside class="panel task-card" id="taskCard"></aside>
+          <section class="booking-main">
+            <div class="booking-nav panel">
+              <button class="btn-secondary" type="button" id="homeFromBookingButton">Home</button>
+              <button class="btn-secondary" type="button" id="prevStepButton">Back</button>
+              <span id="stepHelpText">Choose a movie, date, and showtime first.</span>
+              <button class="btn-primary" type="button" id="nextStepButton">Continue</button>
+            </div>
+
+            <section class="booking-section" id="movieSection">
+              <div class="section-head">
+                <h3>Choose Movie, Day, And Showtime</h3>
+                <span id="movieStatus" class="status-pill">Not selected</span>
+              </div>
+              <div class="date-tabs" id="dateTabs"></div>
+              <div class="movie-grid" id="movieGrid"></div>
+            </section>
+
+            <section class="booking-section" id="seatSection">
+              <div class="section-head">
+                <h3>Choose Seats</h3>
+                <div class="tool-row">
+                  <button class="btn-secondary small" type="button" id="zoomSeatsButton">Enlarge Map</button>
+                  <span id="seatStatus" class="status-pill">No seats</span>
+                </div>
+              </div>
+              <div class="screen-label">Screen</div>
+              <div class="front-warning">Front row warning area</div>
+              <div class="seat-map-wrap" id="seatMapWrap">
+                <div class="seat-map" id="seatMap" aria-label="Interactive seat map"></div>
+              </div>
+              <div class="seat-legend" id="seatLegend"></div>
+              <div class="selected-summary" id="selectedSeatSummary">Selected seats: none</div>
+              <div class="feedback-line" id="seatFeedback" role="status" aria-live="polite"></div>
+            </section>
+
+            <section class="booking-section" id="snackSection">
+              <div class="section-head">
+                <h3>Snacks</h3>
+                <span id="snackStatus" class="status-pill">Optional</span>
+              </div>
+              <div class="snack-offer hidden" id="comboOffer">
+                <strong>Combo offer</strong>
+                <span>Add a drink with popcorn?</span>
+                <button class="btn-secondary small" type="button" id="dismissOfferButton">No thanks</button>
+              </div>
+              <div class="snack-grid" id="snackGrid"></div>
+            </section>
+
+            <section class="booking-section" id="checkoutSection">
+              <div class="section-head">
+                <h3>Fake Checkout</h3>
+                <span class="status-pill">No real payment</span>
+              </div>
+              <div class="checkout-grid">
+                <label class="field">
+                  <span>Practice card number</span>
+                  <input value="4111 1111 1111 1111" readonly />
+                </label>
+                <label class="field">
+                  <span>Name</span>
+                  <input value="Practice User" readonly />
+                </label>
+                <label class="field hidden" id="memoryCodeField">
+                  <span id="memoryCodeLabel">Memory code</span>
+                  <input id="memoryCodeInput" autocomplete="off" />
+                </label>
+              </div>
+              <button class="btn-primary" type="button" id="reviewButton">Review Order</button>
+            </section>
+          </section>
+        </div>
+        <aside class="panel order-panel collapsed" id="orderPanel"></aside>
+      </section>
+
+      <section class="view hidden" id="reviewView">
+        <div class="review-layout" id="reviewLayout">
+          <section class="panel" id="reviewPanel"></section>
+          <aside class="panel patient-review-panel">
+            <div class="patient-review-content">
+              <h2>Patient Review</h2>
+              <p>Compare this summary with the task instructions. Correct any errors before confirming.</p>
+              <div id="reviewChecklist" class="review-checklist"></div>
+              <label class="field">
+              <span>What did you notice?</span>
+              <textarea id="patientNote" rows="4" placeholder="Optional note about errors or choices"></textarea>
+              </label>
+            </div>
+            <div class="button-row">
+              <button class="btn-secondary" type="button" id="backToBookingButton">Correct Order</button>
+              <button class="btn-primary" type="button" id="confirmButton">Confirm Practice Booking</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view hidden" id="summaryView">
+        <div class="summary-grid">
+          <section class="panel" id="performanceSummary"></section>
+          <section class="panel" id="soapSummary"></section>
+        </div>
+        <div class="button-row">
+          <button class="btn-primary" type="button" id="newTaskButton">Try Another Task</button>
+          <button class="btn-secondary" type="button" id="printButton">Print Summary</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-backdrop hidden" id="taskModal">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" type="button" id="closeTaskModal" aria-label="Close">×</button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
+    <script src="app.js?v=cinema-home-clean-43"></script>
+  </body>
+</html>
