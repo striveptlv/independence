@@ -8,18 +8,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=cinema-home-clean-43" />
+    <link rel="stylesheet" href="styles.css?v=cinema-home-clean-66" />
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="https://www.striveptlv.com/independence/dashboard.html" aria-label="STRIVE Independence dashboard">
-        <img class="brand-mark" src="../logo.png" alt="" />
+        <img class="brand-mark" src="../Bill Pay/logo.png" alt="" />
         <span>
           <strong>STRIVE</strong>
           <em>Independence</em>
         </span>
       </a>
       <div class="top-actions">
+        <button class="icon-button nav-icon-button nav-flow-button hidden" type="button" id="navHomeButton" aria-label="Home" title="Home">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9.5 20v-6h5v6"/></svg>
+        </button>
+        <button class="icon-button nav-icon-button nav-flow-button hidden" type="button" id="navBackButton" aria-label="Back" title="Back">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg>
+        </button>
         <button class="icon-button nav-icon-button" type="button" id="infoButton" aria-label="Task information" title="Task information">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v-6"/><path d="M12 7h.01"/><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/></svg>
         </button>
@@ -52,6 +58,15 @@
             <label class="switch"><input type="checkbox" id="lowVisionToggle" /><span>Low-vision mode</span></label>
             <label class="switch"><input type="checkbox" id="highContrastToggle" /><span>High contrast</span></label>
             <label class="switch"><input type="checkbox" id="audioToggle" /><span>Read task aloud</span></label>
+            <label class="switch"><input type="checkbox" id="savedCardToggle" checked /><span>Saved practice card available</span></label>
+            <label class="switch"><input type="checkbox" id="newCardDefaultToggle" /><span>Start checkout with add new card</span></label>
+            <label class="field setup-field">
+              <span>Therapy note format</span>
+              <select id="noteFormatSelect">
+                <option value="soap">S: O: A: P:</option>
+                <option value="paragraph">One paragraph note</option>
+              </select>
+            </label>
           </div>
         </aside>
         <section class="home-task-library" aria-labelledby="taskLibraryTitle">
@@ -86,7 +101,7 @@
             </div>
             <div class="teaching-card">
               <strong>5. Review Checkout</strong>
-              <p>Check that selected seats determine the ticket count, wheelchair-accessible seating is used when required, and the final mock order matches the task directions.</p>
+              <p>Check that selected seats determine the ticket count, wheelchair-accessible seating is used when required, and the final mock cart matches the task directions.</p>
             </div>
             <div class="teaching-card">
               <strong>6. Debrief And Document</strong>
@@ -100,19 +115,19 @@
         <div class="booking-layout">
           <aside class="panel task-card" id="taskCard"></aside>
           <section class="booking-main">
-            <div class="booking-nav panel">
-              <button class="btn-secondary" type="button" id="homeFromBookingButton">Home</button>
-              <button class="btn-secondary" type="button" id="prevStepButton">Back</button>
-              <span id="stepHelpText">Choose a movie, date, and showtime first.</span>
-              <button class="btn-primary" type="button" id="nextStepButton">Continue</button>
-            </div>
+            <div class="ad-strip hidden" id="adStrip" aria-label="Distracting advertisements"></div>
 
             <section class="booking-section" id="movieSection">
               <div class="section-head">
                 <h3>Choose Movie, Day, And Showtime</h3>
                 <span id="movieStatus" class="status-pill">Not selected</span>
               </div>
-              <div class="date-tabs" id="dateTabs"></div>
+              <div class="date-action-row">
+                <div class="date-tabs" id="dateTabs"></div>
+                <div class="step-action-slot" id="movieStepAction">
+                  <button class="btn-primary" type="button" id="nextStepButton">Continue</button>
+                </div>
+              </div>
               <div class="movie-grid" id="movieGrid"></div>
             </section>
 
@@ -122,11 +137,12 @@
                 <div class="tool-row">
                   <button class="btn-secondary small" type="button" id="zoomSeatsButton">Enlarge Map</button>
                   <span id="seatStatus" class="status-pill">No seats</span>
+                  <div class="step-action-slot" id="seatsStepAction"></div>
                 </div>
               </div>
-              <div class="screen-label">Screen</div>
               <div class="front-warning">Front row warning area</div>
               <div class="seat-map-wrap" id="seatMapWrap">
+                <div class="screen-label">Screen</div>
                 <div class="seat-map" id="seatMap" aria-label="Interactive seat map"></div>
               </div>
               <div class="seat-legend" id="seatLegend"></div>
@@ -137,7 +153,14 @@
             <section class="booking-section" id="snackSection">
               <div class="section-head">
                 <h3>Snacks</h3>
-                <span id="snackStatus" class="status-pill">Optional</span>
+                <div class="tool-row">
+                  <span id="snackStatus" class="status-pill">Optional</span>
+                  <div class="step-action-slot" id="snacksStepAction"></div>
+                </div>
+              </div>
+              <div class="snack-intro">
+                <p>Concessions are optional. Choose snacks if the task asks for them, or skip this step with no concessions.</p>
+                <button class="btn-secondary small" type="button" id="skipConcessionsButton">Skip Concessions</button>
               </div>
               <div class="snack-offer hidden" id="comboOffer">
                 <strong>Combo offer</strong>
@@ -152,22 +175,76 @@
                 <h3>Fake Checkout</h3>
                 <span class="status-pill">No real payment</span>
               </div>
-              <div class="checkout-grid">
-                <label class="field">
-                  <span>Practice card number</span>
-                  <input value="4111 1111 1111 1111" readonly />
-                </label>
-                <label class="field">
-                  <span>Name</span>
-                  <input value="Practice User" readonly />
-                </label>
-                <label class="field hidden" id="memoryCodeField">
-                  <span id="memoryCodeLabel">Memory code</span>
-                  <input id="memoryCodeInput" autocomplete="off" />
-                </label>
+              <div id="checkoutPreview" class="checkout-preview"></div>
+              <div class="payment-entry-panel hidden" id="paymentEntryPanel">
+                <div class="payment-entry-head">
+                  <div>
+                    <p class="section-tag">Payment Method</p>
+                    <h3>Add Payment Method</h3>
+                  </div>
+                  <button class="btn-secondary small" type="button" id="closePaymentEntryButton">Hide</button>
+                </div>
+                <div class="payment-options" aria-label="Payment options">
+                  <button class="pay-option active" type="button" data-payment-method="saved-card">
+                    <span class="pay-dot" aria-hidden="true"></span>
+                    <span>
+                      <strong>Saved card</strong>
+                      <em>Use clinician practice profile</em>
+                    </span>
+                  </button>
+                  <button class="pay-option" type="button" data-payment-method="new-card">
+                    <span class="pay-dot" aria-hidden="true"></span>
+                    <span>
+                      <strong>Add new card</strong>
+                      <em>Enter practice billing info</em>
+                    </span>
+                  </button>
+                </div>
+                <div class="saved-card-summary" id="savedCardSummary">
+                  <div class="saved-card-icon" aria-hidden="true">••••</div>
+                  <div>
+                    <strong>Saved Practice Card</strong>
+                    <span>Visa ending in 4242 • Practice billing profile</span>
+                  </div>
+                </div>
+                <div class="payment-card-form" id="newCardFields">
+                  <div class="practice-card-preview" aria-hidden="true">
+                    <span>Practice Card</span>
+                    <strong>4111 1111 1111 1111</strong>
+                    <small>MM/YY &nbsp; CVC</small>
+                  </div>
+                  <label class="field card-number-field">
+                    <span>Card number</span>
+                    <input id="cardNumberInput" inputmode="numeric" autocomplete="off" placeholder="4111 1111 1111 1111" />
+                  </label>
+                  <label class="field card-name-field">
+                    <span>Name on card</span>
+                    <input id="cardNameInput" autocomplete="off" placeholder="Practice User" />
+                  </label>
+                  <div class="payment-form-row">
+                    <label class="field">
+                      <span>Expiration</span>
+                      <input id="cardExpiryInput" inputmode="numeric" autocomplete="off" placeholder="MM/YY" />
+                    </label>
+                    <label class="field">
+                      <span>CVC</span>
+                      <input id="cardSecurityInput" inputmode="numeric" autocomplete="off" placeholder="123" />
+                    </label>
+                    <label class="field">
+                      <span>ZIP code</span>
+                      <input id="billingZipInput" inputmode="numeric" autocomplete="off" placeholder="00000" />
+                    </label>
+                  </div>
+                  <label class="field hidden" id="memoryCodeField">
+                    <span id="memoryCodeLabel">Memory code</span>
+                    <input id="memoryCodeInput" autocomplete="off" />
+                  </label>
+                  <p class="payment-helper">Practice checkout only. Any card number length is accepted.</p>
+                </div>
               </div>
-              <button class="btn-primary" type="button" id="reviewButton">Review Order</button>
+              <button class="btn-primary" type="button" id="reviewButton">Review Cart</button>
             </section>
+            <div class="bottom-ad-zone hidden" id="bottomAdZone" aria-label="More distracting advertisements"></div>
           </section>
         </div>
         <aside class="panel order-panel collapsed" id="orderPanel"></aside>
@@ -187,7 +264,7 @@
               </label>
             </div>
             <div class="button-row">
-              <button class="btn-secondary" type="button" id="backToBookingButton">Correct Order</button>
+              <button class="btn-secondary" type="button" id="backToBookingButton">Correct Cart</button>
               <button class="btn-primary" type="button" id="confirmButton">Confirm Practice Booking</button>
             </div>
           </aside>
@@ -213,6 +290,16 @@
       </div>
     </div>
 
-    <script src="app.js?v=cinema-home-clean-43"></script>
+    <div class="modal-backdrop hidden ad-modal-backdrop" id="adModal">
+      <div class="modal ad-modal" role="dialog" aria-modal="true" aria-labelledby="adModalTitle">
+        <button class="modal-close" type="button" id="closeAdModal" aria-label="Close advertisement">×</button>
+        <p class="section-tag" id="adModalTitle">Advertisement</p>
+        <h2>Limited-Time Movie Deal</h2>
+        <p>This pop-up is not part of the booking task. Close it and return to the checkout steps.</p>
+        <button class="btn-primary" type="button" id="dismissAdModal">Return To Booking</button>
+      </div>
+    </div>
+
+    <script src="app.js?v=cinema-home-clean-66"></script>
   </body>
 </html>
