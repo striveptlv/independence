@@ -46,6 +46,7 @@ body{
 body.locked{overflow:hidden}
 a{color:inherit;text-decoration:none}
 img{max-width:100%}
+.hidden{display:none!important}
 nav{
   position:fixed;top:0;left:0;right:0;z-index:20;height:72px;
   background:rgba(255,255,255,.9);
@@ -147,6 +148,9 @@ main{position:relative;z-index:1}
 .button.secondary{background:rgba(255,255,255,.72);border-color:var(--line-m);color:var(--blue)}
 .button:hover{transform:translateY(-1px);opacity:.92}
 .quicklinks{margin-top:0}
+.owner-tools{margin-top:28px}
+.owner-tools .launch-title{margin-bottom:16px}
+.owner-tools .link-grid{grid-template-columns:minmax(0,380px)}
 .section-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:18px}
 .section-tag{font-family:"DM Mono",monospace;font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:7px}
 .section-title{color:var(--navy);font-size:clamp(1.7rem,3.3vw,2.55rem);font-weight:900;letter-spacing:0;text-transform:uppercase;line-height:1}
@@ -163,10 +167,21 @@ main{position:relative;z-index:1}
 .trial-banner a{display:inline-flex;margin-left:12px;color:var(--blue);font-weight:900;text-decoration:underline;text-underline-offset:3px}
 .link-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .app-card{
-  min-height:210px;display:flex;flex-direction:column;justify-content:space-between;padding:19px;
+  min-height:350px;display:flex;flex-direction:column;justify-content:space-between;padding:0;overflow:hidden;
   background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:8px;
   box-shadow:0 18px 50px rgba(19,35,56,.08);transition:transform .18s,border-color .18s,box-shadow .18s;
 }
+.app-content{padding:16px 16px 0}
+.app-image{
+  position:relative;height:176px;margin:14px -16px 0;overflow:hidden;
+  background:var(--tint);border:0;border-radius:0;
+}
+.app-image::after{
+  content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,35,56,.02),rgba(19,35,56,.2));
+  pointer-events:none;
+}
+.app-image img{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(.72) contrast(.96)}
+.talk .app-image img{object-position:center 62%}
 .app-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 24px 64px rgba(19,35,56,.13)}
 .app-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .app-num{font-family:"DM Mono",monospace;font-size:10px;color:rgba(26,46,68,.38)}
@@ -177,7 +192,7 @@ main{position:relative;z-index:1}
 }
 .app-card h2{margin-top:18px;color:var(--navy);font-size:1.18rem;font-weight:900;line-height:1.05;text-transform:uppercase}
 .app-card p{margin-top:10px;color:var(--muted-s);font-size:.93rem;line-height:1.45}
-.app-launch{margin-top:22px;display:flex;align-items:center;justify-content:space-between;color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.app-launch{margin:20px 16px 16px;display:flex;align-items:center;justify-content:space-between;color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
 .bill{--accent:var(--orange);--tint:rgba(245,130,10,.12);--border:rgba(245,130,10,.28)}
 .credit{--accent:var(--blue-bright);--tint:rgba(37,99,235,.12);--border:rgba(37,99,235,.25)}
 .bank{--accent:var(--green);--tint:rgba(16,185,129,.12);--border:rgba(16,185,129,.25)}
@@ -186,6 +201,7 @@ main{position:relative;z-index:1}
 .left-right{--accent:#0f766e;--tint:rgba(15,118,110,.11);--border:rgba(15,118,110,.24)}
 .market{--accent:#15803d;--tint:rgba(21,128,61,.11);--border:rgba(21,128,61,.25)}
 .medical{--accent:#0e7490;--tint:rgba(14,116,144,.11);--border:rgba(14,116,144,.25)}
+.promo{--accent:var(--orange);--tint:rgba(245,130,10,.12);--border:rgba(245,130,10,.28)}
 .cinema{--accent:#be123c;--tint:rgba(190,18,60,.1);--border:rgba(190,18,60,.24)}
 .basic{--accent:#b45309;--tint:rgba(180,83,9,.1);--border:rgba(180,83,9,.24)}
 .support-strip{
@@ -234,6 +250,7 @@ main{position:relative;z-index:1}
     <a href="account.html">My Account</a>
     <a href="tutorial.html">Tutorial</a>
     <a href="team-admin.html">Manage Team</a>
+    <a id="promoAdminNav" class="hidden" href="promo-admin.html">Promotional Access</a>
     <button class="nav-link-button" id="manageBillingBtn" type="button">Billing</button>
     <a href="feedback.html">Feedback</a>
     <a class="nav-cta" href="contact.html">Contact Us</a>
@@ -248,6 +265,7 @@ main{position:relative;z-index:1}
   <a href="account.html" onclick="toggleMenu(false)">My Account</a>
   <a href="tutorial.html" onclick="toggleMenu(false)">Tutorial</a>
   <a href="team-admin.html" onclick="toggleMenu(false)">Manage Team</a>
+  <a id="promoAdminMobileNav" class="hidden" href="promo-admin.html" onclick="toggleMenu(false)">Promotional Access</a>
   <button id="mobileManageBillingBtn" type="button">Billing</button>
   <a href="contact.html" onclick="toggleMenu(false)">Contact Us</a>
   <button id="mobileSignOutBtn" type="button">Sign Out</button>
@@ -274,53 +292,59 @@ main{position:relative;z-index:1}
 
       <div class="link-grid">
         <a class="app-card stride" href="https://www.striveptlv.com/ride" target="_blank" rel="noopener">
-          <div>
+          <div class="app-content">
             <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">01</div></div>
-            <h2>STRIDE Ride Share</h2>
+            <div class="app-image"><img src="pexels/dashboard-mock/ride-share.jpg" alt="Passenger using a phone inside a taxi" loading="lazy"></div>
+            <h2>Ride Share Simulator</h2>
             <p>Practice pickup, destination, ride selection, confirmation, and cancellation steps in a transportation simulator.</p>
           </div>
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
         <a class="app-card market" href="STRIVE%20Market/index.html">
-          <div>
+          <div class="app-content">
             <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">02</div></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/grocery-shopping.jpg" alt="Person ordering grocery delivery on a smartphone surrounded by fresh food" loading="lazy"></div>
             <h2>Grocery Shopping</h2>
             <p>Practice shopping from a functional grocery market with item search, cart review, checkout, and everyday decision-making.</p>
           </div>
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card cinema" href="https://www.striveptlv.com/cinema/">
-          <div>
+        <a class="app-card cinema" href="https://independence.striveptlv.com/cinema/index">
+          <div class="app-content">
             <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">03</div></div>
-            <h2>STRIVE Cinema</h2>
+            <div class="app-image"><img src="pexels/dashboard-mock/cinema.jpg" alt="Rows of seats in a quiet movie theater" loading="lazy"></div>
+            <h2>Trip to the Cinema</h2>
             <p>Practice choosing a movie, showtime, seats, tickets, and concessions in a realistic cinema booking simulation.</p>
           </div>
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
         <a class="app-card bill" href="https://www.striveptlv.com/moneymanagement/Bill%20Pay/Bill%20Pay%20Homepage.html">
-          <div>
+          <div class="app-content">
             <div class="app-top"><div class="app-num">04</div></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/bill-pay.jpg" alt="Person reviewing household bills at a desk" loading="lazy"></div>
             <h2>Bill Pay</h2>
             <p>Practice utility bill review, number entry, payment steps, sequencing, and error checking.</p>
           </div>
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card credit" href="Visa/index.html">
-          <div>
+        <a class="app-card credit" href="https://independence.striveptlv.com/Visa/index.html">
+          <div class="app-content">
             <div class="app-top"><div class="app-num">05</div></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/credit-card.jpg" alt="Hands using a credit card with a laptop" loading="lazy"></div>
             <h2>Credit Card</h2>
             <p>Practice card management, payment review, online forms, and attention to detail across multiple screens.</p>
           </div>
           <div class="app-launch">Open app <span>→</span></div>
         </a>
 
-        <a class="app-card bank" href="Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html">
-          <div>
+        <a class="app-card bank" href="https://independence.striveptlv.com/Credit%20Union%20Account/Las%20Vegas%20School%20District%20Credit%20Union%20Homepage.html#home">
+          <div class="app-content">
             <div class="app-top"><div class="app-num">06</div></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/online-banking.jpg" alt="Person completing an online banking task" loading="lazy"></div>
             <h2>Online Banking</h2>
             <p>Practice account review, balances, navigation, and everyday banking decisions in a fictional credit union.</p>
           </div>
@@ -328,8 +352,9 @@ main{position:relative;z-index:1}
         </a>
 
         <a class="app-card left-right" href="https://www.striveptlv.com/left-right/">
-          <div>
+          <div class="app-content">
             <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">07</div></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/left-right.jpg" alt="Two open hands showing the left and right sides of the body" loading="lazy"></div>
             <h2>Left/Right Discrimination</h2>
             <p>Practice identifying left and right directions through focused visual discrimination and response tasks.</p>
           </div>
@@ -337,8 +362,9 @@ main{position:relative;z-index:1}
         </a>
 
         <a class="app-card talk" href="https://talk.striveptlv.com" target="_blank" rel="noopener">
-          <div>
+          <div class="app-content">
             <div class="app-top"><div class="app-num">08</div></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/strive-talk.jpg" alt="Older adults communicating while using a phone" loading="lazy"></div>
             <h2>STRIVE Talk</h2>
             <p>Open the AAC mobile app for tap-to-speak functional phrases and daily communication routines.</p>
           </div>
@@ -346,14 +372,30 @@ main{position:relative;z-index:1}
         </a>
 
         <a class="app-card medical" href="Medication%20Management/medication_management_8_med_shuffle.html">
-          <div>
+          <div class="app-content">
             <div class="app-top"><span class="app-badge">Under Construction</span><div class="app-num">09</div></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/medication.jpg" alt="Hands organizing medication into a weekly pillbox" loading="lazy"></div>
             <h2>Medication Management</h2>
             <p>Preview a medication routine practice tool for pill organization, timing, sequencing, and attention to daily health tasks.</p>
           </div>
           <div class="app-launch">Preview app <span>→</span></div>
         </a>
       </div>
+
+      <section id="promoAdminEntry" class="owner-tools hidden" aria-labelledby="ownerToolsTitle">
+        <h2 class="launch-title" id="ownerToolsTitle">Owner Tools</h2>
+        <div class="link-grid">
+          <a class="app-card promo" href="promo-admin.html">
+            <div class="app-content">
+              <div class="app-top"><span class="app-badge">Owner</span><div class="app-num">Admin</div></div>
+              <div class="app-image"><img src="pexels/dashboard-mock/online-banking.jpg" alt="Professional managing an online account from a laptop" loading="lazy"></div>
+              <h2>Promotional Access</h2>
+              <p>Create free-trial invitations, monitor promotional accounts, and manage conversion follow-ups.</p>
+            </div>
+            <div class="app-launch">Open dashboard <span>→</span></div>
+          </a>
+        </div>
+      </section>
 
       <p class="launch-copy">Build everyday independence with guided practice for the digital tasks of daily life: transportation, movie ticket booking, banking, bill pay, card management, grocery shopping, medication routines, left/right discrimination, and AAC communication. Use fictional information only; these tools are built for safe practice, repetition, and carryover between sessions.</p>
 
@@ -651,12 +693,29 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function showPromoAdminEntryWhenAuthorized() {
+    try {
+      const { data: isPromoAdmin, error } = await supabase.rpc("is_promo_admin");
+
+      if (!error && isPromoAdmin === true) {
+        ["promoAdminEntry", "promoAdminNav", "promoAdminMobileNav"].forEach(id => {
+          document.getElementById(id)?.classList.remove("hidden");
+        });
+      } else if (error) {
+        console.error("Promo admin navigation check failed:", error.message);
+      }
+    } catch (error) {
+      console.error("Promo admin navigation check failed:", error);
+    }
+  }
+
   async function initDashboard() {
     const accessData = await checkAccess();
 
     if (!accessData) return;
 
     startInactivitySignOutTimer();
+    showPromoAdminEntryWhenAuthorized();
 
     const { user, profile, trialEndsAt } = accessData;
     currentProfile = profile;
