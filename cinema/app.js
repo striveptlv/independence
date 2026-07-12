@@ -53,6 +53,7 @@ const state = {
   instructionsVisible: false,
   immediateFeedback: true,
   noteFormat: "soap",
+  lastSummary: null,
   reviewSeeded: false,
   reviewOverride: null,
   orderOpen: false,
@@ -66,8 +67,8 @@ const $ = (id) => document.getElementById(id);
 const money = (value) => "$" + value.toFixed(2);
 const movieByTitle = (title) => movies.find((movie) => movie.title === title);
 const movieById = (id) => movies.find((movie) => movie.id === id);
-const dateKeys = ["Today", "Friday", "Saturday", "Sunday"];
-const dateOffsets = { Today: 0, Friday: 1, Saturday: 2, Sunday: 3 };
+const dateKeys = ["Today", "Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"];
+const dateOffsets = { Today: 0, Friday: 1, Saturday: 2, Sunday: 3, Monday: 4, Tuesday: 5, Wednesday: 6 };
 const dateForKey = (key) => {
   const date = new Date();
   date.setHours(12, 0, 0, 0);
@@ -89,6 +90,13 @@ const taskDateMatches = (task, date) => {
 const ruleDateForTask = (task, sourceDate) => {
   if (task.weekend || task.date === "Any" || !task.date) return sourceDate;
   return task.date;
+};
+const showtimesForMovieDate = (movie, dateKey) => {
+  if (!movie) return [];
+  if (movie.days[dateKey]) return movie.days[dateKey];
+  const fallbackKeys = ["Friday", "Saturday", "Sunday"];
+  const offset = dateOffsets[dateKey] ?? 0;
+  return movie.days[fallbackKeys[Math.max(0, offset - 1) % fallbackKeys.length]] || movie.days.Today || [];
 };
 const paymentMethodLabel = (method = state.paymentMethod) => ({
   "saved-card": "Saved practice card",
@@ -136,7 +144,7 @@ function initialDateForTask(task) {
 
 function validShowtimes(movie, day, task = state.task) {
   if (!movie) return [];
-  let times = (movie.days[day] || []).slice();
+  let times = showtimesForMovieDate(movie, day).slice();
   if (task.after) times = times.filter((slot) => toMinutes(slot.time) > toMinutes(task.after));
   if (task.before) times = times.filter((slot) => toMinutes(slot.time) < toMinutes(task.before));
   if (task.earliestAfter) {
@@ -236,7 +244,7 @@ function companionNearWheelchair(wheelchairSeat, companionSeat) {
 }
 
 function selectableMovieList() {
-  const levels = { Easy: 3, Moderate: 5, Hard: 8, Complex: 8 };
+  const levels = { Easy: 3, Moderate: 6, Hard: 6, Complex: 6 };
   const target = movieByTitle(state.task.movie);
   if (state.task.anyMovie || !target) return movies.slice(0, levels[state.task.difficulty] || 5);
   const others = movies.filter((movie) => movie.id !== target.id);
@@ -442,7 +450,7 @@ function renderMovies() {
   const query = state.search.toLowerCase();
   const list = selectableMovieList().filter((movie) => !query || movie.title.toLowerCase().includes(query) || movie.genre.toLowerCase().includes(query));
   $("movieGrid").innerHTML = list.map((movie) => {
-    const slots = movie.days[state.date] || [];
+    const slots = showtimesForMovieDate(movie, state.date);
     return `
       <article class="movie-card ${state.movieId === movie.id ? "active" : ""}" style="--poster: ${movie.accent}">
         <div class="poster">
@@ -598,11 +606,14 @@ function renderCheckout() {
   });
   $("checkoutPreviewBack").addEventListener("click", () => {
     state.bookingStep = "snacks";
+    state.paymentEntryOpen = false;
     renderAll();
   });
   $("checkoutFoodPrompt").addEventListener("click", () => {
     state.bookingStep = "snacks";
+    state.paymentEntryOpen = false;
     renderAll();
+    $("snackSection").scrollIntoView({ behavior: "smooth", block: "start" });
   });
   document.querySelectorAll("[data-payment-method]").forEach((button) => {
     if (button.dataset.paymentMethod === "saved-card") button.classList.toggle("hidden", !canUseSavedCard);
@@ -844,6 +855,7 @@ function confirmBooking() {
   const score = Math.round((passed / checks.length) * 100);
   const minutes = Math.max(1, Math.round((Date.now() - state.startTime) / 60000));
   const missed = checks.filter(([, pass]) => !pass).map(([label]) => label);
+  state.lastSummary = { score, minutes, missed };
   $("performanceSummary").innerHTML = `
     <div class="summary-head">
       <div>
@@ -857,16 +869,31 @@ function confirmBooking() {
       ${checks.map(([label, pass]) => `<div class="review-row"><span>${label}</span><strong>${pass ? "Met" : "Needs practice"}</strong></div>`).join("")}
     </div>
   `;
+  renderTherapySummary(score, minutes, missed);
+  setView("summary");
+}
+
+function renderTherapySummary(score, minutes, missed) {
   $("soapSummary").innerHTML = `
     <div class="summary-head compact">
       <div>
         <p class="section-tag">Therapist Summary</p>
         <h2>${state.noteFormat === "soap" ? "SOAP-Style Note" : "Paragraph Note"}</h2>
       </div>
+      <div class="note-format-toggle" aria-label="Therapy note format">
+        <button type="button" data-note-format="soap" class="${state.noteFormat === "soap" ? "active" : ""}">S: O: A: P:</button>
+        <button type="button" data-note-format="paragraph" class="${state.noteFormat === "paragraph" ? "active" : ""}">Paragraph</button>
+      </div>
     </div>
     <div class="soap ${state.noteFormat === "paragraph" ? "paragraph-note" : ""}">${therapyNote(score, minutes, missed)}</div>
   `;
-  setView("summary");
+  document.querySelectorAll("[data-note-format]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.noteFormat = button.dataset.noteFormat;
+      $("noteFormatSelect").value = state.noteFormat;
+      renderTherapySummary(score, minutes, missed);
+    });
+  });
 }
 
 function noteSections(score, minutes, missed) {
@@ -977,6 +1004,9 @@ function bindEvents() {
   });
   $("noteFormatSelect").addEventListener("change", () => {
     state.noteFormat = $("noteFormatSelect").value;
+    if (state.view === "summary" && state.lastSummary) {
+      renderTherapySummary(state.lastSummary.score, state.lastSummary.minutes, state.lastSummary.missed);
+    }
   });
   $("audioToggle").addEventListener("change", () => { if ($("audioToggle").checked) speakTask(); });
   $("infoButton").addEventListener("click", openTaskModal);
@@ -1028,11 +1058,6 @@ function bindEvents() {
     renderAll();
   });
   $("dismissOfferButton").addEventListener("click", () => $("comboOffer").classList.add("hidden"));
-  $("skipConcessionsButton").addEventListener("click", () => {
-    state.snacks = {};
-    renderReview();
-    setView("review");
-  });
   $("orderPanel").addEventListener("click", (event) => {
     const button = event.target.closest("#orderToggleButton");
     if (!button) return;
