@@ -476,37 +476,45 @@ function generateTeamCode() {
   return Array.from(values, value => alphabet[value % alphabet.length]).join("");
 }
 
-async function sendWelcomeEmail(user, fullName) {
+async function sendWelcomeEmailIfNeeded(user, fullName) {
+  if (!user?.email) {
+    console.error("Welcome email skipped: missing user email.");
+    return false;
+  }
+
   try {
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabaseClient.auth.getSession();
-
-    if (sessionError || !session) {
-      console.warn("No active session. Welcome email was not sent.");
-      return false;
-    }
-
     const response = await fetch(
-      "https://ccfpdgmmwkghjszkbnzs.supabase.co/functions/v1/send-welcome-email",
+      `${SUPABASE_URL}/functions/v1/send-welcome-email`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
         },
         body: JSON.stringify({
-          email: user.email,
-          full_name: fullName,
-        }),
+          user_id: user.id,
+          email: normalizeEmail(user.email),
+          full_name: fullName || user.email
+        })
       }
     );
 
-    const result = await response.json();
+    const responseText = await response.text();
+
+    let result;
+
+    try {
+      result = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      result = { message: responseText };
+    }
 
     if (!response.ok) {
-      console.error("Welcome email failed:", result);
+      console.error("Welcome email failed:", {
+        status: response.status,
+        result
+      });
       return false;
     }
 
@@ -514,47 +522,6 @@ async function sendWelcomeEmail(user, fullName) {
     return true;
   } catch (error) {
     console.error("Unexpected welcome email error:", error);
-    return false;
-  }
-}
-
-async function sendWelcomeEmailIfNeeded(user, fullName) {
-  if (!user?.id) return false;
-
-  try {
-    // TODO: Ensure public.profile.welcome_email_sent_at timestamptz exists.
-    const { data: profile, error: profileError } = await supabaseClient
-      .from("profile")
-      .select("welcome_email_sent_at")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (profileError) {
-      console.error("Welcome email profile check failed:", profileError);
-      return false;
-    }
-
-    if (profile?.welcome_email_sent_at) {
-      console.log("Welcome email already sent:", profile.welcome_email_sent_at);
-      return true;
-    }
-
-    const emailSent = await sendWelcomeEmail(user, fullName);
-    if (!emailSent) return false;
-
-    const { error: updateError } = await supabaseClient
-      .from("profile")
-      .update({ welcome_email_sent_at: new Date().toISOString() })
-      .eq("user_id", user.id);
-
-    if (updateError) {
-      console.error("Welcome email timestamp update failed:", updateError);
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Unexpected welcome email automation error:", error);
     return false;
   }
 }
