@@ -119,6 +119,15 @@ nav{
 .tier-tagline{font-size:.86rem;color:var(--muted);line-height:1.38;margin-bottom:.8rem}
 .tier-price{font-size:clamp(2.9rem,5.1vw,4.25rem);font-weight:900;line-height:.88;letter-spacing:0;color:var(--navy)}
 .tier-price-note{font-size:12px;color:var(--muted);margin-top:.5rem;letter-spacing:.04em}
+.promo-note{
+  display:flex;align-items:center;gap:8px;margin:.15rem 0 .9rem;
+  color:var(--muted-s);font-size:.78rem;font-weight:600;line-height:1.35;
+}
+.promo-note::before{
+  content:'%';display:inline-flex;align-items:center;justify-content:center;flex:0 0 22px;height:22px;
+  border-radius:50%;background:rgba(245,130,10,.14);border:1px solid rgba(245,130,10,.3);
+  color:var(--orange);font-family:'DM Mono',monospace;font-size:10px;font-weight:700;
+}
 .tier-sep{height:1px;background:var(--line);margin:.85rem 0}
 .tier-features{list-style:none;display:flex;flex-direction:column;gap:.36rem;margin-bottom:.95rem;flex:1}
 .tier-features li{font-size:.84rem;color:var(--muted-s);display:flex;align-items:flex-start;gap:9px;line-height:1.28}
@@ -182,6 +191,8 @@ nav{
       </div>
 
       <div class="account-check" id="accountCheck">Checking your account...</div>
+
+      <p class="promo-note">Have a promotion code? You can enter it on the secure checkout screen after choosing a plan.</p>
 
       <div class="tier-grid" id="planGrid">
         <div class="tier-card featured">
@@ -436,7 +447,9 @@ async function startCheckout(plan) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${data.session.access_token}`
       },
-      body: JSON.stringify({ plan })
+      // The checkout-session function uses this flag to enable Stripe's
+      // promotion-code field on the hosted checkout page.
+      body: JSON.stringify({ plan, allow_promotion_codes: true })
     });
 
     const result = await response.json();
