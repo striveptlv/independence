@@ -4,14 +4,14 @@ STRIVE Airlines is a standalone flight-booking simulation designed for functiona
 
 ## Project files
 
-- `strive-airlines.html` — complete website, including its CSS and JavaScript
+- `index.html` — complete website, including its CSS and JavaScript
 - `logo.png` — STRIVE logo used in the navigation header
 
 No framework, package installation, database, or build process is required.
 
 ## Using the activity
 
-1. Open `strive-airlines.html` in a modern web browser.
+1. Open `index.html` in a modern web browser.
 2. Use the Settings button on the homepage to choose a default home airport. Las Vegas (LAS) is the initial default.
 3. Choose an Easy, Moderate, Hard, or Complex scenario.
 4. During the activity, select the information button in the header to review the current task as a bullet list.
