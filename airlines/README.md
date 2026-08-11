@@ -21,23 +21,23 @@ The search form initially defaults to tomorrow. Round-trip searches initially sh
 
 ## Scenarios
 
-### Easy — Family Visit
+The homepage provides eight activities: two activities at each difficulty level. Task 01, 03, 05, and 07 retain the original goals; Task 02, 04, 06, and 08 provide the additional traveler-count, timed-flight, seat-type, and strategic-seating goals.
 
-- One traveler
+### Easy — Two Tickets
+
+- Two travelers
 - One-way flight to Seattle (SEA)
 - Required departure: February 9, 2027
 - Search field initially defaults to tomorrow and must be changed
 - Patient reads the first flight details aloud
 - Saved practice Visa ending in 4242 is available
 
-### Moderate — Budget Trip
+### Moderate — Timed Flight
 
-- One traveler
-- Round trip to Denver (DEN)
+- Two travelers
+- Round trip to San Francisco (SFO)
 - Required travel dates: February 9–14, 2027
-- $450 total budget
-- One $35 checked bag
-- Compare at least two fares and select free cancellation
+- Required departure time: 12:05 PM
 - Saved practice Visa ending in 4242 is available
 
 ### Hard — Two Travelers
@@ -47,9 +47,9 @@ The search form initially defaults to tomorrow. Round-trip searches initially sh
 - Required travel dates: February 9–14, 2027
 - $600 total budget
 - One shared $40 checked bag
-- Different seat and meal preferences for each traveler
+- Interactive seat map requiring exactly one aisle and one middle seat
 - Auditory divided-attention task
-- Saved card is declined; a fictional replacement card is required
+- Saved card is expired; a fictional replacement card is required
 
 ### Complex — Independent Trip
 
@@ -58,10 +58,10 @@ The search form initially defaults to tomorrow. Round-trip searches initially sh
 - Required travel dates: February 9–14, 2027
 - $800 total budget
 - Two $35 checked bags
-- Compare at least three flights
-- Layover calculation and auditory interruption
+- Nearly full seat map with only two available seats
+- One correct pair: seat 8A beside the emergency exit and seat 12F beside the rear restroom
 - Planted return-date error that must be corrected
-- Saved card is declined; a fictional replacement card is required
+- Saved card is expired; a fictional replacement card is required
 
 ## Airport behavior
 
@@ -70,7 +70,7 @@ The homepage Settings panel includes the supported major U.S. airports. The sele
 If the home airport matches a scenario’s normal destination, STRIVE Airlines automatically substitutes another destination so the departure and arrival airports are never identical:
 
 - SEA changes to SAN
-- DEN changes to SLC
+- SFO changes to OAK
 - MCO changes to TPA
 - JFK changes to BOS
 
@@ -81,7 +81,7 @@ The activity can also request the device’s location and choose the closest air
 This website does not process payments.
 
 - Easy and Moderate provide a saved fictional Visa ending in 4242.
-- Hard and Complex simulate a declined saved card and require another fictional card entry.
+- Hard and Complex show an expired saved card and require another fictional card entry.
 - Replacement-card fields are validated only inside the current page.
 - Card details are not saved, uploaded, or transmitted.
 
