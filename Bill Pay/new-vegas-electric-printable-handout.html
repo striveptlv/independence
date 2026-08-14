@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bill Pay Simulator Printable Handout</title>
+    <style>
+      :root {
+        --text: #000000;
+        --muted: #333333;
+        --line: #000000;
+        --bg: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 32px;
+        font-family: "Times New Roman", Georgia, serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .sheet {
+        max-width: 850px;
+        margin: 0 auto;
+      }
+
+      .header,
+      .section,
+      .card-box {
+        border: 2px solid var(--line);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .header h1,
+      .section h2,
+      .card-box h2,
+      p {
+        margin-top: 0;
+      }
+
+      .subtle {
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .detail-list {
+        margin: 0;
+      }
+
+      .detail-list div {
+        padding: 10px 0;
+        border-bottom: 1px solid #000000;
+      }
+
+      .detail-list dt {
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .detail-list dd {
+        margin: 0;
+      }
+
+      .credit-card {
+        border: 3px solid #000000;
+        padding: 24px;
+        min-height: 220px;
+      }
+
+      .credit-card-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 18px;
+      }
+
+      .chip {
+        width: 54px;
+        height: 36px;
+        border: 2px solid #000000;
+        margin-bottom: 24px;
+      }
+
+      .card-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        margin-bottom: 26px;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 16px;
+      }
+
+      .card-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      .instructions {
+        padding-left: 20px;
+        margin: 0;
+      }
+
+      .instructions li {
+        margin-bottom: 8px;
+      }
+
+      .site-footer {
+        margin-top: 18px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media print {
+        body {
+          padding: 0;
+        }
+
+        .sheet {
+          max-width: none;
+        }
+
+        .header,
+        .section,
+        .card-box {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  
+</head>
+  <body>
+    <main class="sheet">
+      <section class="header">
+        <h1>Bill Pay Simulator Practice Handout</h1>
+        <p class="subtle">
+          Printable black-and-white reference for occupational therapy bill-pay practice.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="section">
+          <h2>Login Information</h2>
+          <dl class="detail-list">
+            <div>
+              <dt>Username</dt>
+              <dd>JordanL</dd>
+            </div>
+            <div>
+              <dt>Password</dt>
+              <dd>Therapy</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="section">
+          <h2>Directions</h2>
+          <ol class="instructions">
+            <li>Use this sheet as a reference during the activity.</li>
+            <li>Log in to the Bill Pay Simulator practice site.</li>
+            <li>Find the bill amount, charges, usage, account number, and contact information.</li>
+            <li>Enter the mock payment card correctly.</li>
+            <li>Download the current statement in the simulation.</li>
+          </ol>
+        </article>
+      </section>
+
+      <section class="card-box">
+        <h2>Mock Credit Card Reference</h2>
+        <div class="credit-card">
+          <div class="credit-card-title">Training Card</div>
+          <div class="chip" aria-hidden="true"></div>
+          <div class="card-number">5293 8471 0293 8475</div>
+          <div class="card-grid">
+            <div>
+              <div class="card-label">Cardholder</div>
+              <div>Jordan Lee</div>
+            </div>
+            <div>
+              <div class="card-label">Exp.</div>
+              <div>09/31</div>
+            </div>
+            <div>
+              <div class="card-label">CVV</div>
+              <div>001</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <p class="site-footer">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+    </main>
+  </body>
+</html>

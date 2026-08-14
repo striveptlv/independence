@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bill Pay Simulator Practice Medium Difficulty Desktop</title>
+    <link rel="stylesheet" href="./styles.css" />
+  
+</head>
+  <body class="locked">
+    <div id="loginScreen" class="login-screen">
+      <div class="login-panel card">
+        <p class="eyebrow">Secure Sign In</p>
+        <h1>Bill Pay Simulator</h1>
+        <p class="muted">Medium difficulty practice portal</p>
+
+        <form id="loginForm" class="login-form" novalidate>
+          <label>
+            Username
+            <input name="username" type="text" autocomplete="off" />
+          </label>
+          <label>
+            Password
+            <div class="password-field">
+              <input id="passwordInput" name="password" type="password" autocomplete="off" />
+              <button id="togglePassword" type="button" class="inline-button">Show</button>
+            </div>
+          </label>
+          <button class="primary-button full-width" type="submit">Log In</button>
+          <p id="loginMessage" class="form-message" aria-live="polite"></p>
+        </form>
+
+        <div class="login-note">
+          <p class="eyebrow">Training Credentials</p>
+          <p class="muted">Username: JordanL</p>
+          <p class="muted">Password: Therapy</p>
+        </div>
+        <p class="login-credit">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+      </div>
+    </div>
+
+    <div id="appShell" class="app-shell hidden">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">BP</div>
+          <div>
+            <p class="eyebrow">Clinical Training Platform</p>
+            <h2>Bill Pay Simulator</h2>
+          </div>
+        </div>
+        <a class="home-link" style="margin-bottom: 18px;" href="./Bill_Pay_Homepage.html">Back to Homepage</a>
+
+        <nav class="nav-list" aria-label="Primary">
+          <button class="nav-item active" data-target="dashboard">Dashboard</button>
+          <button class="nav-item" data-target="billing">Billing</button>
+          <button class="nav-item" data-target="usage">Usage</button>
+          <button class="nav-item" data-target="account">Account</button>
+          <button class="nav-item" data-target="support">Support</button>
+          <button class="nav-item" data-target="outages">Outages & Emergencies</button>
+          <button class="nav-item" data-target="business">Business</button>
+          <button class="nav-item" data-target="locations">Locations</button>
+          <button class="nav-item" data-target="about">About Us</button>
+          <button class="nav-item" data-target="apply">Apply Now</button>
+          <button class="nav-item" data-target="ads">Offers</button>
+        </nav>
+
+        <section class="therapy-note card">
+          <p class="eyebrow">OT Session Note</p>
+          <h3>Practice Goals</h3>
+          <ul class="goal-list">
+            <li>
+              <label class="goal-item">
+                <input type="checkbox" data-goal="bill" />
+                <span>Find the current statement amount</span>
+              </label>
+            </li>
+            <li>
+              <label class="goal-item">
+                <input type="checkbox" data-goal="charges" />
+                <span>Find current charges</span>
+              </label>
+            </li>
+            <li>
+              <label class="goal-item">
+                <input type="checkbox" data-goal="usage" />
+                <span>Find current usage</span>
+              </label>
+            </li>
+            <li>
+              <label class="goal-item">
+                <input type="checkbox" data-goal="account" />
+                <span>Find the account number</span>
+              </label>
+            </li>
+            <li>
+              <label class="goal-item">
+                <input type="checkbox" data-goal="contact" />
+                <span>Find contact information</span>
+              </label>
+            </li>
+            <li>
+              <label class="goal-item">
+                <input type="checkbox" data-goal="payment" />
+                <span>Enter payment correctly</span>
+              </label>
+            </li>
+            <li>
+              <label class="goal-item">
+                <input type="checkbox" data-goal="download" />
+                <span>Download the current statement</span>
+              </label>
+            </li>
+          </ul>
+        </section>
+      </aside>
+
+      <main class="main-content">
+        <header class="hero card">
+          <div>
+            <p class="eyebrow">Practice Account</p>
+            <h1>1180 Desert Bloom Court</h1>
+            <p class="muted">Practice account profile</p>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <p class="eyebrow">Current Statement</p>
+              <p class="hero-value" data-goal-trigger="bill">$184.61</p>
+              <p class="muted">Due April 22, 2026</p>
+            </div>
+            <button class="primary-button" data-target="billing" type="button">
+              Go To Billing
+            </button>
+          </div>
+        </header>
+
+        <section class="content-grid single-column">
+          <div class="primary-column">
+            <section id="dashboard" class="panel active card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Overview</p>
+                  <h3>Your practice account snapshot</h3>
+                </div>
+                <span class="status-pill">Paperless On</span>
+              </div>
+
+              <div class="stats-grid">
+                <article class="stat-card">
+                  <p class="stat-label">Current Charges</p>
+                  <p class="stat-value" data-goal-trigger="charges">$184.61</p>
+                  <p class="muted">Generation, delivery, and taxes</p>
+                </article>
+                <article class="stat-card">
+                  <p class="stat-label">This Month Usage</p>
+                  <p class="stat-value" data-goal-trigger="usage">728 kWh</p>
+                  <p class="muted">8% higher than March</p>
+                </article>
+                <article class="stat-card">
+                  <p class="stat-label">Account Number</p>
+                  <p class="stat-value compact" data-goal-trigger="account">1048-7721-55</p>
+                  <p class="muted">Household billing practice</p>
+                </article>
+              </div>
+
+              <div class="card split-card">
+                <div>
+                  <p class="eyebrow">Bill Summary</p>
+                  <h4>April 2026 statement</h4>
+                </div>
+                <dl class="summary-list">
+                  <div>
+                    <dt>Previous balance</dt>
+                    <dd>$0.00</dd>
+                  </div>
+                  <div>
+                    <dt>Delivery charges</dt>
+                    <dd>$56.30</dd>
+                  </div>
+                  <div>
+                    <dt>Service charges</dt>
+                    <dd>$101.16</dd>
+                  </div>
+                  <div>
+                    <dt>Taxes and fees</dt>
+                    <dd>$27.15</dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
+
+            <section id="billing" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Billing Center</p>
+                  <h3>Review charges and submit practice payment</h3>
+                </div>
+                <button id="downloadBill" class="ghost-button compact-button" type="button">
+                  Download Current Statement
+                </button>
+              </div>
+
+              <div class="billing-layout">
+                <article class="statement-card">
+                  <h4>Current Charges</h4>
+                  <div class="line-item">
+                    <span>Service charges</span>
+                    <strong>$101.16</strong>
+                  </div>
+                  <div class="line-item">
+                    <span>Delivery service</span>
+                    <strong>$56.30</strong>
+                  </div>
+                  <div class="line-item">
+                    <span>Local taxes and surcharges</span>
+                    <strong>$27.15</strong>
+                  </div>
+                  <div class="line-item total">
+                    <span>Amount due</span>
+                    <strong>$184.61</strong>
+                  </div>
+                </article>
+
+                <div class="payment-stack">
+                  <article class="info-card training-card">
+                    <p class="eyebrow">Training Card For Session</p>
+                    <h4>Use this mock payment information</h4>
+                    <dl class="training-list">
+                      <div>
+                        <dt>Cardholder</dt>
+                        <dd>Jordan Lee</dd>
+                      </div>
+                      <div>
+                        <dt>Card Number</dt>
+                        <dd>5293 8471 0293 8475</dd>
+                      </div>
+                      <div>
+                        <dt>Expiration</dt>
+                        <dd>09/31</dd>
+                      </div>
+                      <div>
+                        <dt>CVV</dt>
+                        <dd>001</dd>
+                      </div>
+                    </dl>
+                  </article>
+
+                  <form id="paymentForm" class="payment-card" novalidate>
+                    <div class="payment-heading">
+                      <div>
+                        <p class="eyebrow">Practice Payment</p>
+                        <h4>Card entry</h4>
+                      </div>
+                      <span class="secure-pill">Secure test mode</span>
+                    </div>
+
+                    <label>
+                      Name on card
+                      <input name="cardName" type="text" autocomplete="off" />
+                    </label>
+                    <label>
+                      Card number
+                      <input name="cardNumber" type="text" inputmode="numeric" autocomplete="off" />
+                    </label>
+
+                    <div class="payment-row two-columns">
+                      <label>
+                        Expiration
+                        <input name="expiry" type="text" autocomplete="off" />
+                      </label>
+                      <label>
+                        CVV
+                        <input name="cvv" type="text" inputmode="numeric" autocomplete="off" />
+                      </label>
+                    </div>
+
+                    <button class="primary-button full-width" type="submit">Submit Payment</button>
+                    <p id="paymentMessage" class="form-message" aria-live="polite"></p>
+                  </form>
+                </div>
+              </div>
+            </section>
+
+            <section id="usage" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Energy Usage</p>
+                  <h3>Current monthly use</h3>
+                </div>
+              </div>
+
+              <div class="usage-chart" aria-label="Energy use chart">
+                <div class="bar-group">
+                  <span>Jan</span>
+                  <div class="bar" style="--size: 61%"></div>
+                  <strong>612</strong>
+                </div>
+                <div class="bar-group">
+                  <span>Feb</span>
+                  <div class="bar" style="--size: 66%"></div>
+                  <strong>684</strong>
+                </div>
+                <div class="bar-group">
+                  <span>Mar</span>
+                  <div class="bar" style="--size: 69%"></div>
+                  <strong>702</strong>
+                </div>
+                <div class="bar-group highlight">
+                  <span>Apr</span>
+                  <div class="bar" style="--size: 73%"></div>
+                  <strong>728</strong>
+                </div>
+              </div>
+
+              <div class="insight-card">
+                <p class="eyebrow">Current Usage</p>
+                <h4>728 kWh used this billing cycle</h4>
+                <p class="muted">Air conditioning usage increased during late afternoon peak hours.</p>
+              </div>
+            </section>
+
+            <section id="account" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Account Details</p>
+                  <h3>Practice billing profile</h3>
+                </div>
+              </div>
+
+              <dl class="account-grid">
+                <div>
+                  <dt>Account holder</dt>
+                  <dd>Jordan Lee</dd>
+                </div>
+                <div>
+                  <dt>Account number</dt>
+                  <dd data-goal-trigger="account">1048-7721-55</dd>
+                </div>
+                <div>
+                  <dt>Rate plan</dt>
+                  <dd>Southern Nevada Time Saver</dd>
+                </div>
+                <div>
+                  <dt>Statement due date</dt>
+                  <dd>April 22, 2026</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section id="support" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Help & Contact</p>
+                  <h3>Support options</h3>
+                </div>
+              </div>
+
+              <div class="contact-grid" data-goal-trigger="contact">
+                <article class="contact-card">
+                  <p class="contact-label">Practice Support</p>
+                  <h4>(702) 555-0184</h4>
+                  <p class="muted">Mon to Fri, 7:00 AM to 7:00 PM</p>
+                </article>
+                <article class="contact-card">
+                  <p class="contact-label">Email</p>
+                  <h4>support@billpay-simulator-demo.com</h4>
+                  <p class="muted">Replies within 1 business day</p>
+                </article>
+                <article class="contact-card">
+                  <p class="contact-label">Mailing Address</p>
+                  <h4>400 Fremont Plaza, Las Vegas, NV</h4>
+                  <p class="muted">Practice correspondence center</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="outages" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Safety Center</p>
+                  <h3>Safety and interruptions</h3>
+                </div>
+              </div>
+              <div class="info-grid">
+                <article class="info-card">
+                  <h4>Report an interruption</h4>
+                  <p class="muted">Text OUT to 69843 or call (702) 555-0199 for automated reporting.</p>
+                </article>
+                <article class="info-card">
+                  <h4>Medical priority note</h4>
+                  <p class="muted">Apply for priority restoration if someone in the home depends on powered equipment.</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="business" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Community Services</p>
+                  <h3>Community billing tools</h3>
+                </div>
+              </div>
+              <div class="info-grid">
+                <article class="info-card">
+                  <h4>Community billing bundles</h4>
+                  <p class="muted">Flat-rate plans for retail, office, and restaurant spaces across Las Vegas.</p>
+                </article>
+                <article class="info-card">
+                  <h4>Payment planning</h4>
+                  <p class="muted">Book a free consultation to reduce summer cooling costs and demand charges.</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="locations" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Practice Locations</p>
+                  <h3>Practice location information</h3>
+                </div>
+              </div>
+              <div class="info-grid">
+                <article class="info-card">
+                  <h4>Downtown Service Hub</h4>
+                  <p class="muted">400 Fremont Plaza, Las Vegas, NV 89101</p>
+                </article>
+                <article class="info-card">
+                  <h4>Summerlin Payment Kiosk</h4>
+                  <p class="muted">1980 Red Rock Loop, Las Vegas, NV 89135</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="about" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Company</p>
+                  <h3>About this simulator</h3>
+                </div>
+              </div>
+              <p class="muted">
+                Bill Pay Simulator is a clinical training simulator designed to resemble a structured bill payment platform for occupational therapy practice.
+              </p>
+            </section>
+
+            <section id="apply" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Programs</p>
+                  <h3>Apply now</h3>
+                </div>
+              </div>
+              <div class="info-grid">
+                <article class="info-card">
+                  <h4>Budget practice</h4>
+                  <p class="muted">Spread seasonal costs into fixed monthly payments after three billing cycles.</p>
+                </article>
+                <article class="info-card">
+                  <h4>Payment assistance</h4>
+                  <p class="muted">Apply for temporary payment support and home weatherization guidance.</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="ads" class="panel card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Special Offers</p>
+                  <h3>Featured promotions</h3>
+                </div>
+              </div>
+              <div class="ad-grid">
+                <article class="ad-card">
+                  <p class="eyebrow">Limited Time</p>
+                  <h4>Save with smart thermostat bundles</h4>
+                  <p class="muted">Install qualifying devices and get a summer bill credit up to $75.</p>
+                </article>
+                <article class="ad-card">
+                  <p class="eyebrow">New</p>
+                  <h4>Home EV charger rebate</h4>
+                  <p class="muted">Residential customers may qualify for next-day enrollment review.</p>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
+        <p class="site-footer">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+      </main>
+    </div>
+
+    <dialog id="downloadModal" class="modal">
+      <div class="modal-card">
+        <p class="eyebrow">Download Ready</p>
+        <h3>April 2026 bill downloaded</h3>
+        <p class="muted">This is a simulated download for therapy practice. No file was actually saved.</p>
+        <button id="closeModal" class="primary-button" type="button">Close</button>
+      </div>
+    </dialog>
+
+    <script>
+      const credentials = { username: "JordanL", password: "Therapy" };
+      const trainingCard = {
+        cardName: "Jordan Lee",
+        cardNumber: "5293847102938475",
+        expiry: "09/31",
+        cvv: "001",
+      };
+
+      const loginScreen = document.querySelector("#loginScreen");
+      const appShell = document.querySelector("#appShell");
+      const loginForm = document.querySelector("#loginForm");
+      const loginMessage = document.querySelector("#loginMessage");
+      const passwordInput = document.querySelector("#passwordInput");
+      const togglePassword = document.querySelector("#togglePassword");
+      const navItems = document.querySelectorAll(".nav-item");
+      const panels = document.querySelectorAll(".panel");
+      const paymentForm = document.querySelector("#paymentForm");
+      const paymentMessage = document.querySelector("#paymentMessage");
+      const downloadBill = document.querySelector("#downloadBill");
+      const downloadModal = document.querySelector("#downloadModal");
+      const closeModal = document.querySelector("#closeModal");
+      const body = document.body;
+      const goalChecks = document.querySelectorAll(".goal-item input[type='checkbox']");
+      const sidebar = document.querySelector(".sidebar");
+
+      if (appShell && sidebar) {
+        const mobileNavBar = document.createElement("div");
+        mobileNavBar.className = "mobile-nav-bar";
+        mobileNavBar.innerHTML = `
+          <button class="mobile-nav-button" type="button" aria-label="Open menu" aria-expanded="false">
+            <span class="mobile-nav-icon" aria-hidden="true"></span>
+          </button>
+          <span class="mobile-nav-title">Bill Pay Simulator</span>
+        `;
+
+        const mobileNavBackdrop = document.createElement("button");
+        mobileNavBackdrop.className = "mobile-nav-backdrop";
+        mobileNavBackdrop.type = "button";
+        mobileNavBackdrop.setAttribute("aria-label", "Close menu");
+
+        appShell.insertBefore(mobileNavBar, sidebar);
+        appShell.insertBefore(mobileNavBackdrop, sidebar);
+
+        const mobileNavButton = mobileNavBar.querySelector(".mobile-nav-button");
+
+        function setMobileMenu(open) {
+          appShell.classList.toggle("mobile-menu-open", open);
+          body.classList.toggle("mobile-menu-locked", open);
+          mobileNavButton.setAttribute("aria-expanded", String(open));
+          mobileNavButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+
+        mobileNavButton.addEventListener("click", () => {
+          setMobileMenu(!appShell.classList.contains("mobile-menu-open"));
+        });
+
+        mobileNavBackdrop.addEventListener("click", () => {
+          setMobileMenu(false);
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            setMobileMenu(false);
+          }
+        });
+
+        navItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            setMobileMenu(false);
+          });
+        });
+      }
+
+      const goalState = {
+        bill: false,
+        charges: false,
+        usage: false,
+        account: false,
+        contact: false,
+        payment: false,
+        download: false,
+      };
+
+      function syncGoals() {
+        goalChecks.forEach((checkbox) => {
+          checkbox.checked = Boolean(goalState[checkbox.dataset.goal]);
+        });
+      }
+
+      function completeGoal(goal) {
+        if (!goalState[goal]) {
+          goalState[goal] = true;
+          syncGoals();
+        }
+      }
+
+      function activatePanel(panelId) {
+        if (body.classList.contains("locked")) return;
+
+        navItems.forEach((item) => {
+          item.classList.toggle("active", item.dataset.target === panelId);
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.toggle("active", panel.id === panelId);
+        });
+
+        if (panelId === "billing") completeGoal("charges");
+        if (panelId === "usage") completeGoal("usage");
+        if (panelId === "account") completeGoal("account");
+        if (panelId === "support") completeGoal("contact");
+      }
+
+      function normalizeDigits(value) {
+        return value.replace(/\D/g, "");
+      }
+
+      navItems.forEach((item) => {
+        item.addEventListener("click", () => activatePanel(item.dataset.target));
+      });
+
+      document.querySelectorAll(".primary-button[data-target]").forEach((button) => {
+        button.addEventListener("click", () => activatePanel(button.dataset.target));
+      });
+
+      document.querySelectorAll("[data-goal-trigger]").forEach((element) => {
+        element.addEventListener("click", () => completeGoal(element.dataset.goalTrigger));
+      });
+
+      togglePassword.addEventListener("click", () => {
+        const hidden = passwordInput.type === "password";
+        passwordInput.type = hidden ? "text" : "password";
+        togglePassword.textContent = hidden ? "Hide" : "Show";
+      });
+
+      loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(loginForm);
+        const username = (formData.get("username") || "").toString().trim();
+        const password = (formData.get("password") || "").toString();
+
+        loginMessage.className = "form-message";
+
+        if (username === credentials.username && password === credentials.password) {
+          loginMessage.textContent = "Login successful.";
+          loginMessage.classList.add("success");
+          loginScreen.classList.add("hidden");
+          appShell.classList.remove("hidden");
+          body.classList.remove("locked");
+          appShell.inert = false;
+          appShell.removeAttribute("aria-hidden");
+          return;
+        }
+
+        loginMessage.textContent = "Username or password is incorrect.";
+        loginMessage.classList.add("error");
+      });
+
+      paymentForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (body.classList.contains("locked")) return;
+
+        const formData = new FormData(paymentForm);
+        const values = {
+          cardName: (formData.get("cardName") || "").toString().trim(),
+          cardNumber: normalizeDigits((formData.get("cardNumber") || "").toString()),
+          expiry: (formData.get("expiry") || "").toString().trim(),
+          cvv: normalizeDigits((formData.get("cvv") || "").toString()),
+        };
+
+        const isMatch =
+          values.cardName.toLowerCase() === trainingCard.cardName.toLowerCase() &&
+          values.cardNumber === trainingCard.cardNumber &&
+          values.expiry === trainingCard.expiry &&
+          values.cvv === trainingCard.cvv;
+
+        paymentMessage.className = "form-message";
+
+        if (isMatch) {
+          paymentMessage.textContent = "Practice payment accepted. The training card was entered correctly.";
+          paymentMessage.classList.add("success");
+          completeGoal("payment");
+          paymentForm.reset();
+          return;
+        }
+
+        paymentMessage.textContent = "Payment was not accepted. Recheck the card information and try again.";
+        paymentMessage.classList.add("error");
+      });
+
+      downloadBill.addEventListener("click", () => {
+        if (body.classList.contains("locked")) return;
+        completeGoal("download");
+        if (typeof downloadModal.showModal === "function") {
+          downloadModal.showModal();
+        } else {
+          downloadModal.setAttribute("open", "open");
+        }
+      });
+
+      closeModal.addEventListener("click", () => {
+        if (typeof downloadModal.close === "function") {
+          downloadModal.close();
+        } else {
+          downloadModal.removeAttribute("open");
+        }
+      });
+
+      downloadModal.addEventListener("click", (event) => {
+        if (event.target === downloadModal) {
+          if (typeof downloadModal.close === "function") {
+            downloadModal.close();
+          } else {
+            downloadModal.removeAttribute("open");
+          }
+        }
+      });
+
+      appShell.inert = true;
+      appShell.setAttribute("aria-hidden", "true");
+      syncGoals();
+    </script>
+  </body>
+</html>

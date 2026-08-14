@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bill Pay Simulator Practice Hard Difficulty Desktop</title>
+    <style>
+      :root {
+        --bg: #f3f6fa;
+        --surface: rgba(255, 255, 255, 0.98);
+        --surface-strong: #ffffff;
+        --text: #142238;
+        --muted: #5d6b7d;
+        --line: rgba(20, 34, 56, 0.12);
+        --shadow: 0 16px 36px rgba(19, 35, 56, 0.1);
+        --green: #0f766e;
+        --green-dark: #0b5f58;
+        --red: #b42318;
+        --navy: #1b4fa8;
+        --navy-dark: #132338;
+        --sky: #eef3f8;
+        --radius-lg: 10px;
+        --radius-md: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          linear-gradient(90deg, rgba(27, 79, 168, 0.06) 0 1px, transparent 1px 100%),
+          linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+        background-size: 32px 32px, auto;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      body.locked {
+        overflow: hidden;
+      }
+
+      body.locked #appShell,
+      body.locked .modal {
+        display: none !important;
+        pointer-events: none;
+      }
+
+      body:not(.locked) #loginScreen {
+        display: none;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .login-screen {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .login-panel {
+        width: min(100%, 460px);
+        padding: 32px;
+        background:
+          linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.94));
+      }
+
+      .login-panel h1,
+      .brand h2,
+      .hero h1,
+      .section-heading h3,
+      .therapy-note h3,
+      .modal-card h3,
+      h4 {
+        margin: 0;
+      }
+
+      .login-form,
+      .payment-card label {
+        display: grid;
+        gap: 8px;
+      }
+
+      .login-form label,
+      .payment-card label {
+        margin-bottom: 14px;
+        font-size: 0.93rem;
+        font-weight: 700;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 15px;
+        border-radius: 6px;
+        border: 1px solid rgba(24, 32, 51, 0.12);
+        background: #ffffff;
+        color: var(--text);
+      }
+
+      input:focus {
+        outline: 2px solid rgba(27, 79, 168, 0.18);
+        border-color: rgba(27, 79, 168, 0.55);
+      }
+
+      .password-field {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+      }
+
+      .inline-button,
+      .nav-item,
+      .ghost-button,
+      .primary-button,
+      .chip-button {
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: transform 160ms ease, background 160ms ease;
+      }
+
+      .home-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 700;
+        background: var(--sky);
+        border: 1px solid var(--line);
+        margin-bottom: 18px;
+      }
+
+      .inline-button,
+      .ghost-button,
+      .chip-button {
+        background: var(--sky);
+        color: var(--text);
+      }
+
+      .inline-button {
+        padding: 0 14px;
+      }
+
+      .primary-button {
+        padding: 14px 20px;
+        color: white;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--navy), #2563eb);
+        box-shadow: 0 12px 22px rgba(27, 79, 168, 0.2);
+      }
+
+      .ghost-button,
+      .chip-button {
+        padding: 11px 14px;
+        font-weight: 700;
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
+      .form-message {
+        min-height: 1.5rem;
+        margin: 8px 0 0;
+        font-weight: 700;
+      }
+
+      .success {
+        color: #22825d;
+      }
+
+      .error {
+        color: #c04f49;
+      }
+
+      .app-shell {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        min-height: 100vh;
+      }
+
+      .mobile-nav-bar,
+      .mobile-nav-backdrop {
+        display: none;
+      }
+
+      .portal-utility {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+        gap: 28px;
+        padding: 10px 28px;
+        color: white;
+        background: var(--navy-dark);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .portal-utility span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .sidebar {
+        padding: 28px 22px;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 6px;
+        font-weight: 800;
+        color: white;
+        background: linear-gradient(135deg, var(--navy), var(--green));
+      }
+
+      .nav-list {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+
+      .nav-item {
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 700;
+        background: transparent;
+        color: var(--text);
+      }
+
+      .nav-item.active,
+      .nav-item:hover {
+        transform: translateY(-1px);
+        color: var(--navy-dark);
+        background: rgba(27, 79, 168, 0.08);
+        box-shadow: inset 4px 0 0 var(--navy);
+      }
+
+      .therapy-note {
+        padding: 20px;
+      }
+
+      .goal-list {
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .goal-list li {
+        margin-bottom: 12px;
+      }
+
+      .goal-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--muted);
+      }
+
+      .goal-item input {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        accent-color: var(--green);
+        pointer-events: none;
+      }
+
+      .goal-item input:checked + span {
+        color: var(--text);
+        text-decoration: line-through;
+      }
+
+      .main-content {
+        padding: 28px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 22px;
+        padding: 24px 28px;
+        margin-bottom: 18px;
+        background:
+          linear-gradient(105deg, rgba(19, 35, 56, 0.96), rgba(27, 79, 168, 0.88)),
+          linear-gradient(90deg, transparent 0%, rgba(15, 118, 110, 0.35) 100%);
+        color: white;
+      }
+
+      .hero .eyebrow,
+      .hero .muted {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .hero-stats {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .hero-value {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .promo-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+
+      .promo-card {
+        padding: 16px;
+        border-radius: var(--radius-md);
+        color: white;
+      }
+
+      .promo-card .eyebrow {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 4px 7px;
+        color: #ffffff;
+        background: rgba(0, 0, 0, 0.22);
+        border-radius: 4px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.11em;
+      }
+
+      .promo-card h4 {
+        margin-bottom: 12px;
+        color: #ffffff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.24);
+      }
+
+      .promo-card p:not(.eyebrow) {
+        margin-bottom: 0;
+        color: rgba(255, 255, 255, 0.96);
+        line-height: 1.45;
+      }
+
+      .promo-card.teal { background: linear-gradient(135deg, var(--green-dark), var(--green)); }
+      .promo-card.gold { background: linear-gradient(135deg, #b87915, #d79a21); }
+      .promo-card.coral { background: linear-gradient(135deg, #9f202a, var(--red)); }
+      .promo-card.navy { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); }
+
+      .content-grid {
+        display: grid;
+        gap: 22px;
+      }
+
+      .panel {
+        display: none;
+        padding: 24px;
+      }
+
+      .panel.active {
+        display: block;
+      }
+
+      .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .status-pill,
+      .secure-pill {
+        padding: 9px 12px;
+        border-radius: 999px;
+        font-size: 0.84rem;
+        font-weight: 700;
+      }
+
+      .status-pill {
+        background: rgba(47, 143, 70, 0.14);
+        color: var(--green-dark);
+      }
+
+      .secure-pill {
+        background: var(--sky);
+        color: var(--navy-dark);
+      }
+
+      .stats-grid,
+      .contact-grid,
+      .info-grid,
+      .ad-grid,
+      .hub-grid,
+      .news-grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-bottom: 18px;
+      }
+
+      .contact-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .info-grid,
+      .ad-grid,
+      .hub-grid,
+      .news-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat-card,
+      .statement-card,
+      .payment-card,
+      .insight-card,
+      .contact-card,
+      .info-card,
+      .ad-card,
+      .hub-card,
+      .news-card {
+        padding: 20px;
+        border-radius: var(--radius-md);
+        background: var(--surface-strong);
+        border: 1px solid var(--line);
+      }
+
+      .stat-label,
+      .contact-label {
+        margin: 0 0 6px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .stat-value {
+        margin: 0 0 5px;
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+
+      .stat-value.compact {
+        font-size: 1.45rem;
+      }
+
+      .split-card {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .summary-list,
+      .account-grid {
+        display: grid;
+        gap: 16px;
+        margin: 0;
+      }
+
+      .summary-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .account-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .summary-list div,
+      .account-grid div {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .summary-list dt,
+      .account-grid dt {
+        margin-bottom: 6px;
+        color: var(--muted);
+      }
+
+      .summary-list dd,
+      .account-grid dd {
+        margin: 0;
+        font-weight: 800;
+      }
+
+      .billing-layout {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      .payment-heading {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .payment-row.two-columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .line-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .line-item.total {
+        margin-top: 6px;
+        font-size: 1.06rem;
+      }
+
+      .usage-chart {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 16px;
+        align-items: end;
+        min-height: 260px;
+        padding: 14px 0 20px;
+      }
+
+      .bar-group {
+        display: grid;
+        justify-items: center;
+        gap: 10px;
+      }
+
+      .bar {
+        width: 100%;
+        max-width: 72px;
+        height: 190px;
+        border-radius: 8px 8px 0 0;
+        clip-path: inset(calc(100% - var(--size)) 0 0 0 round 8px 8px 0 0);
+      }
+
+      .bar.a { background: linear-gradient(180deg, var(--navy), #8bb3d9); }
+      .bar.b { background: linear-gradient(180deg, var(--green-dark), #8fc69d); }
+      .bar.c { background: linear-gradient(180deg, #b87915, #f0c46a); }
+      .bar.d { background: linear-gradient(180deg, var(--red), #e88991); }
+      .bar.e { background: linear-gradient(180deg, var(--navy-dark), #7fa5ca); }
+      .bar.f { background: linear-gradient(180deg, var(--green), #9ed2aa); }
+
+      .top-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .modal {
+        padding: 0;
+        border: none;
+        background: transparent;
+      }
+
+      .site-footer {
+        margin-top: 20px;
+        font-size: 0.82rem;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .modal::backdrop {
+        background: rgba(25, 29, 41, 0.44);
+      }
+
+      .modal-card {
+        width: min(100vw - 32px, 420px);
+        padding: 28px;
+        border-radius: var(--radius-lg);
+        background: white;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      @media (max-width: 1120px) {
+        .promo-strip,
+        .stats-grid,
+        .contact-grid,
+        .billing-layout,
+        .info-grid,
+        .ad-grid,
+        .hub-grid,
+        .news-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .app-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .mobile-nav-bar {
+          position: sticky;
+          top: 0;
+          z-index: 30;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          padding: 12px 18px;
+          color: white;
+          background: var(--navy);
+          box-shadow: 0 10px 24px rgba(13, 46, 83, 0.16);
+        }
+
+        .mobile-nav-title {
+          min-width: 0;
+          font-weight: 800;
+        }
+
+        .mobile-nav-button {
+          display: inline-grid;
+          place-items: center;
+          width: 44px;
+          height: 40px;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 6px;
+          color: white;
+          background: transparent;
+          cursor: pointer;
+        }
+
+        .mobile-nav-icon,
+        .mobile-nav-icon::before,
+        .mobile-nav-icon::after {
+          display: block;
+          width: 20px;
+          height: 2px;
+          background: currentColor;
+          content: "";
+        }
+
+        .mobile-nav-icon {
+          position: relative;
+        }
+
+        .mobile-nav-icon::before,
+        .mobile-nav-icon::after {
+          position: absolute;
+          left: 0;
+        }
+
+        .mobile-nav-icon::before {
+          top: -7px;
+        }
+
+        .mobile-nav-icon::after {
+          top: 7px;
+        }
+
+        .app-shell.mobile-menu-open .mobile-nav-icon {
+          background: transparent;
+        }
+
+        .app-shell.mobile-menu-open .mobile-nav-icon::before {
+          top: 0;
+          transform: rotate(45deg);
+        }
+
+        .app-shell.mobile-menu-open .mobile-nav-icon::after {
+          top: 0;
+          transform: rotate(-45deg);
+        }
+
+        .mobile-nav-backdrop {
+          position: fixed;
+          inset: 0;
+          z-index: 35;
+          display: block;
+          background: rgba(12, 26, 43, 0.42);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 160ms ease;
+        }
+
+        .app-shell.mobile-menu-open .mobile-nav-backdrop {
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .portal-utility {
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          gap: 8px 14px;
+          padding: 10px 18px;
+          white-space: normal;
+        }
+
+        .sidebar {
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 40;
+          width: min(84vw, 340px);
+          overflow-y: auto;
+          transform: translateX(-105%);
+          transition: transform 180ms ease;
+          border-right: 1px solid var(--line);
+          border-bottom: none;
+          box-shadow: 18px 0 34px rgba(12, 26, 43, 0.18);
+        }
+
+        .app-shell.mobile-menu-open .sidebar {
+          transform: translateX(0);
+        }
+
+        body.mobile-menu-locked {
+          overflow: hidden;
+        }
+
+        .main-content {
+          padding-bottom: 0;
+        }
+
+        .nav-list {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-stats {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .split-card,
+        .summary-list,
+        .account-grid,
+        .payment-row.two-columns,
+        .usage-chart {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .main-content,
+        .sidebar,
+        .login-screen {
+          padding: 18px;
+        }
+
+        .panel,
+        .therapy-note,
+        .login-panel,
+        .modal-card {
+          padding: 18px;
+        }
+
+        .portal-utility {
+          font-size: 0.82rem;
+        }
+
+        .brand {
+          align-items: flex-start;
+        }
+
+        .brand-mark {
+          width: 48px;
+          height: 48px;
+        }
+
+        .nav-list {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+
+        .nav-item {
+          padding: 12px 14px;
+        }
+
+        .hero {
+          padding: 20px;
+        }
+
+        .hero h1 {
+          font-size: 1.55rem;
+        }
+
+        .section-heading,
+        .payment-heading {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .top-actions {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  
+</head>
+  <body class="locked">
+    <div id="loginScreen" class="login-screen">
+      <div class="login-panel card">
+        <p class="eyebrow">Secure Sign In</p>
+        <h1>Bill Pay Simulator</h1>
+        <p class="muted">Hard difficulty practice portal</p>
+        <form id="loginForm" class="login-form" novalidate>
+          <label>
+            Username
+            <input name="username" type="text" autocomplete="off" />
+          </label>
+          <label>
+            Password
+            <div class="password-field">
+              <input id="passwordInput" name="password" type="password" autocomplete="off" />
+              <button id="togglePassword" type="button" class="inline-button">Show</button>
+            </div>
+          </label>
+          <button class="primary-button full-width" type="submit">Log In</button>
+          <p id="loginMessage" class="form-message" aria-live="polite"></p>
+        </form>
+        <p class="login-credit">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+      </div>
+    </div>
+
+    <div id="appShell" class="app-shell hidden" aria-hidden="true">
+      <div class="portal-utility" aria-label="Quick actions">
+        <span>$ Pay Bill</span>
+        <span>Calendar Usage</span>
+        <span>? Customer Support</span>
+        <span>! Outage Alerts</span>
+      </div>
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">BP</div>
+          <div>
+            <p class="eyebrow">Clinical Training Platform</p>
+            <h2>Bill Pay Simulator</h2>
+          </div>
+        </div>
+        <a class="home-link" href="./Bill_Pay_Homepage.html">Back to Homepage</a>
+
+        <nav class="nav-list" aria-label="Primary">
+          <button class="nav-item active" data-target="dashboard">Dashboard</button>
+          <button class="nav-item" data-target="billing">Billing</button>
+          <button class="nav-item" data-target="usage">Usage</button>
+          <button class="nav-item" data-target="account">Account</button>
+          <button class="nav-item" data-target="support">Support</button>
+          <button class="nav-item" data-target="outages">Outages</button>
+          <button class="nav-item" data-target="business">Business</button>
+          <button class="nav-item" data-target="rewards">Rewards</button>
+          <button class="nav-item" data-target="solar">Solar</button>
+          <button class="nav-item" data-target="moving">Moving</button>
+          <button class="nav-item" data-target="ev">EV Center</button>
+          <button class="nav-item" data-target="news">Newsroom</button>
+          <button class="nav-item" data-target="community">Community</button>
+          <button class="nav-item" data-target="safety">Safety</button>
+          <button class="nav-item" data-target="ads">Offers</button>
+        </nav>
+
+        <section class="therapy-note card">
+          <p class="eyebrow">OT Session Note</p>
+          <h3>Practice Goals</h3>
+          <ul class="goal-list">
+            <li><label class="goal-item"><input type="checkbox" data-goal="signin" /><span>Sign in</span></label></li>
+            <li><label class="goal-item"><input type="checkbox" data-goal="bill" /><span>Find the current statement amount</span></label></li>
+            <li><label class="goal-item"><input type="checkbox" data-goal="charges" /><span>Find current charges</span></label></li>
+            <li><label class="goal-item"><input type="checkbox" data-goal="usage" /><span>Find current usage</span></label></li>
+            <li><label class="goal-item"><input type="checkbox" data-goal="account" /><span>Find the account number</span></label></li>
+            <li><label class="goal-item"><input type="checkbox" data-goal="contact" /><span>Find contact information</span></label></li>
+            <li><label class="goal-item"><input type="checkbox" data-goal="payment" /><span>Enter payment correctly</span></label></li>
+            <li><label class="goal-item"><input type="checkbox" data-goal="download" /><span>Download the current statement</span></label></li>
+          </ul>
+        </section>
+      </aside>
+
+      <main class="main-content">
+        <header class="hero card">
+          <div>
+            <p class="eyebrow">Practice Account</p>
+            <h1>1180 Desert Bloom Court</h1>
+            <p class="muted">Practice account profile</p>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <p class="eyebrow">Current Statement</p>
+              <p class="hero-value" data-goal-trigger="bill">$184.61</p>
+              <p class="muted">Due April 22, 2026</p>
+            </div>
+            <button class="primary-button" data-target="billing" type="button">Open Billing</button>
+          </div>
+        </header>
+
+        <section class="promo-strip">
+          <article class="promo-card teal">
+            <p class="eyebrow">Featured</p>
+            <h4>Summer Peak Rewards</h4>
+            <p>Earn statement credits for reducing weekday use.</p>
+          </article>
+          <article class="promo-card gold">
+            <p class="eyebrow">Popular</p>
+            <h4>Smart Thermostat Deal</h4>
+            <p>Bundle install plus service reminder plan.</p>
+          </article>
+          <article class="promo-card coral">
+            <p class="eyebrow">New</p>
+            <h4>Storm Alerts</h4>
+            <p>Enroll for outage text messages and preparedness tips.</p>
+          </article>
+          <article class="promo-card navy">
+            <p class="eyebrow">Recommended</p>
+            <h4>Business Savings Review</h4>
+            <p>Book a consultation for commercial demand planning.</p>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <section id="dashboard" class="panel active card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Overview</p>
+                <h3>Today's account snapshot</h3>
+              </div>
+              <div class="top-actions">
+                <button class="chip-button" data-target="rewards" type="button">Rewards</button>
+                <button class="chip-button" data-target="outages" type="button">Outages</button>
+                <button class="chip-button" data-target="news" type="button">Newsroom</button>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <article class="stat-card">
+                <p class="stat-label">Current Charges</p>
+                <p class="stat-value" data-goal-trigger="charges">$184.61</p>
+                <p class="muted">Generation, delivery, and taxes</p>
+              </article>
+              <article class="stat-card">
+                <p class="stat-label">This Month Usage</p>
+                <p class="stat-value" data-goal-trigger="usage">728 kWh</p>
+                <p class="muted">8% higher than March</p>
+              </article>
+              <article class="stat-card">
+                <p class="stat-label">Account Number</p>
+                <p class="stat-value compact" data-goal-trigger="account">1048-7721-55</p>
+                <p class="muted">Household billing practice</p>
+              </article>
+            </div>
+
+            <div class="hub-grid">
+              <article class="hub-card">
+                <p class="eyebrow">Quick Hub</p>
+                <h4>Recent activity</h4>
+                <p class="muted">Payment reminder issued, usage alert sent, paperless statement ready.</p>
+              </article>
+              <article class="hub-card">
+                <p class="eyebrow">Suggested</p>
+                <h4>Explore programs</h4>
+                <p class="muted">Find rebates, moving service support, EV options, and seasonal tips.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="billing" class="panel card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Billing Center</p>
+                <h3>Review charges and submit practice payment</h3>
+              </div>
+              <button id="downloadBill" class="ghost-button" type="button">Download Current Statement</button>
+            </div>
+
+            <div class="billing-layout">
+              <article class="statement-card">
+                <h4>Current Charges</h4>
+                <div class="line-item"><span>Service charges</span><strong>$101.16</strong></div>
+                <div class="line-item"><span>Delivery service</span><strong>$56.30</strong></div>
+                <div class="line-item"><span>Local taxes and surcharges</span><strong>$27.15</strong></div>
+                <div class="line-item total"><span>Amount due</span><strong>$184.61</strong></div>
+              </article>
+
+              <form id="paymentForm" class="payment-card" novalidate>
+                <div class="payment-heading">
+                  <div>
+                    <p class="eyebrow">Practice Payment</p>
+                    <h4>Card entry</h4>
+                  </div>
+                  <span class="secure-pill">Secure test mode</span>
+                </div>
+
+                <label>
+                  Name on card
+                  <input name="cardName" type="text" autocomplete="off" />
+                </label>
+                <label>
+                  Card number
+                  <input name="cardNumber" type="text" inputmode="numeric" autocomplete="off" />
+                </label>
+                <div class="payment-row two-columns">
+                  <label>
+                    Expiration
+                    <input name="expiry" type="text" autocomplete="off" />
+                  </label>
+                  <label>
+                    CVV
+                    <input name="cvv" type="text" inputmode="numeric" autocomplete="off" />
+                  </label>
+                </div>
+
+                <button class="primary-button full-width" type="submit">Submit Payment</button>
+                <p id="paymentMessage" class="form-message" aria-live="polite"></p>
+              </form>
+            </div>
+          </section>
+
+          <section id="usage" class="panel card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Energy Usage</p>
+                <h3>Current monthly use</h3>
+              </div>
+              <span class="status-pill">High cooling season</span>
+            </div>
+
+            <div class="usage-chart">
+              <div class="bar-group"><span>Nov</span><div class="bar a" style="--size: 48%"></div><strong>522</strong></div>
+              <div class="bar-group"><span>Dec</span><div class="bar b" style="--size: 52%"></div><strong>548</strong></div>
+              <div class="bar-group"><span>Jan</span><div class="bar c" style="--size: 61%"></div><strong>612</strong></div>
+              <div class="bar-group"><span>Feb</span><div class="bar d" style="--size: 66%"></div><strong>684</strong></div>
+              <div class="bar-group"><span>Mar</span><div class="bar e" style="--size: 69%"></div><strong>702</strong></div>
+              <div class="bar-group"><span>Apr</span><div class="bar f" style="--size: 73%"></div><strong>728</strong></div>
+            </div>
+
+            <div class="insight-card">
+              <p class="eyebrow">Current Usage</p>
+              <h4 data-goal-trigger="usage">728 kWh used this billing cycle</h4>
+              <p class="muted">Late afternoon air conditioning and pool equipment increased peak-hour consumption.</p>
+            </div>
+          </section>
+
+          <section id="account" class="panel card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Account Details</p>
+                <h3>Practice billing profile</h3>
+              </div>
+            </div>
+            <dl class="account-grid">
+              <div><dt>Account holder</dt><dd>Jordan Lee</dd></div>
+              <div><dt>Account number</dt><dd data-goal-trigger="account">1048-7721-55</dd></div>
+              <div><dt>Rate plan</dt><dd>Southern Nevada Time Saver</dd></div>
+              <div><dt>Statement due date</dt><dd>April 22, 2026</dd></div>
+            </dl>
+          </section>
+
+          <section id="support" class="panel card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Help & Contact</p>
+                <h3>Support options</h3>
+              </div>
+            </div>
+            <div class="contact-grid" data-goal-trigger="contact">
+              <article class="contact-card">
+                <p class="contact-label">Practice Support</p>
+                <h4>(702) 555-0184</h4>
+                <p class="muted">Mon to Fri, 7:00 AM to 7:00 PM</p>
+              </article>
+              <article class="contact-card">
+                <p class="contact-label">Email</p>
+                <h4>support@billpay-simulator-demo.com</h4>
+                <p class="muted">Replies within 1 business day</p>
+              </article>
+              <article class="contact-card">
+                <p class="contact-label">Mailing Address</p>
+                <h4>400 Fremont Plaza, Las Vegas, NV</h4>
+                <p class="muted">Practice correspondence center</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="outages" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Grid Alerts</p><h3>Outage tools</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Outage map beta</h4><p class="muted">View estimated restoration times, crew routing, and current weather impacts.</p></article>
+              <article class="info-card"><h4>Text alerts</h4><p class="muted">Enroll for outage, restoration, and maintenance notices by phone or email.</p></article>
+            </div>
+          </section>
+
+          <section id="business" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Community Services</p><h3>Community billing tools</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Demand planning</h4><p class="muted">Analyze interval data and prepare for high-heat billing periods.</p></article>
+              <article class="info-card"><h4>Rate consultations</h4><p class="muted">Schedule a specialist review for retail, hospitality, or mixed-use buildings.</p></article>
+            </div>
+          </section>
+
+          <section id="rewards" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Member Perks</p><h3>Rewards center</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Peak saver challenge</h4><p class="muted">Join monthly energy reduction goals to earn bonus statement credits.</p></article>
+              <article class="info-card"><h4>Home upgrade points</h4><p class="muted">Track qualifying appliance and weatherization purchases.</p></article>
+            </div>
+          </section>
+
+          <section id="solar" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Renewables</p><h3>Solar and battery</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Net metering guide</h4><p class="muted">Review export credits, annual true-up estimates, and battery add-on options.</p></article>
+              <article class="info-card"><h4>Installer search</h4><p class="muted">Compare participating contractors and financing promotions.</p></article>
+            </div>
+          </section>
+
+          <section id="moving" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Relocation</p><h3>Move or transfer service</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Start service</h4><p class="muted">Request power at a new address with preferred start date and access notes.</p></article>
+              <article class="info-card"><h4>Stop service</h4><p class="muted">Schedule final read and download your closing statement.</p></article>
+            </div>
+          </section>
+
+          <section id="ev" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Optional Services</p><h3>Optional services</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Charger rebates</h4><p class="muted">See approved chargers and time-of-use savings estimates.</p></article>
+              <article class="info-card"><h4>Overnight charging guide</h4><p class="muted">Shift charging hours to reduce peak rates during summer afternoons.</p></article>
+            </div>
+          </section>
+
+          <section id="news" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Updates</p><h3>Newsroom</h3></div></div>
+            <div class="news-grid">
+              <article class="news-card"><h4>Desert heat readiness campaign launches</h4><p class="muted">Residents encouraged to review cooling support and emergency plans.</p></article>
+              <article class="news-card"><h4>Community rebate fair announced</h4><p class="muted">Local partners will offer appliance savings and energy education next month.</p></article>
+            </div>
+          </section>
+
+          <section id="community" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Community</p><h3>Events and education</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Neighborhood workshops</h4><p class="muted">Join evening sessions on lowering summer bills and understanding rate plans.</p></article>
+              <article class="info-card"><h4>School partnerships</h4><p class="muted">Explore youth STEM programs focused on power, safety, and conservation.</p></article>
+            </div>
+          </section>
+
+          <section id="safety" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Preparedness</p><h3>Safety center</h3></div></div>
+            <div class="info-grid">
+              <article class="info-card"><h4>Downed lines</h4><p class="muted">Always stay back and report hazards to emergency services immediately.</p></article>
+              <article class="info-card"><h4>Medical support plans</h4><p class="muted">Learn about preparedness for customers using medically necessary equipment.</p></article>
+            </div>
+          </section>
+
+          <section id="ads" class="panel card">
+            <div class="section-heading"><div><p class="eyebrow">Featured Promotions</p><h3>Offers and sponsored content</h3></div></div>
+            <div class="ad-grid">
+              <article class="ad-card"><p class="eyebrow">Sponsored</p><h4>Free home energy starter kit</h4><p class="muted">Sign up for a virtual consult and receive efficiency accessories by mail.</p></article>
+              <article class="ad-card"><p class="eyebrow">Limited Time</p><h4>Upgrade your pool pump</h4><p class="muted">Get a bill credit with qualifying high-efficiency equipment.</p></article>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="downloadModal" class="modal">
+      <div class="modal-card">
+        <p class="eyebrow">Download Ready</p>
+        <h3>April 2026 bill downloaded</h3>
+        <p class="muted">This is a simulated download for therapy practice. No file was actually saved.</p>
+        <button id="closeModal" class="primary-button" type="button">Close</button>
+      </div>
+    </dialog>
+
+    <script>
+      const credentials = { username: "JordanL", password: "Therapy" };
+      const trainingCard = {
+        cardName: "Jordan Lee",
+        cardNumber: "5293847102938475",
+        expiry: "09/31",
+        cvv: "001",
+      };
+
+      const loginScreen = document.querySelector("#loginScreen");
+      const appShell = document.querySelector("#appShell");
+      const loginForm = document.querySelector("#loginForm");
+      const loginMessage = document.querySelector("#loginMessage");
+      const passwordInput = document.querySelector("#passwordInput");
+      const togglePassword = document.querySelector("#togglePassword");
+      const navItems = document.querySelectorAll(".nav-item");
+      const panels = document.querySelectorAll(".panel");
+      const paymentForm = document.querySelector("#paymentForm");
+      const paymentMessage = document.querySelector("#paymentMessage");
+      const downloadBill = document.querySelector("#downloadBill");
+      const downloadModal = document.querySelector("#downloadModal");
+      const closeModal = document.querySelector("#closeModal");
+      const body = document.body;
+      const goalChecks = document.querySelectorAll(".goal-item input[type='checkbox']");
+      const sidebar = document.querySelector(".sidebar");
+      const billPayGoalLevel = "hard";
+      const billPayGoalStoragePrefix = "billPaySelectedGoals:";
+      const billPaySuggestedGoals = {
+        easy: ["signin", "bill", "charges", "payment"],
+        medium: ["signin", "bill", "charges", "usage", "account", "payment"],
+        hard: ["signin", "bill", "charges", "usage", "account", "contact", "payment", "download"],
+        realistic: ["bill", "charges", "usage", "account", "contact", "payment", "download"],
+      };
+
+      function getSelectedGoalIds() {
+        const queryGoals = new URLSearchParams(window.location.search).get("goals");
+        if (queryGoals) {
+          const parsedGoals = queryGoals.split(",").filter(Boolean);
+          if (parsedGoals.length) {
+            localStorage.setItem(billPayGoalStoragePrefix + billPayGoalLevel, JSON.stringify(parsedGoals));
+            return parsedGoals;
+          }
+        }
+        try {
+          const stored = JSON.parse(localStorage.getItem(billPayGoalStoragePrefix + billPayGoalLevel) || "null");
+          if (Array.isArray(stored) && stored.length) return stored;
+        } catch (error) {
+          localStorage.removeItem(billPayGoalStoragePrefix + billPayGoalLevel);
+        }
+        return billPaySuggestedGoals[billPayGoalLevel];
+      }
+
+      function applySelectedGoalList() {
+        const selectedGoals = new Set(getSelectedGoalIds());
+        document.querySelectorAll(".goal-item input[data-goal]").forEach((input) => {
+          const row = input.closest("li");
+          if (row && !selectedGoals.has(input.dataset.goal)) row.remove();
+        });
+      }
+
+      function shouldBypassLogin() {
+        return !getSelectedGoalIds().includes("signin");
+      }
+
+      function enterApp() {
+        loginScreen.classList.add("hidden");
+        appShell.classList.remove("hidden");
+        body.classList.remove("locked");
+        appShell.inert = false;
+        appShell.removeAttribute("aria-hidden");
+      }
+
+      if (appShell && sidebar) {
+        const mobileNavBar = document.createElement("div");
+        mobileNavBar.className = "mobile-nav-bar";
+        mobileNavBar.innerHTML = `
+          <button class="mobile-nav-button" type="button" aria-label="Open menu" aria-expanded="false">
+            <span class="mobile-nav-icon" aria-hidden="true"></span>
+          </button>
+          <span class="mobile-nav-title">Bill Pay Simulator</span>
+        `;
+
+        const mobileNavBackdrop = document.createElement("button");
+        mobileNavBackdrop.className = "mobile-nav-backdrop";
+        mobileNavBackdrop.type = "button";
+        mobileNavBackdrop.setAttribute("aria-label", "Close menu");
+
+        appShell.insertBefore(mobileNavBar, sidebar);
+        appShell.insertBefore(mobileNavBackdrop, sidebar);
+
+        const mobileNavButton = mobileNavBar.querySelector(".mobile-nav-button");
+
+        function setMobileMenu(open) {
+          appShell.classList.toggle("mobile-menu-open", open);
+          body.classList.toggle("mobile-menu-locked", open);
+          mobileNavButton.setAttribute("aria-expanded", String(open));
+          mobileNavButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+
+        mobileNavButton.addEventListener("click", () => {
+          setMobileMenu(!appShell.classList.contains("mobile-menu-open"));
+        });
+
+        mobileNavBackdrop.addEventListener("click", () => {
+          setMobileMenu(false);
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            setMobileMenu(false);
+          }
+        });
+
+        navItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            setMobileMenu(false);
+          });
+        });
+      }
+
+      const goalState = {
+        bill: false,
+        charges: false,
+        usage: false,
+        account: false,
+        contact: false,
+        payment: false,
+        download: false,
+      };
+
+      function syncGoals() {
+        goalChecks.forEach((checkbox) => {
+          checkbox.checked = Boolean(goalState[checkbox.dataset.goal]);
+        });
+      }
+
+      function completeGoal(goal) {
+        if (!goalState[goal]) {
+          goalState[goal] = true;
+          syncGoals();
+        }
+      }
+
+      function activatePanel(panelId) {
+        if (body.classList.contains("locked")) return;
+
+        navItems.forEach((item) => {
+          item.classList.toggle("active", item.dataset.target === panelId);
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.toggle("active", panel.id === panelId);
+        });
+
+        if (panelId === "billing") completeGoal("charges");
+        if (panelId === "usage") completeGoal("usage");
+        if (panelId === "account") completeGoal("account");
+        if (panelId === "support") completeGoal("contact");
+      }
+
+      function normalizeDigits(value) {
+        return value.replace(/\D/g, "");
+      }
+
+      navItems.forEach((item) => {
+        item.addEventListener("click", () => activatePanel(item.dataset.target));
+      });
+
+      document.querySelectorAll("[data-target].primary-button, [data-target].chip-button").forEach((button) => {
+        button.addEventListener("click", () => activatePanel(button.dataset.target));
+      });
+
+      document.querySelectorAll("[data-goal-trigger]").forEach((element) => {
+        element.addEventListener("click", () => completeGoal(element.dataset.goalTrigger));
+      });
+
+      togglePassword.addEventListener("click", () => {
+        const hidden = passwordInput.type === "password";
+        passwordInput.type = hidden ? "text" : "password";
+        togglePassword.textContent = hidden ? "Hide" : "Show";
+      });
+
+      loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(loginForm);
+        const username = (formData.get("username") || "").toString().trim();
+        const password = (formData.get("password") || "").toString();
+
+        loginMessage.className = "form-message";
+
+        if (username === credentials.username && password === credentials.password) {
+          loginMessage.textContent = "Login successful.";
+          loginMessage.classList.add("success");
+          completeGoal("signin");
+          enterApp();
+          return;
+        }
+
+        loginMessage.textContent = "Username or password is incorrect.";
+        loginMessage.classList.add("error");
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (!body.classList.contains("locked")) return;
+        if (event.key === "Tab") {
+          const items = Array.from(loginForm.querySelectorAll("input, button"));
+          const first = items[0];
+          const last = items[items.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      paymentForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (body.classList.contains("locked")) return;
+
+        const formData = new FormData(paymentForm);
+        const values = {
+          cardName: (formData.get("cardName") || "").toString().trim(),
+          cardNumber: normalizeDigits((formData.get("cardNumber") || "").toString()),
+          expiry: (formData.get("expiry") || "").toString().trim(),
+          cvv: normalizeDigits((formData.get("cvv") || "").toString()),
+        };
+
+        const isMatch =
+          values.cardName.toLowerCase() === trainingCard.cardName.toLowerCase() &&
+          values.cardNumber === trainingCard.cardNumber &&
+          values.expiry === trainingCard.expiry &&
+          values.cvv === trainingCard.cvv;
+
+        paymentMessage.className = "form-message";
+
+        if (isMatch) {
+          paymentMessage.textContent = "Practice payment accepted. The training card was entered correctly.";
+          paymentMessage.classList.add("success");
+          completeGoal("payment");
+          paymentForm.reset();
+          return;
+        }
+
+        paymentMessage.textContent = "Payment was not accepted. Recheck the mock card information and try again.";
+        paymentMessage.classList.add("error");
+      });
+
+      downloadBill.addEventListener("click", () => {
+        if (body.classList.contains("locked")) return;
+        completeGoal("download");
+        if (typeof downloadModal.showModal === "function") {
+          downloadModal.showModal();
+        } else {
+          downloadModal.setAttribute("open", "open");
+        }
+      });
+
+      closeModal.addEventListener("click", () => {
+        if (typeof downloadModal.close === "function") {
+          downloadModal.close();
+        } else {
+          downloadModal.removeAttribute("open");
+        }
+      });
+
+      downloadModal.addEventListener("click", (event) => {
+        if (event.target === downloadModal) {
+          if (typeof downloadModal.close === "function") {
+            downloadModal.close();
+          } else {
+            downloadModal.removeAttribute("open");
+          }
+        }
+      });
+
+      appShell.inert = true;
+      applySelectedGoalList();
+      syncGoals();
+      if (shouldBypassLogin()) enterApp();
+    </script>
+    <p class="site-footer">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+  </body>
+</html>

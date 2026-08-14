@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulated Electric Bill Pay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --navy: #132338;
+        --ink: #1a2e44;
+        --muted: rgba(26, 46, 68, 0.66);
+        --soft: rgba(26, 46, 68, 0.78);
+        --blue: #1b4fa8;
+        --orange: #f5820a;
+        --surface: rgba(255, 255, 255, 0.94);
+        --line: rgba(19, 32, 51, 0.1);
+        --shadow: 0 24px 52px rgba(26, 40, 74, 0.14);
+        --panel-solid: #ffffff;
+        --text-mid: rgba(19, 35, 56, 0.72);
+        --gb: rgba(27, 79, 168, 0.13);
+        --orange-glow: rgba(245, 130, 10, 0.22);
+        --easy: #1b4fa8;
+        --easy-deep: #132338;
+        --medium: #2f8f46;
+        --medium-deep: #236b35;
+        --hard: #d79a21;
+        --hard-deep: #9a6410;
+        --realistic: #c92835;
+        --realistic-deep: #8d1f27;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Barlow", "Avenir Next", Avenir, "Segoe UI", sans-serif;
+        color: var(--ink);
+        padding-top: 70px;
+        background:
+          radial-gradient(ellipse 70% 42% at 50% -10%, rgba(27, 79, 168, 0.2), transparent 64%),
+          radial-gradient(ellipse 36% 34% at 95% 22%, rgba(245, 130, 10, 0.18), transparent 60%),
+          radial-gradient(ellipse 44% 34% at 4% 82%, rgba(27, 79, 168, 0.08), transparent 58%),
+          linear-gradient(180deg, #ffffff 0%, #f5fafc 100%);
+      }
+
+      body.menu-open {
+        overflow: hidden;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        height: 72px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(22px) saturate(1.6);
+        -webkit-backdrop-filter: blur(22px) saturate(1.6);
+        border-bottom: 1px solid rgba(19, 35, 56, 0.11);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5vw;
+      }
+
+      .nav-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+
+      .logo-img { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+
+      .logo-wrap { display: flex; flex-direction: column; line-height: 1; }
+
+      .logo-text {
+        font-size: 21px;
+        font-weight: 900;
+        letter-spacing: 0.09em;
+        color: var(--navy);
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .logo-sub {
+        font-size: 7.5px;
+        color: var(--orange);
+        font-weight: 700;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: var(--text-mid);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: var(--blue);
+      }
+
+      .nav-dropdown {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .nav-dropdown > a {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 22px 0;
+      }
+
+      .nav-dropdown > a::after {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 5px solid rgba(220, 232, 245, 0.45);
+        transition: transform 0.2s;
+      }
+
+      .nav-dropdown:hover > a::after {
+        transform: rotate(180deg);
+      }
+
+      .dropdown-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        min-width: 172px;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid var(--gb);
+        backdrop-filter: blur(16px);
+        transition: opacity 0.15s;
+      }
+
+      .nav-dropdown:hover .dropdown-menu {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .dropdown-menu a {
+        display: block;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        color: var(--text-mid);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.9px;
+        text-align: center;
+      }
+
+      .dropdown-menu a:last-child {
+        border-bottom: none;
+      }
+
+      .dropdown-menu a:hover {
+        color: var(--blue);
+        background: rgba(27, 79, 168, 0.06);
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        width: 42px;
+        height: 42px;
+        cursor: pointer;
+        padding: 0;
+        border: 1px solid rgba(19, 35, 56, 0.12);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .nav-toggle span {
+        width: 24px;
+        height: 2px;
+        display: block;
+        background: var(--navy);
+        border-radius: 1px;
+        transition: transform 0.25s, opacity 0.25s;
+      }
+
+      .nav-toggle.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+
+      .nav-toggle.open span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .nav-toggle.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+
+      .mobile-menu {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #ffffff;
+        z-index: 199;
+        padding: 28px 6vw;
+        overflow-y: auto;
+      }
+
+      .mobile-menu.open {
+        display: flex;
+      }
+
+      .mobile-menu a {
+        text-decoration: none;
+        color: var(--navy);
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .mob-dropdown {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .mob-dropdown-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--navy);
+        font-size: 21px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 15px 0;
+        cursor: pointer;
+      }
+
+      .mob-arrow {
+        font-size: 20px;
+        color: var(--orange);
+        transition: transform 0.25s;
+      }
+
+      .mob-arrow.open {
+        transform: rotate(90deg);
+      }
+
+      .mob-dropdown-items {
+        display: none;
+        flex-direction: column;
+        padding-left: 14px;
+      }
+
+      .mob-dropdown-items.open {
+        display: flex;
+      }
+
+      .mob-dropdown-items a {
+        font-size: 15px !important;
+        text-transform: none;
+        letter-spacing: 0;
+        color: var(--soft);
+        padding: 12px 0 !important;
+      }
+
+      .shell {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 40px 24px 56px;
+      }
+
+      .hero,
+      .card {
+        border-radius: 18px;
+        background: var(--surface);
+        border: 1px solid rgba(27, 79, 168, 0.16);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(16px);
+      }
+
+      .hero {
+        padding: clamp(24px, 4vw, 42px);
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(120deg, rgba(27, 79, 168, 0.09), transparent 42%),
+          radial-gradient(circle at 92% 0%, rgba(245, 130, 10, 0.14), transparent 30%);
+        pointer-events: none;
+      }
+
+      .hero > * {
+        position: relative;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--orange);
+        font-weight: 800;
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+        color: var(--navy);
+        font-size: clamp(2.6rem, 7vw, 5.2rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+
+      .muted {
+        color: var(--soft);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .card {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--orange), var(--blue));
+      }
+
+      .card h2 {
+        margin-bottom: 10px;
+        color: var(--navy);
+        font-size: 1.35rem;
+      }
+
+      .card ul {
+        margin: 0 0 22px;
+        padding-left: 18px;
+        color: var(--muted);
+        line-height: 1.55;
+        flex: 1;
+      }
+
+      .launch {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 16px;
+        text-decoration: none;
+        color: white;
+        font-weight: 800;
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .other-accounts {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border-radius: 16px;
+        text-decoration: none;
+        color: var(--navy);
+        font-weight: 800;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--line);
+        box-shadow: 0 12px 22px rgba(26, 40, 74, 0.08);
+      }
+
+      .launch:hover {
+        transform: translateY(-1px);
+      }
+
+      .launch.easy {
+        background: linear-gradient(135deg, var(--easy), var(--easy-deep));
+        box-shadow: 0 16px 28px rgba(0, 0, 0, 0.2);
+      }
+
+      .launch.medium {
+        background: linear-gradient(135deg, var(--medium), var(--medium-deep));
+        box-shadow: 0 16px 28px rgba(45, 155, 88, 0.22);
+      }
+
+      .launch.hard {
+        background: linear-gradient(135deg, var(--hard), var(--hard-deep));
+        box-shadow: 0 16px 28px rgba(159, 117, 7, 0.22);
+      }
+
+      .launch.realistic {
+        background: linear-gradient(135deg, var(--realistic), var(--realistic-deep));
+        box-shadow: 0 16px 28px rgba(209, 76, 69, 0.22);
+      }
+
+      .footer-note {
+        margin-top: 24px;
+        padding: 20px 24px;
+      }
+
+      .homepage-credit {
+        margin-top: 8px;
+        margin-bottom: 0;
+        font-size: 0.78rem;
+        color: var(--muted);
+        text-align: left;
+      }
+
+      .site-footer {
+        margin-top: 22px;
+        font-size: 0.82rem;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .shell {
+          padding: 24px 18px 40px;
+        }
+      }
+
+      @media (max-width: 960px) {
+        .nav-links {
+          display: none;
+        }
+
+        .nav-toggle {
+          display: flex;
+        }
+      }
+    </style>
+  
+</head>
+  <body>
+    <nav aria-label="Primary">
+      <a class="nav-logo" href="/index.html">
+        <img class="logo-img" src="logo.png" alt="STRIVE INDEPENDENCE" />
+        <div class="logo-wrap">
+          <div class="logo-text">STRIVE</div>
+          <div class="logo-sub">Independence</div>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="https://www.striveptlv.com/">Physical Therapy</a>
+        <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
+        <a href="https://www.striveptlv.com/independence/demo.html">Demo Access</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="https://www.striveptlv.com/" onclick="toggleMenu(false)">Physical Therapy</a>
+      <a href="https://www.striveptlv.com/talk" onclick="toggleMenu(false)">STRIVE Talk</a>
+      <a href="https://www.striveptlv.com/independence/demo.html" onclick="toggleMenu(false)">Demo Access</a>
+    </div>
+
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Money Management Module</p>
+        <h1>Electric Bill Pay Practice</h1>
+        <p class="muted">
+          Choose the task level you want to open for New Vegas Electric bill-pay practice. Each level is designed to simulate real-world bill payment tasks while adjusting the amount of visual support, guidance, and distraction. Users will work on locating key account information, navigating the page, and entering payment details accurately, with easier levels offering more built-in help and higher levels requiring more independent scanning, attention, and problem solving.
+        </p>
+        <a class="other-accounts" href="../index.html">Go to Other Accounts</a>
+        <p class="homepage-credit">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Single Payment Task</h2>
+          <ul>
+            <li>Black-and-white simplified layout</li>
+            <li>Only one task after login</li>
+            <li>Payment reference shown on the same page</li>
+          </ul>
+          <a class="launch easy" href="./new-vegas-electric-easy-difficulty-desktop.html">Open Easy</a>
+        </article>
+
+        <article class="card">
+          <h2>Basic Support</h2>
+          <ul>
+            <li>Most direct desktop layout</li>
+            <li>Lower visual distraction</li>
+            <li>Best starting point for orientation and task success</li>
+          </ul>
+          <a class="launch medium" href="./new-vegas-electric-medium-difficulty-desktop.html">Open Medium</a>
+        </article>
+
+        <article class="card">
+          <h2>Reference Required</h2>
+          <ul>
+            <li>Desktop layout with fewer built-in cues</li>
+            <li>User must reference the printed information sheet</li>
+            <li>Balanced challenge with standard distractions</li>
+          </ul>
+          <a class="launch hard" href="./new-vegas-electric-hard-difficulty-desktop.html">Open Hard</a>
+        </article>
+
+        <article class="card">
+          <h2>High Distraction</h2>
+          <ul>
+            <li>More color variation and visual competition</li>
+            <li>Many extra tabs, promos, and action paths</li>
+            <li>Designed for more advanced scanning and attention demands</li>
+          </ul>
+          <a class="launch realistic" href="./new-vegas-electric-realistic-difficulty-desktop.html">Open Realistic</a>
+        </article>
+      </section>
+
+      <section class="hero footer-note">
+        <p class="eyebrow">Reference Materials</p>
+        <p class="muted">
+          Use the printable reference sheet for Hard and Realistic:
+          <a href="./new-vegas-electric-reference-sheet.png" target="_blank" rel="noopener">PNG Reference Sheet</a>.
+        </p>
+      </section>
+      <p class="site-footer">STRIVE Independence by STRIVE Physical Therapy - Las Vegas</p>
+    </main>
+    <script>
+      function toggleMenu(forceState) {
+        const menu = document.getElementById("mobileMenu");
+        const toggle = document.getElementById("navToggle");
+        const shouldOpen = typeof forceState === "boolean"
+          ? forceState
+          : !menu.classList.contains("open");
+
+        menu.classList.toggle("open", shouldOpen);
+        if (toggle) toggle.classList.toggle("open", shouldOpen);
+        document.body.classList.toggle("menu-open", shouldOpen);
+      }
+
+      function toggleMobileDropdown(itemsId, arrowEl) {
+        const dropdown = document.getElementById(itemsId);
+        if (!dropdown || !arrowEl) return;
+        dropdown.classList.toggle("open");
+        arrowEl.classList.toggle("open");
+      }
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 960) toggleMenu(false);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") toggleMenu(false);
+      });
+    </script>
+  </body>
+</html>
