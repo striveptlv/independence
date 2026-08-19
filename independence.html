@@ -43,11 +43,6 @@
     { "@type": "Audience", "audienceType": "Assisted living facilities" },
     { "@type": "Audience", "audienceType": "Independent living facilities" },
     { "@type": "Audience", "audienceType": "Case managers" }
-  ],
-  "offers": [
-    { "@type": "Offer", "name": "Individual", "price": "4.99", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "4.99", "priceCurrency": "USD", "billingDuration": "P1M" } },
-    { "@type": "Offer", "name": "Clinic", "price": "29.99", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "29.99", "priceCurrency": "USD", "billingDuration": "P1M" } },
-    { "@type": "Offer", "name": "Enterprise", "price": "99.99", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "99.99", "priceCurrency": "USD", "billingDuration": "P1M" } }
   ]
 }
 </script>
@@ -874,7 +869,6 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
     <a href="https://www.striveptlv.com/">Physical Therapy</a>
     <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
     <a href="#free-practice">Patient Practice</a>
-    <a href="#pricing">Pricing</a>
     <a href="https://www.striveptlv.com/independence/demo.html">Demo Access</a>
     <a class="nav-cta" href="https://www.striveptlv.com/independence/auth.html">Access Your Account</a>
   </div>
@@ -888,7 +882,6 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   <a href="https://www.striveptlv.com/" onclick="toggleMenu(false)">Physical Therapy</a>
   <a href="https://www.striveptlv.com/talk" onclick="toggleMenu(false)">STRIVE Talk</a>
   <a href="#free-practice" onclick="toggleMenu(false)">Patient Practice</a>
-  <a href="#pricing" onclick="toggleMenu(false)">Pricing</a>
   <a href="https://www.striveptlv.com/independence/demo.html" onclick="toggleMenu(false)">Demo Access</a>
   <a class="mob-book" href="https://www.striveptlv.com/independence/auth.html" onclick="toggleMenu(false)">Access Your Account</a>
 </div>
@@ -1019,7 +1012,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
     </form>
     <div class="modal-confirmed" id="modalConfirmed">
       <p>Thanks. We will follow up to schedule your demo.</p>
-      <a href="#pricing" class="modal-submit" onclick="closeModal()" style="display:inline-flex;text-decoration:none">Compare Plans</a>
+      <a href="https://www.striveptlv.com/independence/auth.html" class="modal-submit" onclick="closeModal()" style="display:inline-flex;text-decoration:none">Access Account</a>
     </div>
   </div>
 </div>
@@ -1072,73 +1065,6 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
         <div class="free-practice-action">Open activity <span>→</span></div>
       </a>
     </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="pricing-section" id="pricing">
-  <div class="pricing-inner">
-    <div class="pricing-header">
-      <div class="section-tag">Founding Member Pricing</div>
-      <h2 class="section-h2">Choose Your<br><span class="light">Plan</span></h2>
-      <p class="section-body" style="margin-bottom:0">All plans include access to the STRIVE account. Pricing depends on the number of users, team members, and organization needs.</p>
-    </div>
-    <div class="tier-grid">
-
-      <div class="tier-card featured">
-        <div class="tier-badge">Start Here</div>
-        <div class="tier-name">Individual</div>
-        <div class="tier-tagline">For solo users, therapists, caregivers, or single clinicians.</div>
-        <div class="tier-price">$4<span class="price-cents">.99</span></div>
-        <div class="tier-price-note">/ month · 30-day free trial</div>
-        <div class="tier-sep"></div>
-        <ul class="tier-features">
-          <li><span class="chk">✓</span>One user account</li>
-          <li><span class="chk">✓</span>Full access to STRIVE practice tools</li>
-          <li><span class="chk">✓</span>Money management practice</li>
-          <li><span class="chk">✓</span>Ride share practice</li>
-          <li><span class="chk">✓</span>Independent living skill practice</li>
-          <li><span class="chk">✓</span>Email support</li>
-        </ul>
-        <a class="tier-cta solid" href="https://www.striveptlv.com/independence/auth.html?panel=createPractice">Start 30-Day Free Trial</a>
-      </div>
-
-      <div class="tier-card">
-        <div class="tier-name">Clinic</div>
-        <div class="tier-tagline">For one clinic or team with multiple staff members.</div>
-        <div class="tier-price">$29<span class="price-cents">.99</span></div>
-        <div class="tier-price-note">/ month · 30-day free trial</div>
-        <div class="tier-sep"></div>
-        <ul class="tier-features">
-          <li><span class="chk">✓</span>Up to 10 team members</li>
-          <li><span class="chk">✓</span>Shared clinic or team account</li>
-          <li><span class="chk">✓</span>Full STRIVE Talk access</li>
-          <li><span class="chk">✓</span>Full Money Rehab and Community Mobility access</li>
-          <li><span class="chk">✓</span>Team use across treatment sessions</li>
-          <li><span class="chk">✓</span>Email support</li>
-        </ul>
-        <a class="tier-cta outline" href="https://www.striveptlv.com/independence/auth.html?panel=createPractice">Start 30-Day Free Trial</a>
-      </div>
-
-      <div class="tier-card">
-        <div class="tier-name">Enterprise</div>
-        <div class="tier-tagline">For larger organizations and multi-location teams.</div>
-        <div class="tier-price">$99<span class="price-cents">.99</span></div>
-        <div class="tier-price-note">/ month · up to 50 team members · 30-day free trial</div>
-        <div class="tier-sep"></div>
-        <ul class="tier-features">
-          <li><span class="chk">✓</span>Everything in Clinic</li>
-          <li><span class="chk">✓</span>Up to 50 team members</li>
-          <li><span class="chk">✓</span>Multiple clinics or locations</li>
-          <li><span class="chk">✓</span>Organization-level account access</li>
-          <li><span class="chk">✓</span>Custom onboarding and setup</li>
-          <li><span class="chk">✓</span>Priority support for custom needs</li>
-        </ul>
-        <a class="tier-cta outline" href="https://www.striveptlv.com/independence/auth.html?panel=createPractice">Start 30-Day Free Trial</a>
-      </div>
-
-    </div>
-    <p class="pricing-note">Founding members keep their introductory monthly rate while their subscription remains active. All plans include STRIVE account access.</p>
   </div>
 </section>
 
