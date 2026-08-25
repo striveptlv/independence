@@ -139,8 +139,10 @@ const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjZnBkZ21td2tnaGpzemtibnpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NzM4MjYsImV4cCI6MjA5NjQ0OTgyNn0.c2ocYnK9bvQo4uTJtxXbjk6KdizCI_vaNDCt0HFYXuk";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const DASHBOARD_PAGE = "dashboard.html";
 const PLAN_PAGE = "choose-plan.html";
 const TEAM_ACCESS_REMOVED_PAGE = PLAN_PAGE + "?reason=team_access_removed";
+const FREE_PUBLIC_ACCESS = true;
 
 const statusTitle = document.getElementById("statusTitle");
 const statusMessage = document.getElementById("statusMessage");
@@ -187,6 +189,10 @@ function showAccessConfirmed() {
 }
 
 async function checkAccess() {
+  if (FREE_PUBLIC_ACCESS) {
+    window.location.replace(DASHBOARD_PAGE);
+    return;
+  }
   const { data: userData, error: userError } = await supabase.auth.getUser();
   const user = userData && userData.user;
   console.log("Supabase user id:", user ? user.id : null);

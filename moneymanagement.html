@@ -4,28 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f6fafc">
-  <title>Money Management Simulator | STRIVE Money Rehab</title>
-  <meta name="description" content="Practice money management with STRIVE Money Rehab, including mock bill pay, simulated online banking, and simulated ride-share tasks for functional rehab and IADL training.">
+  <title>STRIVE INDEPENDENCE | Money Management Launchpad</title>
+  <meta name="description" content="Launch STRIVE INDEPENDENCE starter apps, including Basic Bill Pay, Left/Right practice, and the free Grocery Shopping Task.">
   <meta name="robots" content="index, follow">
-  <meta name="keywords" content="money management simulator, STRIVE Money Rehab, mock bill pay, simulated online banking, simulated ride-share app, occupational therapy money management, IADL training, cognitive rehab, executive function practice, stroke rehab, brain injury rehab">
-  <link rel="canonical" href="https://striveptlv.com/moneymanagement/">
-  <meta property="og:title" content="Money Management Simulator | STRIVE Money Rehab">
-  <meta property="og:description" content="STRIVE Money Rehab supports money-management practice with mock bill pay, simulated online banking, and ride-share tasks under STRIVE INDEPENDENCE.">
+  <meta name="keywords" content="money management simulator, STRIVE INDEPENDENCE, bill pay practice, left right discrimination game, occupational therapy money management, IADL training, cognitive rehab, executive function practice, stroke rehab, brain injury rehab">
+  <link rel="canonical" href="https://striveptlv.com/independence.html">
+  <meta property="og:title" content="STRIVE INDEPENDENCE | Money Management Launchpad">
+  <meta property="og:description" content="Launch available STRIVE INDEPENDENCE starter apps and view the broader app library, including the free Grocery Shopping Task.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://striveptlv.com/moneymanagement/">
-  <meta property="og:image" content="https://striveptlv.com/moneymanagement/logo.png">
+  <meta property="og:url" content="https://striveptlv.com/independence.html">
+  <meta property="og:image" content="https://striveptlv.com/logo.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Money Management Simulator | STRIVE Money Rehab">
-  <meta name="twitter:description" content="Practice mock bill pay, online banking, and ride-share tasks with STRIVE Money Rehab.">
+  <meta name="twitter:title" content="STRIVE INDEPENDENCE | Money Management Launchpad">
+  <meta name="twitter:description" content="Launch available STRIVE INDEPENDENCE starter apps and view the broader app library, including the free Grocery Shopping Task.">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "STRIVE Money Rehab",
+    "name": "STRIVE INDEPENDENCE",
     "alternateName": "Money Management Simulator",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Web",
-    "description": "Money-management practice for functional rehabilitation, including mock bill pay, simulated online banking, and simulated ride-share tasks.",
+    "description": "Starter launchpad for money-management and functional cognition practice, including mock bill pay, basic left/right discrimination, grocery shopping practice, and access to the full app library.",
     "isPartOf": {
       "@type": "SoftwareApplication",
       "name": "STRIVE INDEPENDENCE"
@@ -38,8 +38,9 @@
     ],
     "featureList": [
       "Mock bill pay",
-      "Simulated online banking",
-      "Simulated ride-share app",
+      "Basic left/right discrimination practice",
+      "Free grocery shopping task",
+      "Paid upgrade prompts",
       "Money-management IADL practice",
       "Executive function practice"
     ]
@@ -230,181 +231,286 @@
       color: var(--blue);
       border-color: rgba(27, 79, 168, 0.24);
     }
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 500;
-      background: rgba(226, 238, 246, 0.78);
-      backdrop-filter: blur(18px);
+    .button.dark {
+      background: var(--navy);
+      color: #fff;
+    }
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 8px 0 18px;
+      align-items: stretch;
+    }
+    .available-grid {
+      margin-bottom: 18px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .restricted-grid {
+      margin-top: 18px;
+    }
+    .restricted-grid .app-card {
+      min-height: 344px;
+    }
+    .app-card {
+      min-height: 210px;
+      height: 100%;
+      padding: 19px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 50px rgba(19, 35, 56, 0.08);
       display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .app-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 24px 64px rgba(19, 35, 56, 0.13);
+    }
+    .app-card.disabled {
+      cursor: default;
+      opacity: 0.76;
+    }
+    .app-card.disabled:hover {
+      transform: none;
+      border-color: var(--line);
+      box-shadow: 0 18px 50px rgba(19, 35, 56, 0.08);
+    }
+    .app-card.restricted {
+      background: rgba(255, 255, 255, 0.58);
+      border-style: dashed;
+      box-shadow: none;
+    }
+    .app-card.restricted:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 42px rgba(19, 35, 56, 0.08);
+    }
+    .app-top {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .app-num {
+      color: rgba(19, 35, 56, 0.28);
+      font-family: "DM Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+    .app-badge {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: 24px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .modal-overlay.open { opacity: 1; pointer-events: auto; }
-    .modal-box {
-      width: min(92vw, 400px);
-      max-height: min(760px, calc(100dvh - 32px));
-      overflow-y: auto;
-      background: linear-gradient(145deg, #ffffff 0%, #edf6fb 100%);
-      border: 1px solid var(--gb);
-      border-radius: 18px;
-      padding: clamp(1.35rem, 4vw, 2.3rem);
-      position: relative;
-      transform: translateY(24px) scale(0.97);
-      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-      box-shadow: 0 34px 90px rgba(19, 35, 56, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.72);
-    }
-    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
-    .modal-box::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 15%;
-      right: 15%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245, 130, 10, 0.6), transparent);
-    }
-    .modal-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--gb);
-      background: transparent;
-      color: var(--muted-s);
-      font-size: 20px;
+      min-height: 22px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--tint);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
       line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, color 0.2s;
+      text-transform: uppercase;
     }
-    .modal-close:hover { background: rgba(27, 79, 168, 0.07); color: var(--blue); }
-    .modal-demo-ring {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      margin-bottom: 0.9rem;
-      border: 1px solid var(--gb);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(245, 130, 10, 0.1);
-    }
-    .modal-demo-ring svg { width: 19px; height: 19px; stroke: var(--orange); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .modal-title { font-size: clamp(1.35rem, 5vw, 1.95rem); font-weight: 900; letter-spacing: 0; text-transform: uppercase; color: var(--navy); margin-bottom: 0.55rem; line-height: 1.05; }
-    .modal-sub { font-size: clamp(0.88rem, 2.5vw, 0.96rem); color: var(--muted-s); line-height: 1.5; margin-bottom: 1rem; }
-    .modal-form { display: flex; flex-direction: column; gap: 0.72rem; }
-    .modal-field { display: grid; gap: 0.35rem; }
-    .modal-label { font-family: "DM Mono", monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); }
-    .modal-input {
-      width: 100%;
-      min-height: 42px;
-      border-radius: 10px;
-      border: 1px solid rgba(19, 35, 56, 0.14);
-      background: #fff;
+    .app-card h2 {
+      margin-top: 18px;
       color: var(--navy);
-      font: inherit;
-      font-size: 0.97rem;
-      padding: 0 1.1rem;
-      transition: border-color 0.2s, background 0.2s;
+      font-size: 1.18rem;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
-    .modal-input:focus { outline: none; border-color: rgba(245, 130, 10, 0.55); background: #fff; }
-    .modal-input::placeholder { color: rgba(26, 46, 68, 0.34); }
-    .modal-submit {
+    .app-card p {
+      color: var(--muted-s);
+      font-size: 0.93rem;
+      line-height: 1.45;
+    }
+    .app-launch {
+      margin-top: 22px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--accent);
+      font-size: 0.74rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .app-launch span {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .bill { --accent: var(--orange); --tint: rgba(245, 130, 10, 0.12); --border: rgba(245, 130, 10, 0.28); }
+    .credit { --accent: #2563eb; --tint: rgba(37, 99, 235, 0.12); --border: rgba(37, 99, 235, 0.25); }
+    .bank { --accent: #10b981; --tint: rgba(16, 185, 129, 0.12); --border: rgba(16, 185, 129, 0.25); }
+    .talk { --accent: #db2777; --tint: rgba(219, 39, 119, 0.1); --border: rgba(219, 39, 119, 0.22); }
+    .stride { --accent: #7c3aed; --tint: rgba(124, 58, 237, 0.11); --border: rgba(124, 58, 237, 0.22); }
+    .left-right { --accent: #0f766e; --tint: rgba(15, 118, 110, 0.11); --border: rgba(15, 118, 110, 0.24); }
+    .grocery { --accent: #16a34a; --tint: rgba(22, 163, 74, 0.11); --border: rgba(22, 163, 74, 0.24); }
+    .upgrade-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      margin-top: 18px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(19, 35, 56, 0.96), rgba(27, 79, 168, 0.92));
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .upgrade-panel h2 {
+      font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .upgrade-panel p {
+      max-width: 620px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+    .upgrade-panel .button {
       background: var(--orange);
       color: var(--navy);
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 13px 20px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      margin-top: 0.15rem;
-      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
     }
-    .modal-submit:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 14px 36px var(--orange-glow); }
-    .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-    .modal-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 0.5rem; }
-    .modal-status { display: none; font-size: 0.97rem; font-weight: 600; padding: 0.8rem 1rem; border-radius: 8px; text-align: center; margin-top: 0.5rem; }
-    .modal-status.success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #047857; }
-    .modal-status.error { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.28); color: #b91c1c; }
-    .modal-confirmed { display: none; text-align: center; padding-top: 1.2rem; }
-    .modal-confirmed p { color: var(--muted-s); margin-bottom: 1.2rem; }
-    .modal-confirmed .modal-submit { width: 100%; }
     @media (max-width: 960px) {
       .nav-links { display: none; }
       .nav-toggle { display: flex; }
+      .launch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .available-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     .redirect {
       color: var(--muted);
       font-size: 0.95rem;
     }
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .feature {
-      min-height: 116px;
-      padding: 18px;
-      background: var(--white);
-      border: 1px solid var(--line);
-    }
-    .feature::before {
-      content: "";
-      display: block;
-      width: 32px;
-      height: 3px;
-      background: var(--orange);
-      margin-bottom: 16px;
-    }
-    .feature:nth-child(2)::before { background: #10b981; }
-    .feature:nth-child(3)::before { background: #8b5cf6; }
-    .feature h2 {
-      color: var(--navy);
-      font-size: 1.05rem;
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 8px;
-    }
-    .feature p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.45;
-    }
     @media (max-width: 720px) {
-      body { padding: 92px 18px 18px; place-items: start center; }
-      main { gap: 20px; }
-      .notice { padding: 24px 18px; }
-      .features { grid-template-columns: 1fr; }
-      .button { width: 100%; }
-      .redirect { width: 100%; text-align: center; }
+      body {
+        display: block;
+        padding: 76px 0 0;
+        min-height: 100svh;
+      }
+      nav {
+        height: 64px;
+        padding: 0 18px;
+      }
+      .logo-img {
+        width: 38px;
+        height: 38px;
+      }
+      .logo-text {
+        font-size: 18px;
+        letter-spacing: 0.08em;
+      }
+      .logo-sub {
+        font-size: 6.8px;
+        letter-spacing: 0.22em;
+      }
+      .mobile-menu {
+        top: 64px;
+        padding: 18px;
+      }
+      .mobile-menu a {
+        font-size: 18px;
+        padding: 14px 0;
+      }
+      main {
+        width: 100%;
+        gap: 0;
+      }
+      .notice {
+        min-height: calc(100svh - 76px);
+        padding: 24px 18px 28px;
+        border-left: 0;
+        border-right: 0;
+        box-shadow: none;
+      }
+      .eyebrow {
+        font-size: 0.9rem;
+        letter-spacing: 0.14em;
+        margin-bottom: 14px;
+      }
+      h1 {
+        font-size: clamp(2.05rem, 10.5vw, 3.25rem);
+        line-height: 0.98;
+        margin-bottom: 16px;
+      }
+      .lead {
+        font-size: 1rem;
+        line-height: 1.52;
+        margin-bottom: 18px;
+      }
+      .actions {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 22px;
+      }
+      .launch-grid {
+        grid-template-columns: 1fr;
+      }
+      .available-grid {
+        grid-template-columns: 1fr;
+      }
+      .upgrade-panel {
+        grid-template-columns: 1fr;
+      }
+      .app-card {
+        min-height: 0;
+        padding: 18px;
+      }
+      .restricted-grid .app-card {
+        min-height: 0;
+      }
+      .app-card h2 {
+        font-size: 1.12rem;
+      }
+      .upgrade-panel {
+        padding: 18px;
+      }
+      .button {
+        width: 100%;
+        min-height: 46px;
+        padding: 12px 14px;
+        font-size: 0.74rem;
+        letter-spacing: 0.09em;
+      }
+      .redirect {
+        width: 100%;
+        text-align: left;
+        font-size: 0.9rem;
+        line-height: 1.35;
+      }
     }
     @media (max-width: 520px) {
-      .modal-overlay { align-items: flex-start; padding: 88px 14px 14px; }
-      .modal-box { width: 100%; max-height: calc(100dvh - 104px); border-radius: 14px; }
-      .modal-label { font-size: 9px; }
-      .modal-note { font-size: 11px; }
+      body { padding-top: 68px; }
+      nav { height: 60px; }
+      .mobile-menu { top: 60px; }
+      .notice {
+        min-height: calc(100svh - 68px);
+        padding: 20px 16px 24px;
+      }
+      h1 {
+        font-size: clamp(1.95rem, 10vw, 2.7rem);
+      }
+      .lead {
+        font-size: 0.96rem;
+      }
     }
   </style>
 </head>
 <body>
   <nav>
-    <a class="nav-logo" href="https://www.striveptlv.com/index.html">
+    <a class="nav-logo" href="https://striveptlv.com/independence.html">
       <img class="logo-img" src="./logo.png" alt="STRIVE INDEPENDENCE">
       <div class="logo-wrap">
         <div class="logo-text">STRIVE</div>
@@ -414,7 +520,7 @@
     <div class="nav-links">
       <a href="https://www.striveptlv.com/">Physical Therapy</a>
       <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
-      <a class="nav-cta" href="#demo" onclick="openModal();return false;">Book A Free Demo</a>
+      <a class="nav-cta" href="dashboard.html">Open Free Dashboard</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMenu()">
       <span></span><span></span><span></span>
@@ -424,74 +530,90 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="https://www.striveptlv.com/" onclick="toggleMenu(false)">Physical Therapy</a>
     <a href="https://www.striveptlv.com/talk" onclick="toggleMenu(false)">STRIVE Talk</a>
-    <a href="#demo" class="mob-book" onclick="openModal();return false;">Book A Free Demo</a>
+    <a href="dashboard.html" class="mob-book" onclick="toggleMenu(false)">Open Free Dashboard</a>
   </div>
 
   <main aria-labelledby="page-title">
     <section class="notice">
-      <p class="eyebrow">We have moved</p>
-      <h1 id="page-title">Money Management is now <span class="accent-title">STRIVE Money Rehab.</span></h1>
-      <p class="lead">The Money Management simulator still exists as STRIVE Money Rehab, now under STRIVE INDEPENDENCE. Clinicians can continue using realistic practice for bill pay, online banking, and transportation tasks.</p>
-      <div class="actions">
-        <a class="button" href="https://www.striveptlv.com/index.html">Go To STRIVE INDEPENDENCE</a>
-        <a class="button secondary" href="#demo" onclick="openModal();return false;">Book A Free Demo</a>
-        <p class="redirect">STRIVE Money Rehab is now organized under STRIVE INDEPENDENCE.</p>
+      <h1 id="page-title">Money Management is now <span class="accent-title">STRIVE INDEPENDENCE.</span></h1>
+      <p class="lead">The Money Management simulator is now part of STRIVE INDEPENDENCE. Clinicians can continue using realistic practice for bill pay, online banking, and transportation tasks inside the larger independence platform.</p>
+
+      <div class="launch-grid available-grid" aria-label="Available STRIVE INDEPENDENCE apps">
+        <a class="app-card bill" href="https://www.striveptlv.com/independence/free/Bill%20Pay/Bill%20Pay%20Homepage.html">
+          <div>
+            <div class="app-top"><span class="app-num">01</span></div>
+            <h2>Bill Pay</h2>
+            <p>Practice utility bill review, number entry, payment steps, sequencing, and error checking with fictional information.</p>
+          </div>
+          <div class="app-launch">Open app <span>→</span></div>
+        </a>
+
+        <a class="app-card left-right" href="https://www.striveptlv.com/independence/free/left-right-basic/index.html">
+          <div>
+            <div class="app-top"><span class="app-badge">FREE APP</span><span class="app-num">02</span></div>
+            <h2>Left/Right Discrimination</h2>
+            <p>Practice left/right discrimination with the full STRIVE library, now free to access.</p>
+          </div>
+          <div class="app-launch">Open app <span>→</span></div>
+        </a>
+
+        <a class="app-card grocery" href="https://www.striveptlv.com/independence/free/grocery-shopping-task/index.html">
+          <div>
+            <div class="app-top"><span class="app-badge">FREE APP</span><span class="app-num">03</span></div>
+            <h2>Grocery Shopping Task</h2>
+            <p>Practice grocery shopping with the full STRIVE library, now free to access.</p>
+          </div>
+          <div class="app-launch">Open app <span>→</span></div>
+        </a>
       </div>
 
-      <div class="features" aria-label="STRIVE Money Rehab simulations">
-        <article class="feature">
-          <h2>Mock Bill Pay</h2>
-          <p>Practice reading statements, finding balances, and completing utility-payment steps with fictional information.</p>
-        </article>
-        <article class="feature">
-          <h2>Simulated Online Banking</h2>
-          <p>Navigate accounts, cards, payment screens, and everyday money-management decisions without real financial risk.</p>
-        </article>
-        <article class="feature">
-          <h2>Simulated Ride-Share App</h2>
-          <p>Work through pickup, destination, ride choice, confirmation, review, and cancellation in a safe practice environment.</p>
-        </article>
+      <div class="upgrade-panel" aria-label="Free access prompt">
+        <div>
+          <h2>Explore the full STRIVE INDEPENDENCE library.</h2>
+          <p>All activities, including online banking, credit card practice, STRIDE Ride Share, STRIVE Talk, and the full dashboard, are currently free to access.</p>
+        </div>
+        <a class="button" href="dashboard.html">Open Free Dashboard</a>
+      </div>
+
+      <div class="launch-grid restricted-grid" aria-label="Restricted STRIVE INDEPENDENCE apps">
+        <a class="app-card stride restricted" href="dashboard.html" aria-label="Open free STRIDE Ride Share access">
+          <div>
+            <div class="app-top"><span class="app-num">04</span></div>
+            <h2>STRIDE Ride Share</h2>
+            <p>Practice pickup, destination, ride selection, confirmation, and cancellation steps in a transportation simulator.</p>
+          </div>
+          <div class="app-launch">Open free dashboard <span>→</span></div>
+        </a>
+
+        <a class="app-card bank restricted" href="dashboard.html" aria-label="Open free Online Banking access">
+          <div>
+            <div class="app-top"><span class="app-num">05</span></div>
+            <h2>Online Banking</h2>
+            <p>Practice account review, balances, navigation, and everyday banking decisions in a fictional credit union.</p>
+          </div>
+          <div class="app-launch">Open free dashboard <span>→</span></div>
+        </a>
+
+        <a class="app-card credit restricted" href="dashboard.html" aria-label="Open free Credit Card access">
+          <div>
+            <div class="app-top"><span class="app-num">06</span></div>
+            <h2>Credit Card</h2>
+            <p>Practice card management, payment review, online forms, and attention to detail across multiple screens.</p>
+          </div>
+          <div class="app-launch">Open free dashboard <span>→</span></div>
+        </a>
+
+        <a class="app-card talk restricted" href="dashboard.html" aria-label="Open free STRIVE Talk access">
+          <div>
+            <div class="app-top"><span class="app-num">07</span></div>
+            <h2>STRIVE Talk</h2>
+            <p>Open the AAC mobile app for tap-to-speak functional phrases and daily communication routines.</p>
+          </div>
+          <div class="app-launch">Open free dashboard <span>→</span></div>
+        </a>
       </div>
     </section>
   </main>
-
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
-      <div class="modal-demo-ring">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
-      </div>
-      <h2 class="modal-title">Book A Free Demo</h2>
-      <p class="modal-sub">Tell us where to reach you and we will walk you through STRIVE Talk, Money Rehab, and Community Mobility with your clinic's goals in mind.</p>
-      <form class="modal-form" id="accessForm" action="https://formspree.io/f/mykvqkpz" method="POST" onsubmit="handleModalSubmit(event)">
-        <div class="modal-field">
-          <label class="modal-label" for="mac-name">Full Name</label>
-          <input class="modal-input" id="mac-name" name="name" type="text" placeholder="Dr. Jane Smith" required>
-        </div>
-        <div class="modal-field">
-          <label class="modal-label" for="mac-email">Work Email</label>
-          <input class="modal-input" id="mac-email" name="email" type="email" placeholder="you@clinic.com" required>
-        </div>
-        <div class="modal-field">
-          <label class="modal-label" for="mac-phone">Mobile Number</label>
-          <input class="modal-input" id="mac-phone" name="mobile" type="tel" placeholder="(555) 123-4567" inputmode="tel" autocomplete="tel">
-        </div>
-        <div class="modal-field">
-          <label class="modal-label" for="mac-role">Role</label>
-          <input class="modal-input" id="mac-role" name="role" type="text" placeholder="Occupational Therapist">
-        </div>
-        <input type="hidden" name="source" value="STRIVE Money Rehab - free demo request">
-        <button class="modal-submit" type="submit" id="modalSubmit">Book A Free Demo</button>
-        <p class="modal-note">No spam. We will follow up within one business day.</p>
-        <div class="modal-status success" id="modalSuccess">Thanks. We will follow up to schedule your demo.</div>
-        <div class="modal-status error" id="modalError">Something went wrong. Please try again.</div>
-      </form>
-      <div class="modal-confirmed" id="modalConfirmed">
-        <p>Thanks. We will follow up to schedule your demo.</p>
-        <a href="https://www.striveptlv.com/index.html" class="modal-submit" onclick="closeModal()" style="display:inline-flex;text-decoration:none">Explore STRIVE INDEPENDENCE</a>
-      </div>
-    </div>
-  </div>
 
   <script>
     function toggleMenu(force) {
@@ -510,54 +632,8 @@
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") {
         toggleMenu(false);
-        closeModal();
       }
     });
-
-    function openModal() {
-      const mobileMenu = document.getElementById("mobileMenu");
-      if (mobileMenu.classList.contains("open")) toggleMenu(false);
-      document.getElementById("modalOverlay").classList.add("open");
-      document.body.classList.add("locked");
-      document.getElementById("accessForm").style.display = "";
-      document.getElementById("modalConfirmed").style.display = "none";
-    }
-
-    function closeModal() {
-      document.getElementById("modalOverlay").classList.remove("open");
-      if (!document.getElementById("mobileMenu").classList.contains("open")) {
-        document.body.classList.remove("locked");
-      }
-    }
-
-    function closeModalOutside(event) {
-      if (event.target === document.getElementById("modalOverlay")) closeModal();
-    }
-
-    async function handleModalSubmit(event) {
-      event.preventDefault();
-      const button = document.getElementById("modalSubmit");
-      const success = document.getElementById("modalSuccess");
-      const error = document.getElementById("modalError");
-      success.style.display = "none";
-      error.style.display = "none";
-      button.disabled = true;
-      button.textContent = "Sending...";
-      try {
-        const response = await fetch(event.target.action, {
-          method: "POST",
-          headers: { Accept: "application/json" },
-          body: new FormData(event.target)
-        });
-        if (!response.ok) throw new Error("Demo request failed");
-        document.getElementById("accessForm").style.display = "none";
-        document.getElementById("modalConfirmed").style.display = "block";
-      } catch (error) {
-        document.getElementById("modalError").style.display = "block";
-        button.disabled = false;
-        button.textContent = "Book A Free Demo";
-      }
-    }
   </script>
 </body>
 </html>

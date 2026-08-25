@@ -385,6 +385,7 @@ const formTitle=document.getElementById('formTitle');
 const formCopy=document.getElementById('formCopy');
 const statusBox=document.getElementById('authStatus');
 const PLAN_PAGE="choose-plan.html";
+const FREE_PUBLIC_ACCESS=true;
 const DASHBOARD_PAGE="dashboard.html";
 const SUPABASE_URL='https://ccfpdgmmwkghjszkbnzs.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui';
@@ -396,6 +397,55 @@ const TEAM_PLAN_LIMITS = {
   enterprise: 50
 };
 const INDIVIDUAL_PLAN = "individual";
+
+function getSafeReturnPath() {
+  const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+
+  if (!returnTo) return null;
+
+  const normalized = returnTo.trim();
+  const lower = normalized.toLowerCase();
+  if (
+    !normalized ||
+    lower.startsWith("http://") ||
+    lower.startsWith("https://") ||
+    normalized.startsWith("//") ||
+    lower.startsWith("javascript:") ||
+    normalized.startsWith("/") ||
+    normalized.includes("\\") ||
+    /[\u0000-\u001f]/.test(normalized) ||
+    normalized.split(/[/?#]/, 1)[0].includes(":")
+  ) {
+    return null;
+  }
+
+  try {
+    const destination = new URL(normalized, window.location.href);
+    if (destination.origin !== window.location.origin) return null;
+  } catch {
+    return null;
+  }
+
+  return normalized;
+}
+
+const SAFE_RETURN_PATH = getSafeReturnPath();
+function getPostAuthPath(defaultPath) {
+  return SAFE_RETURN_PATH || defaultPath;
+}
+
+function finishRequestedAuth(session) {
+  if (!SAFE_RETURN_PATH) return false;
+
+  if (!session) {
+    showStatus("warn", "Account created. Please confirm your email, then sign in to continue.");
+    return true;
+  }
+
+  showStatus("ok", "Account ready. Returning you to your requested page...");
+  window.location.href = SAFE_RETURN_PATH;
+  return true;
+}
 
 function showPanel(panelName){
   Object.entries(forms).forEach(([name,form])=>{
@@ -626,6 +676,8 @@ function planPageWithReason(reason) {
 }
 
 async function getLoginRedirectForUser(user) {
+  if (FREE_PUBLIC_ACCESS) return DASHBOARD_PAGE;
+
   if (!user?.id) {
     console.log("Login routing: no user id available for access check.");
     return PLAN_PAGE;
@@ -783,7 +835,7 @@ async function acceptPendingInviteForUser(user, options = {}) {
   }
 
   showStatus("ok", "Team invite accepted. Taking you to your dashboard...");
-  window.location.href = DASHBOARD_PAGE;
+  window.location.href = getPostAuthPath(DASHBOARD_PAGE);
   return true;
 }
 
@@ -851,7 +903,7 @@ async function joinTeamByCodeForUser(user, teamCode, profileFields = {}, options
   }
 
   showStatus("ok", "Joined team successfully. Taking you to your dashboard...");
-  window.location.href = DASHBOARD_PAGE;
+  window.location.href = getPostAuthPath(DASHBOARD_PAGE);
   return true;
 }
 
@@ -885,11 +937,13 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
+      if (finishRequestedAuth(loginData.session)) return;
+
       console.log("Supabase login data", loginData);
       const invitedToTeam = await acceptPendingInviteForUser(loginData.user);
       if (invitedToTeam) return;
 
-      const redirectUrl = await getLoginRedirectForUser(loginData.user);
+      const redirectUrl = getPostAuthPath(await getLoginRedirectForUser(loginData.user));
       console.log("Login routing redirect:", redirectUrl);
 
       if (redirectUrl === DASHBOARD_PAGE) {
@@ -980,6 +1034,8 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
+      if (finishRequestedAuth(signupData.session)) return;
+
       const invitedToTeam = await acceptPendingInviteForUser(user, {
         sendWelcomeEmail: true
       });
@@ -993,7 +1049,7 @@ async function handleAuthSubmit(event, type) {
 
         await sendWelcomeEmailIfNeeded(user, fullName);
         showStatus("ok", "Individual therapist account created successfully. Taking you to your dashboard...");
-        window.location.href = DASHBOARD_PAGE;
+        window.location.href = getPostAuthPath(DASHBOARD_PAGE);
         return;
       }
 
@@ -1045,7 +1101,7 @@ async function handleAuthSubmit(event, type) {
 
       await sendWelcomeEmailIfNeeded(user, fullName);
       showStatus("ok", "Account and practice created successfully. Taking you to your dashboard...");
-      window.location.href = DASHBOARD_PAGE;
+      window.location.href = getPostAuthPath(DASHBOARD_PAGE);
       return;
     }
 
@@ -1108,6 +1164,8 @@ async function handleAuthSubmit(event, type) {
             return;
           }
 
+          if (finishRequestedAuth(loginData.session)) return;
+
           const existingUser = loginData.user;
 
           const invitedToTeam = await acceptPendingInviteForUser(existingUser);
@@ -1129,6 +1187,8 @@ async function handleAuthSubmit(event, type) {
         showStatus("warn", "Account created. Please check your email to confirm your account.");
         return;
       }
+
+      if (finishRequestedAuth(signupData.session)) return;
 
       const invitedToTeam = await acceptPendingInviteForUser(user, {
         sendWelcomeEmail: true

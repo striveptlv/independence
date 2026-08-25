@@ -264,6 +264,7 @@ const supabaseClient = window.supabase.createClient(
 
 const CHECKOUT_FUNCTION_URL =
   "https://ccfpdgmmwkghjszkbnzs.supabase.co/functions/v1/create-checkout-session";
+const FREE_PUBLIC_ACCESS = true;
 const AUTH_PAGE = "auth.html";
 const DASHBOARD_PAGE = "dashboard.html";
 
@@ -422,6 +423,10 @@ async function checkAccessOrRedirect() {
 }
 
 async function initChoosePlan() {
+  if (FREE_PUBLIC_ACCESS) {
+    window.location.replace(DASHBOARD_PAGE);
+    return;
+  }
   const accessCheck = await checkAccessOrRedirect();
   if (accessCheck) showPlans();
 }
@@ -429,6 +434,10 @@ async function initChoosePlan() {
 initChoosePlan();
 
 async function startCheckout(plan) {
+  if (FREE_PUBLIC_ACCESS) {
+    window.location.href = DASHBOARD_PAGE;
+    return;
+  }
   try {
     const accessCheck = await checkAccessOrRedirect();
     if (!accessCheck) return;
