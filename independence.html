@@ -31,7 +31,6 @@
   "inLanguage": "en-US",
   "applicationCategory": "HealthApplication",
   "operatingSystem": "Web",
-  "isAccessibleForFree": true,
   "description": "Functional rehabilitation platform for neuro clinics, private practices, occupational therapists, speech therapists, senior care teams, university OT and ST programs, assisted living facilities, independent living facilities, and case managers.",
   "audience": [
     { "@type": "Audience", "audienceType": "Occupational therapists" },
@@ -369,85 +368,6 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
     -webkit-mask-image:radial-gradient(ellipse at 58% 50%,black 0%,rgba(0,0,0,.72) 34%,rgba(0,0,0,.28) 58%,transparent 78%);
     mask-image:radial-gradient(ellipse at 58% 50%,black 0%,rgba(0,0,0,.72) 34%,rgba(0,0,0,.28) 58%,transparent 78%);
   }
-}
-
-/* ─────────────────────────
-   FREE BASIC PRACTICE
-───────────────────────── */
-.free-practice-section{
-  padding:6rem 6% 2rem;
-}
-.free-practice-inner{
-  max-width:1200px;
-  margin:0 auto;
-}
-.free-practice-head{
-  max-width:660px;
-  margin-bottom:2rem;
-}
-.free-practice-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
-}
-.free-practice-card{
-  min-height:230px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:2rem;
-  background:rgba(255,255,255,.88);
-  border:1px solid var(--gb);
-  border-radius:10px;
-  box-shadow:0 18px 50px rgba(19,35,56,.08);
-  transition:transform .18s,border-color .18s,box-shadow .18s;
-}
-.free-practice-card:hover{
-  transform:translateY(-4px);
-  border-color:var(--card-border);
-  box-shadow:var(--card-shadow);
-}
-.free-practice-card.bill{
-  --card-border:rgba(245,130,10,.35);
-  --card-shadow:0 24px 60px rgba(245,130,10,.13);
-}
-.free-practice-card.airlines{
-  --card-border:rgba(15,118,110,.32);
-  --card-shadow:0 24px 60px rgba(15,118,110,.12);
-}
-.free-practice-card.grocery{
-  --card-border:rgba(16,185,129,.34);
-  --card-shadow:0 24px 60px rgba(16,185,129,.12);
-}
-.free-practice-card h3{
-  color:var(--navy);
-  font-size:clamp(1.45rem,2.4vw,1.9rem);
-  font-weight:800;
-  line-height:1.04;
-  text-transform:uppercase;
-}
-.free-practice-card p{
-  margin-top:.85rem;
-  color:var(--muted-s);
-  line-height:1.65;
-}
-.free-practice-action{
-  margin-top:2rem;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  color:var(--orange);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-@media(max-width:920px){
-  .free-practice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:720px){
-  .free-practice-section{padding:4rem 6% 1rem}
-  .free-practice-grid{grid-template-columns:1fr}
 }
 
 /* ─────────────────────────
@@ -868,9 +788,8 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   <div class="nav-links">
     <a href="https://www.striveptlv.com/">Physical Therapy</a>
     <a href="https://www.striveptlv.com/talk">STRIVE Talk</a>
-    <a href="#free-practice">Patient Practice</a>
-    <a href="https://www.striveptlv.com/independence/demo.html">Demo Access</a>
-    <a class="nav-cta" href="https://www.striveptlv.com/independence/auth.html">Access Your Account</a>
+    <a href="https://independence.striveptlv.com/demo.html">Demo Access</a>
+    <a class="nav-cta" href="https://independence.striveptlv.com/auth.html?panel=createPractice">Create Account</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -881,9 +800,8 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
 <div class="mobile-menu" id="mobileMenu">
   <a href="https://www.striveptlv.com/" onclick="toggleMenu(false)">Physical Therapy</a>
   <a href="https://www.striveptlv.com/talk" onclick="toggleMenu(false)">STRIVE Talk</a>
-  <a href="#free-practice" onclick="toggleMenu(false)">Patient Practice</a>
-  <a href="https://www.striveptlv.com/independence/demo.html" onclick="toggleMenu(false)">Demo Access</a>
-  <a class="mob-book" href="https://www.striveptlv.com/independence/auth.html" onclick="toggleMenu(false)">Access Your Account</a>
+  <a href="https://independence.striveptlv.com/demo.html" onclick="toggleMenu(false)">Demo Access</a>
+  <a class="mob-book" href="https://independence.striveptlv.com/auth.html?panel=createPractice" onclick="toggleMenu(false)">Create Account</a>
 </div>
 
 <!-- HERO -->
@@ -897,10 +815,8 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   </h1>
   <p class="hero-sub">Real-world practice for banking, communication, transportation, and independent living. STRIVE gives clinicians practical digital environments where patients can practice safely, repeatedly, and without real-world risk.</p>
   <div class="cta-group">
-    <a class="btn-primary" href="dashboard.html">Open STRIVE Free</a>
-    <a href="#free-practice" class="btn-ghost">Try Patient Practice</a>
+    <a class="btn-primary" href="https://independence.striveptlv.com/auth.html?panel=createPractice">Create Account</a>
   </div>
-  <p class="trial-small">Free access is open now. No checkout or subscription required.</p>
   <div class="hero-cues">
     <span>Works on any device</span>
     <span>Demo access available</span>
@@ -913,8 +829,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   <div class="final-h2">Give Your Patients<br>A Safe Place to <em>Practice.</em></div>
   <p class="final-p">STRIVE INDEPENDENCE sets up in minutes and works on any device. See how communication, banking, and community mobility practice can fit into your treatment sessions.</p>
   <div class="cta-group">
-    <a class="btn-primary" href="dashboard.html">Open STRIVE Free</a>
-    <a href="#free-practice" class="btn-ghost">Try Patient Practice</a>
+    <a class="btn-primary" href="https://independence.striveptlv.com/auth.html?panel=createPractice">Create Account</a>
   </div>
 </section>
 
@@ -981,7 +896,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
     <div class="modal-demo-ring">
       <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
     </div>
-    <h2 class="modal-title">Request Free Trial</h2>
+    <h2 class="modal-title">Request Access</h2>
     <p class="modal-sub">Tell us where to reach you and we will walk you through STRIVE Talk, Money Rehab, and Community Mobility with your clinic's goals in mind.</p>
     <form class="modal-form" id="accessForm" action="https://formspree.io/f/mykvqkpz" method="POST" onsubmit="handleModalSubmit(event)">
       <div class="modal-field">
@@ -1004,15 +919,15 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
         <label class="modal-label" for="mac-referral">How Did You Hear About Us?</label>
         <input class="modal-input" id="mac-referral" name="heard_about" type="text" placeholder="Colleague, conference, search, social media">
       </div>
-      <input type="hidden" name="source" value="STRIVE INDEPENDENCE — free trial request">
-      <button class="modal-submit" type="submit" id="modalSubmit">Request Free Trial</button>
+      <input type="hidden" name="source" value="STRIVE INDEPENDENCE — access request">
+      <button class="modal-submit" type="submit" id="modalSubmit">Request Access</button>
       <p class="modal-note">No spam. We will follow up within one business day.</p>
       <div class="modal-status success" id="modalSuccess">Thanks. We will follow up to schedule your demo.</div>
       <div class="modal-status error" id="modalError">Something went wrong. Please try again.</div>
     </form>
     <div class="modal-confirmed" id="modalConfirmed">
       <p>Thanks. We will follow up to schedule your demo.</p>
-      <a href="https://www.striveptlv.com/independence/auth.html" class="modal-submit" onclick="closeModal()" style="display:inline-flex;text-decoration:none">Access Account</a>
+      <a href="https://independence.striveptlv.com/auth.html?panel=createPractice" class="modal-submit" onclick="closeModal()" style="display:inline-flex;text-decoration:none">Create Account</a>
     </div>
   </div>
 </div>
@@ -1030,40 +945,6 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
       <div class="use-item"><div class="use-num">05 —</div><div class="use-name">ALFs &amp; ILFs</div><div class="use-desc">Give assisted living and independent living teams practical tools for cognition, communication, resident engagement, and independence programming.</div><div class="use-tag">Facilities</div></div>
       <div class="use-item"><div class="use-num">06 —</div><div class="use-name">University OT &amp; ST Programs</div><div class="use-desc">Give students realistic practice environments for clinical reasoning, AAC, IADL training, executive function treatment planning, and simulated patient assignments.</div><div class="use-tag">Education</div></div>
       <div class="use-item"><div class="use-num">07 —</div><div class="use-name">Case Managers</div><div class="use-desc">Connect clients with practical independent-living practice that supports discharge planning, community reintegration, and caregiver education.</div><div class="use-tag">Care Team</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- FREE BASIC PRACTICE -->
-<section class="free-practice-section" id="free-practice">
-  <div class="free-practice-inner">
-    <div class="free-practice-head">
-      <div class="section-tag">For Patient Practice</div>
-      <h2 class="section-h2">Real-Life Skills<br><span class="light">Patients Can Try</span></h2>
-      <p class="section-body" style="margin-bottom:0">Give patients a safe place to practice everyday tasks in the browser before using those skills in real life. No account needed.</p>
-    </div>
-    <div class="free-practice-grid" aria-label="Free patient practice activities">
-      <a class="free-practice-card bill" href="free/Bill%20Pay/Bill%20Pay%20Homepage.html">
-        <div>
-          <h3>Basic Bill Pay</h3>
-          <p>Practice utility bill review, number entry, sequencing, and payment-step accuracy with fictional information.</p>
-        </div>
-        <div class="free-practice-action">Open activity <span>→</span></div>
-      </a>
-      <a class="free-practice-card airlines" href="airlines/index.html">
-        <div>
-          <h3>STRIVE Airlines</h3>
-          <p>Practice searching for flights, comparing schedules and fares, following travel requirements, and completing a simulated booking.</p>
-        </div>
-        <div class="free-practice-action">Open activity <span>→</span></div>
-      </a>
-      <a class="free-practice-card grocery" href="STRIVE%20Market/index.html">
-        <div>
-          <h3>Grocery Shopping Task</h3>
-          <p>Practice finding items, following a list, comparing prices, reviewing a cart, and completing a structured checkout sequence.</p>
-        </div>
-        <div class="free-practice-action">Open activity <span>→</span></div>
-      </a>
     </div>
   </div>
 </section>
@@ -1180,7 +1061,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
       <a href="/stroke.html">Stroke Recovery</a>
       <a href="/talk">STRIVE Talk</a>
       <a href="https://open.spotify.com/show/2nbFBV45QpM37SAdHtobgF" target="_blank">Podcast</a>
-      <a href="#modalOverlay" onclick="openModal();return false;">Request Free Trial</a>
+      <a href="#modalOverlay" onclick="openModal();return false;">Request Access</a>
       <a href="/about.html">About</a>
     </div>
   </div>
@@ -1240,7 +1121,7 @@ async function handleModalSubmit(e){
     document.getElementById('modalConfirmed').style.display='block';
   }catch(err){
     error.style.display='block';
-    btn.disabled=false;btn.textContent='Request Free Trial';
+    btn.disabled=false;btn.textContent='Request Access';
   }
 }
 

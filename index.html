@@ -31,7 +31,6 @@
   "inLanguage": "en-US",
   "applicationCategory": "HealthApplication",
   "operatingSystem": "Web",
-  "isAccessibleForFree": true,
   "description": "Web-based functional independence and IADL rehabilitation practice software that helps improve therapy productivity, supports point-of-service documentation, and gives therapists structured activities for individual, concurrent, and group therapy while bridging the gap between therapy sessions and real-life daily tasks.",
   "keywords": "therapy productivity software, point of service documentation therapy, concurrent therapy activities, group therapy activities, functional independence software, IADL rehab software, occupational therapy software, speech therapy functional communication software, cognitive rehabilitation software, executive function therapy tools, stroke rehab practice, brain injury rehab, senior cognitive rehab, simulated daily living tasks",
   "featureList": [
@@ -121,15 +120,15 @@
       "name": "How much does STRIVE INDEPENDENCE cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "STRIVE INDEPENDENCE is currently free to access. No checkout or subscription is required."
+        "text": "STRIVE INDEPENDENCE is available with an account."
       }
     },
     {
       "@type": "Question",
-      "name": "Is STRIVE INDEPENDENCE free?",
+      "name": "How do I access STRIVE INDEPENDENCE?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. STRIVE INDEPENDENCE is currently free to access with no checkout or subscription required."
+        "text": "Create an account to access STRIVE INDEPENDENCE."
       }
     }
   ]
@@ -487,85 +486,6 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
     -webkit-mask-image:radial-gradient(ellipse at 58% 50%,black 0%,rgba(0,0,0,.72) 34%,rgba(0,0,0,.28) 58%,transparent 78%);
     mask-image:radial-gradient(ellipse at 58% 50%,black 0%,rgba(0,0,0,.72) 34%,rgba(0,0,0,.28) 58%,transparent 78%);
   }
-}
-
-/* ─────────────────────────
-   FREE BASIC PRACTICE
-───────────────────────── */
-.free-practice-section{
-  padding:2rem 6% 2rem;
-}
-.free-practice-inner{
-  max-width:1200px;
-  margin:0 auto;
-}
-.free-practice-head{
-  max-width:1040px;
-  margin-bottom:2rem;
-}
-.free-practice-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
-}
-.free-practice-card{
-  min-height:230px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:2rem;
-  background:rgba(255,255,255,.88);
-  border:1px solid var(--gb);
-  border-radius:10px;
-  box-shadow:0 18px 50px rgba(19,35,56,.08);
-  transition:transform .18s,border-color .18s,box-shadow .18s;
-}
-.free-practice-card:hover{
-  transform:translateY(-4px);
-  border-color:var(--card-border);
-  box-shadow:var(--card-shadow);
-}
-.free-practice-card.bill{
-  --card-border:rgba(245,130,10,.35);
-  --card-shadow:0 24px 60px rgba(245,130,10,.13);
-}
-.free-practice-card.airlines{
-  --card-border:rgba(15,118,110,.32);
-  --card-shadow:0 24px 60px rgba(15,118,110,.12);
-}
-.free-practice-card.grocery{
-  --card-border:rgba(16,185,129,.34);
-  --card-shadow:0 24px 60px rgba(16,185,129,.12);
-}
-.free-practice-card h3{
-  color:var(--navy);
-  font-size:clamp(1.45rem,2.4vw,1.9rem);
-  font-weight:800;
-  line-height:1.04;
-  text-transform:uppercase;
-}
-.free-practice-card p{
-  margin-top:.85rem;
-  color:var(--muted-s);
-  line-height:1.65;
-}
-.free-practice-action{
-  margin-top:2rem;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  color:var(--orange);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-@media(max-width:920px){
-  .free-practice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:720px){
-  .free-practice-section{padding:3rem 6% 1rem}
-  .free-practice-grid{grid-template-columns:1fr}
 }
 
 /* ─────────────────────────
@@ -986,7 +906,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   <div class="nav-links">
     <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
-    <a class="nav-cta" href="https://www.striveptlv.com/independence/auth.html">Access Account</a>
+    <a class="nav-cta" href="https://independence.striveptlv.com/auth.html?panel=createPractice">Create Account</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -997,7 +917,7 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
 <div class="mobile-menu" id="mobileMenu">
   <a href="#faq" onclick="toggleMenu(false)">FAQ</a>
   <a href="#contact" onclick="toggleMenu(false)">Contact</a>
-  <a class="mob-book" href="https://www.striveptlv.com/independence/auth.html" onclick="toggleMenu(false)">Access Account</a>
+  <a class="mob-book" href="https://independence.striveptlv.com/auth.html?panel=createPractice" onclick="toggleMenu(false)">Create Account</a>
 </div>
 
 <!-- HERO -->
@@ -1012,10 +932,8 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   <p class="hero-sub">Boost therapy productivity with ready-to-use functional practice tools.</p>
   <p class="hero-seo">Support point-of-service documentation, individual sessions, concurrent therapy, and group therapy while practicing real daily tasks like communication, cognition, bill pay, banking, transportation, grocery shopping, and community participation without real accounts or real money.</p>
   <div class="cta-group">
-    <a class="btn-primary" href="dashboard.html">Open STRIVE Free</a>
-    <a href="#free-practice" class="btn-ghost">Explore Activities</a>
+    <a class="btn-primary" href="https://independence.striveptlv.com/auth.html?panel=createPractice">Create Account</a>
   </div>
-  <p class="trial-small">Free access is open now. No checkout or subscription required.</p>
   <div class="hero-cues">
     <span>Boost productivity</span>
     <span>Document at point of service</span>
@@ -1146,40 +1064,6 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
   </div>
 </section>
 
-<!-- FREE PRACTICE -->
-<section class="free-practice-section" id="free-practice">
-  <div class="free-practice-inner">
-    <div class="free-practice-head">
-      <div class="section-tag">Free Basics</div>
-      <h2 class="section-h2">Try the<br><span class="light">Basics</span></h2>
-      <p class="section-body" style="margin-bottom:0">Use these no-account activities for a quick sample of functional practice before moving into full STRIVE Independence access.</p>
-    </div>
-    <div class="free-practice-grid" aria-label="Free STRIVE Independence practice activities">
-      <a class="free-practice-card bill" href="free/Bill%20Pay/Bill%20Pay%20Homepage.html">
-        <div>
-          <h3>Basic Bill Pay</h3>
-          <p>Practice utility bill review, number entry, sequencing, and payment-step accuracy with fictional information.</p>
-        </div>
-        <div class="free-practice-action">Open activity <span>→</span></div>
-      </a>
-      <a class="free-practice-card airlines" href="airlines/index.html">
-        <div>
-          <h3>STRIVE Airlines</h3>
-          <p>Practice searching for flights, comparing schedules and fares, following travel requirements, and completing a simulated booking.</p>
-        </div>
-        <div class="free-practice-action">Open activity <span>→</span></div>
-      </a>
-      <a class="free-practice-card grocery" href="STRIVE%20Market/index.html">
-        <div>
-          <h3>Grocery Shopping Task</h3>
-          <p>Practice finding items, following a list, comparing prices, reviewing a cart, and completing a structured checkout sequence.</p>
-        </div>
-        <div class="free-practice-action">Open activity <span>→</span></div>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- FAQ -->
 <section class="faq-section" id="faq">
   <div class="section-tag">Questions</div>
@@ -1210,12 +1094,12 @@ h1 sup{font-size:.18em;letter-spacing:0;vertical-align:super;margin-left:.08em;c
       <div class="faq-a">No. STRIVE Independence uses simulated practice activities and fictional information. Users should not enter real banking, credit card, password, or protected health information.</div>
     </div>
     <div class="faq-item">
-      <button class="faq-toggle" onclick="toggleFaq(this)"><span class="faq-q">Is there a free trial?</span><span class="faq-icon">+</span></button>
-      <div class="faq-a">STRIVE Independence is currently free to access. No checkout, payment, or subscription is required.</div>
+      <button class="faq-toggle" onclick="toggleFaq(this)"><span class="faq-q">How do I get started?</span><span class="faq-icon">+</span></button>
+      <div class="faq-a">Create an account to access STRIVE Independence.</div>
     </div>
     <div class="faq-item">
       <button class="faq-toggle" onclick="toggleFaq(this)"><span class="faq-q">How much does STRIVE Independence cost?</span><span class="faq-icon">+</span></button>
-      <div class="faq-a">STRIVE Independence is currently free to access. The existing paid-plan system is paused while free public access is available.</div>
+      <div class="faq-a">STRIVE Independence requires an account, and anonymous public access is not available.</div>
     </div>
   </div>
 </section>
@@ -1336,7 +1220,7 @@ async function handleModalSubmit(e){
     document.getElementById('modalConfirmed').style.display='block';
   }catch(err){
     error.style.display='block';
-    btn.disabled=false;btn.textContent='Request Free Trial';
+    btn.disabled=false;btn.textContent='Request Access';
   }
 }
 
