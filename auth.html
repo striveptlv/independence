@@ -217,6 +217,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
           <label for="loginPassword">Password</label>
           <input id="loginPassword" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
         </div>
+        <label class="terms-consent" for="loginTerms"><input id="loginTerms" name="terms_accepted" type="checkbox" required><span>I have read and agree to the <a href="legal/terms-2026-10-06.html" target="_blank" rel="noopener">Terms and Conditions</a></span></label>
         <div class="button-row">
           <button class="primary" type="submit">Access Your Account</button>
           <button class="secondary" type="button" data-panel="createPractice">Create New Account</button>
@@ -297,7 +298,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
             </select>
           </div>
         </div>
-        <label class="terms-consent" for="createTerms"><input id="createTerms" name="terms_accepted" type="checkbox" required><span>I have read and agree to the <a href="legal/terms-2026-10-06.html" target="_blank" rel="noopener">Terms and Conditions</a> of Haraya Wellness LLC, operating as Strive Independence.</span></label>
+        <label class="terms-consent" for="createTerms"><input id="createTerms" name="terms_accepted" type="checkbox" required><span>I have read and agree to the <a href="legal/terms-2026-10-06.html" target="_blank" rel="noopener">Terms and Conditions</a></span></label>
         <div class="button-row">
           <button class="primary" type="submit">Create Free Account</button>
           <button class="secondary" type="button" data-panel="joinPractice">Join Existing Practice</button>
@@ -348,7 +349,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
             </div>
           </div>
         </div>
-        <label class="terms-consent" for="joinTerms"><input id="joinTerms" name="terms_accepted" type="checkbox" required><span>I have read and agree to the <a href="legal/terms-2026-10-06.html" target="_blank" rel="noopener">Terms and Conditions</a> of Haraya Wellness LLC, operating as Strive Independence.</span></label>
+        <label class="terms-consent" for="joinTerms"><input id="joinTerms" name="terms_accepted" type="checkbox" required><span>I have read and agree to the <a href="legal/terms-2026-10-06.html" target="_blank" rel="noopener">Terms and Conditions</a></span></label>
         <div class="button-row">
           <button class="primary" type="submit">Join Practice</button>
           <button class="form-link" type="button" data-panel="login">Back To Access</button>
@@ -918,8 +919,8 @@ async function handleAuthSubmit(event, type) {
   const form = event.currentTarget;
   const data = getFormData(form);
   if (form.dataset.submitting === 'true') return;
-  if (['createPractice', 'joinPractice'].includes(type) && data.terms_accepted !== 'on') {
-    showStatus('no', 'Please read and accept the Terms and Conditions to create an account.');
+  if (['login', 'createPractice', 'joinPractice'].includes(type) && data.terms_accepted !== 'on') {
+    showStatus('no', 'Please read and accept the Terms and Conditions to continue.');
     return;
   }
   form.dataset.submitting = 'true';
@@ -950,7 +951,7 @@ async function handleAuthSubmit(event, type) {
         return;
       }
 
-      if (!(await StriveTerms.ensureAccepted(supabaseClient))) { showStatus("warn", "You have signed out. Accept the terms after signing in to continue."); return; }
+      if (!(await StriveTerms.ensureAccepted(supabaseClient, data.terms_accepted === 'on'))) { showStatus("warn", "You have signed out. Accept the terms after signing in to continue."); return; }
       if (finishRequestedAuth(loginData.session)) return;
 
       console.log("Supabase login data", loginData);
@@ -1054,7 +1055,7 @@ async function handleAuthSubmit(event, type) {
         showStatus("warn", "Please check your email to confirm your account, then sign in to continue.");
         return;
       }
-      if (!(await StriveTerms.ensureAccepted(supabaseClient))) return;
+      if (!(await StriveTerms.ensureAccepted(supabaseClient, data.terms_accepted === 'on'))) return;
       if (finishRequestedAuth(signupData.session)) return;
 
       const invitedToTeam = await acceptPendingInviteForUser(user, {
@@ -1187,7 +1188,7 @@ async function handleAuthSubmit(event, type) {
             return;
           }
 
-          if (!(await StriveTerms.ensureAccepted(supabaseClient))) { showStatus("warn", "You have signed out. Accept the terms after signing in to continue."); return; }
+          if (!(await StriveTerms.ensureAccepted(supabaseClient, data.terms_accepted === 'on'))) { showStatus("warn", "You have signed out. Accept the terms after signing in to continue."); return; }
       if (finishRequestedAuth(loginData.session)) return;
 
           const existingUser = loginData.user;
@@ -1216,7 +1217,7 @@ async function handleAuthSubmit(event, type) {
         showStatus("warn", "Please check your email to confirm your account, then sign in to continue.");
         return;
       }
-      if (!(await StriveTerms.ensureAccepted(supabaseClient))) return;
+      if (!(await StriveTerms.ensureAccepted(supabaseClient, data.terms_accepted === 'on'))) return;
       if (finishRequestedAuth(signupData.session)) return;
 
       const invitedToTeam = await acceptPendingInviteForUser(user, {
