@@ -236,6 +236,8 @@ main{position:relative;z-index:1}
   #billingMessage{text-align:left}.support-strip a{display:inline-flex;margin-top:12px}
 }
 </style>
+<link rel="stylesheet" href="terms.css">
+<script src="terms.js"></script>
 </head>
 <body>
 <nav aria-label="Primary">
@@ -374,7 +376,7 @@ main{position:relative;z-index:1}
         <a class="app-card airlines" href="airlines/index.html">
           <div class="app-content">
             <div class="app-top"><span class="app-badge">NEW!!</span><div class="app-num">09</div></div>
-            <div class="app-image"><img src="pexels/dashboard-mock/book-a-flight.png" alt="Traveler booking a flight on a laptop at an airport" loading="lazy"></div>
+            <div class="app-image"><img src="pexels/dashboard-mock/book-a-flight.jpg" alt="Traveler booking a flight on a laptop at an airport" loading="lazy"></div>
             <h2>Book a Flight</h2>
             <p>Practice travel planning, flight comparison, budgeting, passenger details, error correction, and simulated payment.</p>
           </div>
@@ -402,7 +404,7 @@ main{position:relative;z-index:1}
       <div class="support-strip">
         <div>
           <strong>Need help getting started?</strong>
-          <span>STRIVE Independence is currently free to access. No checkout or subscription is required.</span>
+          <span>STRIVE Independence is free with an account. No checkout or subscription is required.</span>
         </div>
         <p id="billingMessage"></p>
         <a href="mailto:dpt@striveptlv.com">Email Support</a>
@@ -429,7 +431,7 @@ const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const FREE_PUBLIC_ACCESS = true;
+const FREE_ACCOUNT_ACCESS = true;
 const PLAN_PAGE = "choose-plan.html";
 const TEAM_ACCESS_REMOVED_PAGE = PLAN_PAGE + "?reason=team_access_removed";
 
@@ -454,14 +456,6 @@ window.addEventListener("DOMContentLoaded", () => {
   let currentTrialEndsAt = null;
 
   async function checkAccess() {
-    if (FREE_PUBLIC_ACCESS) {
-      return {
-        user: null,
-        profile: { access_type: "free", has_access: true },
-        trialEndsAt: null
-      };
-    }
-
     const {
       data: { user },
       error: userError
@@ -472,6 +466,17 @@ window.addEventListener("DOMContentLoaded", () => {
       return null;
     }
 
+    try {
+      if (!(await StriveTerms.hasAccepted(supabase))) {
+        window.location.replace('auth.html?returnTo=dashboard.html');
+        return null;
+      }
+    } catch (error) {
+      console.error('Terms verification failed:', error);
+      window.location.replace('auth.html?returnTo=dashboard.html');
+      return null;
+    }
+
     const { data: profile, error: profileError } = await supabase
       .from("profile")
       .select("has_access, access_type, trial_ends_at")
@@ -479,10 +484,15 @@ window.addEventListener("DOMContentLoaded", () => {
       .single();
 
     if (profileError || !profile) {
+      if (FREE_ACCOUNT_ACCESS) {
+        return { user, profile: { access_type: "free", has_access: true }, trialEndsAt: null };
+      }
       console.error("Profile fetch failed:", profileError?.message);
       window.location.href = "auth.html";
       return null;
     }
+
+    if (FREE_ACCOUNT_ACCESS) return { user, profile, trialEndsAt: null };
 
     console.log("Profile access type:", profile.access_type);
 
@@ -618,7 +628,7 @@ window.addEventListener("DOMContentLoaded", () => {
     console.log("Manage Billing clicked");
     toggleMenu(false);
 
-    if (FREE_PUBLIC_ACCESS) {
+    if (FREE_ACCOUNT_ACCESS) {
       showBillingMessage("ok", "STRIVE Independence is free to access. No billing action is needed.");
       return;
     }
@@ -728,7 +738,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (!accessData) return;
 
-    if (!FREE_PUBLIC_ACCESS) startInactivitySignOutTimer();
+    startInactivitySignOutTimer();
     showPromoAdminEntryWhenAuthorized();
 
     const { user, profile, trialEndsAt } = accessData;
@@ -736,7 +746,7 @@ window.addEventListener("DOMContentLoaded", () => {
     currentTrialEndsAt = trialEndsAt;
     const trialBanner = document.getElementById("trialBanner");
 
-    if (profile.access_type === "trial" && trialEndsAt && trialBanner) {
+    if (!FREE_ACCOUNT_ACCESS && profile.access_type === "trial" && trialEndsAt && trialBanner) {
       const now = new Date();
       const msRemaining = trialEndsAt - now;
       const urgentTrialWindow = msRemaining <= 48 * 60 * 60 * 1000;
