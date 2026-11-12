@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Account Access | STRIVE INDEPENDENCE</title>
-<meta name="description" content="Create or access your STRIVE INDEPENDENCE account for therapy teams, clinics, and care programs.">
+<meta name="description" content="Log in to your STRIVE INDEPENDENCE account or create a new account for therapy teams, clinics, and care programs.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -206,9 +206,9 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
 
     <div class="auth-card" id="account">
       <div class="card-kicker">Welcome</div>
-      <h2 class="card-title" id="formTitle">Access Your Account</h2>
-      <p class="card-copy" id="formCopy"></p>
-      <form class="auth-form active" id="loginForm" data-title="Access Your Account" data-copy="" onsubmit="handleAuthSubmit(event,'login')">
+      <h2 class="card-title" id="formTitle">Log In</h2>
+      <p class="card-copy" id="formCopy">Welcome back. Log in with the email and password you used to create your account.</p>
+      <form class="auth-form active" id="loginForm" data-title="Log In" data-copy="Welcome back. Log in with the email and password you used to create your account." onsubmit="handleAuthSubmit(event,'login')">
         <div class="field">
           <label for="loginEmail">Email</label>
           <input id="loginEmail" name="email" type="email" placeholder="you@clinic.com" autocomplete="email" required>
@@ -219,7 +219,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
         </div>
         <label class="terms-consent" for="loginTerms"><input id="loginTerms" name="terms_accepted" type="checkbox" required><span>I have read and agree to the <a href="legal/terms-2026-10-06.html" target="_blank" rel="noopener">Terms and Conditions</a></span></label>
         <div class="button-row">
-          <button class="primary" type="submit">Access Your Account</button>
+          <button class="primary" type="submit">Log In</button>
           <button class="secondary" type="button" data-panel="createPractice">Create New Account</button>
         </div>
         <div class="link-row">
@@ -302,7 +302,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
         <div class="button-row">
           <button class="primary" type="submit">Create Free Account</button>
           <button class="secondary" type="button" data-panel="joinPractice">Join Existing Practice</button>
-          <button class="form-link" type="button" data-panel="login">Back To Access</button>
+          <button class="form-link" type="button" data-panel="login">Already have an account? Log In</button>
         </div>
       </form>
 
@@ -352,7 +352,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
         <label class="terms-consent" for="joinTerms"><input id="joinTerms" name="terms_accepted" type="checkbox" required><span>I have read and agree to the <a href="legal/terms-2026-10-06.html" target="_blank" rel="noopener">Terms and Conditions</a></span></label>
         <div class="button-row">
           <button class="primary" type="submit">Join Practice</button>
-          <button class="form-link" type="button" data-panel="login">Back To Access</button>
+          <button class="form-link" type="button" data-panel="login">Back to Log In</button>
         </div>
       </form>
 
@@ -363,7 +363,7 @@ footer a{color:var(--navy);text-decoration:none;font-weight:800}
         </div>
         <div class="button-row">
           <button class="primary" type="submit">Send Reset Link</button>
-          <button class="form-link" type="button" data-panel="login">Back To Access</button>
+          <button class="form-link" type="button" data-panel="login">Back to Log In</button>
         </div>
       </form>
 
@@ -1183,7 +1183,7 @@ async function handleAuthSubmit(event, type) {
           if (loginError) {
             showStatus(
               "no",
-              "An account already exists with this email. Please use the Access Your Account form to sign in, then your team invite will be applied automatically."
+              "An account already exists with this email. Please use the Log In form to sign in, then your team invite will be applied automatically."
             );
             return;
           }
